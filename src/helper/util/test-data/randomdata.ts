@@ -1,4 +1,5 @@
-const { getRandomInt } = require('./randomGenerator');
+
+import { getRandomInt } from './randomGenerator';
 
 
 function generateRandomPhoneNumber() {
@@ -21,11 +22,7 @@ function generateRandomPhoneNumber() {
 const randomName = generateRandomName();
 const randomValuePhone = generateRandomPhoneNumber();
 const randomValuePasscode = getRandomInt(2222, 9999);
-module.exports = {
-    randomValuePhone,
-    randomValuePasscode,
-    randomName
-};
+// No CommonJS export here
 export { randomValuePhone, randomValuePasscode, randomName };
 
 //create a function to generate random email
@@ -38,9 +35,7 @@ function generateRandomEmail() {
   }
   
 const randomEmail = generateRandomEmail();
-module.exports = {
-    randomEmail
-};
+// No CommonJS export here
 export { randomEmail, getRandomInt };
 
 //create a function to generate random text
@@ -55,9 +50,7 @@ function generateRandomText(length: number): string {
 }
 
 const randomtext = generateRandomText(20); // Generate random text of length 20
-module.exports = {
-    randomtext
-};
+// No CommonJS export here
 export { randomtext };
 
 //create a function to get current date in mm/dd/yyyy format
@@ -71,8 +64,6 @@ function getCurrentDate(): string {
   }
   
 const currentDate = getCurrentDate();
-module.exports = {
-    currentDate
-};
+// No CommonJS export here
 export { currentDate };
 
