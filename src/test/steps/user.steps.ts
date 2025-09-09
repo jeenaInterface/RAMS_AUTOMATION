@@ -21,7 +21,15 @@ When('Enter all the fields', async () => {
 When('Click on the save button', async () => {
   await user.submit();
 });
-Then('Verify the success message is displayed', async () => {
+Then('Verify the user is created in the user list', async () => {
+  await user.searchUserId();
 
+});
+Then('Verify edit functioanlity', async () => {
+  await user.ClickOneditButton();
+
+});
+Then('Verify action Log', async () => {
+  await user.verifyActionlog();
 
 });

@@ -7,9 +7,6 @@ Feature: Admin module
     When Click on the add button
     And Enter all the fields
     And Click on the save button
-    # And Search for the created user
-    # Then Verify the user is created in the user list  
-    # And Click on the edit button
-    # Then Verify the success message is displayed
-
-
+    Then Verify the user is created in the user list
+    And Verify edit functioanlity
+    Then Verify action Log
