@@ -4,6 +4,7 @@ import PlaywrightWrapper from "../helper/wrapper/PlaywrightWrappers";
 import { setDefaultTimeout } from "@cucumber/cucumber";
 export { getRandomInt };
 import { currentDate, getRandomInt, randomName, randomEmail, randomValuePhone, randomValuePasscode, randomtext } from "../helper/util/test-data/randomdata";
+import { fixture } from "../hooks/pageFixture";
 
 setDefaultTimeout(100 * 1000);
 
@@ -46,7 +47,7 @@ export default class UserPage {
     headerTitle: "//div[@class='el-dialog__header']//span[1]",
     closeButton: "(//button[@aria-label='Close']//i)[1]",
     actionTypeTextbox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[4]/div[1]/div[1]/div[1]/div[1]/input[1]",
-    searchResult:"//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/span[1]"
+    searchResult: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/span[1]"
   };
 
   //   async navigateToCreateUserPage(): Promise<void> {
@@ -96,6 +97,8 @@ export default class UserPage {
   async submit(): Promise<void> {
     await this.page.locator(this.Elements.saveButton).click();
     //await expect(this.page.locator(this.Elements.successMessage)).toBeVisible();
+    fixture.logger.info("Waiting for 2 seconds")
+    await fixture.page.waitForTimeout(2000);
     await this.page.locator(this.Elements.okButton).click();
     await this.base.waitAndClick(this.Elements.systemSettingsMenu);
     await this.base.waitAndClick(this.Elements.userMenu);

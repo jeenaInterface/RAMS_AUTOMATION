@@ -1,4 +1,4 @@
-Feature: Admin module
+Feature: User module
 
   @user @sanity
   Scenario: Verify Create/Edit User functionality

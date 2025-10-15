@@ -1,15 +1,14 @@
 import { Given, Then, When } from "@cucumber/cucumber";
 import { fixture } from "../../hooks/pageFixture";
 import loginPage from "../../pages/login.page";
-import * as data from "../../helper/util/test-data/payloads.json"
 
 let login: loginPage;
 
 Given('User logged into the application', async function () {
   login = new loginPage(fixture.page);
   await login.navigateToLoginPage();
-  await login.enterUserName(data.userEmail);
-  await login.enterPassword(data.userPassword);
+  await login.enterUserName(process.env.userEmail);
+  await login.enterPassword(process.env.userPassword);
   await login.clickLoginButton();
 });
 
