@@ -50,7 +50,9 @@ export default class AssetPage {
         engineSerialNo: "(//label[normalize-space(text())='Engine Serial']/following::input)[1]",
         engineModel: "(//label[normalize-space(text())='Engine Model']/following::input)[1]",
         engineFamily: "(//label[normalize-space(text())='Engine Family']/following::input)[1]",
-        retiredDate:"(//label[normalize-space(text())='Retired Date']/following::input)[1]"
+        retiredDate: "(//label[normalize-space(text())='Retired Date']/following::input)[1]",
+        newButton: "//span[normalize-space(text())='New']",
+        createAssetHeader: "(//div[@class='ivu-card-head']//div)[1]"
 
     };
 
@@ -111,9 +113,9 @@ export default class AssetPage {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.assetStatus).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Retired' }).first().click();
-    // fill retired date using project's currentDate (format YYYY-Mmm-DD, e.g. 2025-Oct-16)
-    await this.page.locator(this.Elements.retiredDate).fill('2025-Oct-16');
-        await fixture.page.waitForTimeout(2000);       
+        // fill retired date using project's currentDate (format YYYY-Mmm-DD, e.g. 2025-Oct-16)
+        await this.page.locator(this.Elements.retiredDate).fill('2025-Oct-16');
+        await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.saveButton).click();
         await this.page.locator(this.Elements.okButton).click();
     }
@@ -126,5 +128,6 @@ export default class AssetPage {
         await expect(this.page.locator(this.Elements.searchResult)).toHaveText('Add');
         await this.page.locator(this.Elements.closeButton).click();
     }
+
 
 }

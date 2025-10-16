@@ -32,3 +32,6 @@ Then('Verify edit functionality in asset owner form', async () => {
 Then('Verify action Log in asset owner form', async () => {
   await assetOwner.verifyActionLog();
 });
+Then('Verify page is resting and opening the create asset owner form on clicking the Add button', async () => {
+  await assetOwner.newButtonFunctionality();
+});

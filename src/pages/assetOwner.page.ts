@@ -43,6 +43,8 @@ export default class AssetOwnerPage {
         inquireSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
         firstRowEdit: "//i[@class='ivu-icon ivu-icon-edit']",
         status: "(//label[normalize-space(text())='Status:']/following::input)[1]",
+        newButton:"//span[normalize-space(text())='New']",
+        createAssetOwnerHeader:"(//div[@class='ivu-card-head']//div)[1]"
     };
 
     public assetOwnerData: { ownerId?: string } = {};
@@ -115,6 +117,13 @@ export default class AssetOwnerPage {
         await this.page.locator(this.Elements.actionTypeTextbox).fill('Add');
         await expect(this.page.locator(this.Elements.searchResult)).toHaveText('Add');
         await this.page.locator(this.Elements.closeButton).click();
+    }
+    async newButtonFunctionality(): Promise<void> {
+        await this.page.locator(this.Elements.newButton).click();
+        await expect(this.page.locator(this.Elements.createAssetOwnerHeader)).toBeVisible();
+        await expect(this.page.locator(this.Elements.assetOwner)).toBeEmpty();
+        await expect(this.page.locator(this.Elements.assetOwnerName)).toBeEmpty();
+        await expect(this.page.locator(this.Elements.SAPCustomerCode)).toBeEmpty();
     }
 
 }

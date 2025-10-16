@@ -10,3 +10,7 @@ Feature: Asset Owner module
     Then Verify the asset owner is created in the inquire list
     And Verify edit functionality in asset owner form
     Then Verify action Log in asset owner form
+    Then Verify page is resting and opening the create asset owner form on clicking the Add button
+
+
+

@@ -10,3 +10,5 @@ Feature: Vendor module
     Then Verify the Vendor is created in the inquire list
     And Verify edit functionality in Vendor form
     Then Verify action Log in Vendor form
+    Then Verify page is resting and opening the create vendor form on clicking the Add button
+

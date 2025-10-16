@@ -33,3 +33,6 @@ Then('Verify action Log in Vendor form', async () => {
   await vendor.verifyActionLog();
 });
 
+Then('Verify page is resting and opening the create vendor form on clicking the Add button', async () => {
+  await vendor.newButtonFunctionality();
+});
