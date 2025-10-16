@@ -65,17 +65,17 @@ function generateRandomWebsite(): string {
 const randomWebsite = generateRandomWebsite();
 export { randomWebsite };
 
-//create a function to get current date in mm/dd/yyyy format
+// create a function to get current date in format YYYY-Mmm-DD e.g., 2025-Oct-16
 function getCurrentDate(): string {
     const date = new Date();
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
     const year = date.getFullYear();
-  
-    return `${month}/${day}/${year}`;
-  }
-  
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const monthName = months[date.getMonth()];
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${monthName}-${day}`;
+}
+
 const currentDate = getCurrentDate();
-// No CommonJS export here
 export { currentDate };
 
