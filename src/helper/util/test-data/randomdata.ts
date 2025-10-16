@@ -53,6 +53,18 @@ const randomtext = generateRandomText(20); // Generate random text of length 20
 // No CommonJS export here
 export { randomtext };
 
+// create a function to generate random website URLs
+function generateRandomWebsite(): string {
+  const domains = ['example.com', 'test.com', 'demo.com', 'sample.com', 'vendor.io', 'suppliers.net'];
+  const name = Math.random().toString(36).substring(2, 9);
+  const domain = domains[getRandomInt(0, domains.length - 1)];
+  // return a full URL with protocol
+  return `https://${name}.${domain}`;
+}
+
+const randomWebsite = generateRandomWebsite();
+export { randomWebsite };
+
 //create a function to get current date in mm/dd/yyyy format
 function getCurrentDate(): string {
     const date = new Date();

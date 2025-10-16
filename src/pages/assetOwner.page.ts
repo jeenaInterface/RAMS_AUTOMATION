@@ -42,6 +42,7 @@ export default class AssetOwnerPage {
         okButton: "//button[normalize-space()='OK']",
         inquireSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
         firstRowEdit: "//i[@class='ivu-icon ivu-icon-edit']",
+        status: "(//label[normalize-space(text())='Status:']/following::input)[1]",
     };
 
     public assetOwnerData: { ownerId?: string } = {};
@@ -62,11 +63,11 @@ export default class AssetOwnerPage {
         fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.assetOwnerName).fill(randomName);
-    await this.page.locator(this.Elements.SAPCustomerCode).fill(this.assetOwnerData.ownerId!);
-    // select Tariff dropdown specifically by its label to avoid ambiguous locators
-    const tariffLocator: Locator = this.page.locator("//label[normalize-space(text())='Tariff']/following::input[1]");
-    await tariffLocator.click();
-    await this.page.getByRole('listitem').filter({ hasText: 'BAL_06292024' }).first().click();
+        await this.page.locator(this.Elements.SAPCustomerCode).fill(this.assetOwnerData.ownerId!);
+        // select Tariff dropdown specifically by its label to avoid ambiguous locators
+        const tariffLocator: Locator = this.page.locator("//label[normalize-space(text())='Tariff']/following::input[1]");
+        await tariffLocator.click();
+        await this.page.getByRole('listitem').filter({ hasText: 'BAL_06292024' }).first().click();
         await this.page.locator(this.Elements.Contact1Name).fill(randomName);
         await this.page.locator(this.Elements.Contact2Name).fill(randomName);
         await this.page.locator(this.Elements.email).fill(randomEmail);
@@ -100,8 +101,10 @@ export default class AssetOwnerPage {
 
     async clickOnEditButton(): Promise<void> {
         await this.page.locator(this.Elements.firstRowEdit).click();
-                fixture.logger.info("Waiting for 1 seconds")
+        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.status).click();
+        await this.page.getByRole('listitem').filter({ hasText: 'Inactive' }).click();
         await this.page.locator(this.Elements.saveButton).click();
         await this.page.locator(this.Elements.okButton).click();
     }
