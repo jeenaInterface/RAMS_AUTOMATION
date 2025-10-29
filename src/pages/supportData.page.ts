@@ -20,8 +20,10 @@ export default class SupportDataPage {
 
     private Elements = {
         systemSettingsMenu: "//span[normalize-space(text())='System Setting']",
+        vendorMenu: "//span[normalize-space(text())='- Vendor']",
         supportDataMenu: "//span[normalize-space(text())='- Supporting Data']",
         create: "//span[normalize-space(text())='Create']",
+        vendorType: "(//input[@placeholder='--Select One--'])[1]",
         code: "(//label[normalize-space(text())='Code']/following::input)[1]",
         description: "(//label[normalize-space(text())='Description']/following::textarea)[1]",
         status: "//div[@class='el-input']//input[@placeholder='--Select One--']",
@@ -39,8 +41,10 @@ export default class SupportDataPage {
         okButton: "//button[normalize-space()='OK']",
         OkButtonOnPopUp: "(//span[contains(text(),'OK')])[2]",
         typeList: "(//input[@placeholder='--Select One--'])[1]",
-        stockLocation:"//span[normalize-space()='- Stock Location']",
-        
+        stockLocation: "//span[normalize-space()='- Stock Location']",
+        wareHouseCode: "(//input[@class='el-input__inner'])[1]",
+
+
     };
 
     async clickOnSupportDataMenu(): Promise<void> {
@@ -106,7 +110,7 @@ export default class SupportDataPage {
         await this.page.locator(this.Elements.okButton).click();
     }
 
-        async CreateVendorType(): Promise<void> {
+    async CreateVendorType(): Promise<void> {
         const randomNumber = getRandomInt(1000, 9999);
         this.vendorType = `TVT${randomNumber}`;
 
@@ -120,27 +124,86 @@ export default class SupportDataPage {
         await this.base.waitAndClick(this.Elements.save);
         await this.page.locator(this.Elements.okButton).click();
     }
-        async searchWareHouseCode(): Promise<void> {
+    async searchWareHouseCode(): Promise<void> {
         await this.page.locator(this.Elements.codeList).fill(this.WarehouseCode);
     }
 
     async verifySearchResultWareHouseCode(): Promise<void> {
         await expect(this.page.locator(this.Elements.searchResult)).toHaveText(this.WarehouseCode);
     }
-        async searchVendorTypeCode(): Promise<void> {
+    async searchVendorTypeCode(): Promise<void> {
         await this.page.locator(this.Elements.codeList).fill(this.vendorType);
     }
 
     async verifySearchResultVendorType(): Promise<void> {
         await expect(this.page.locator(this.Elements.searchResult)).toHaveText(this.vendorType);
     }
-        async verifyWareHouseInStockLocationForm(): Promise<void> {
+    async verifyWareHouseInStockLocationForm(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
         await this.base.waitAndClick(this.Elements.assetMenu);
         await this.base.waitAndClick(this.Elements.create);
         await this.page.locator(this.Elements.assetGroup).click();
         const assetGroupOption = this.page.locator(`.el-select-dropdown__item:has-text("${this.assetGroupCode}")`);
         await expect(assetGroupOption).toBeVisible();
+
+    }
+
+    async clickOnStockLocation(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.systemSettingsMenu);
+        await this.base.waitAndClick(this.Elements.stockLocation);
+        await this.page.locator(this.Elements.wareHouseCode).click();
+        const warehouseCodeOption = this.page.locator(`.el-select-dropdown__item:has-text("${this.WarehouseCode}")`);
+        await expect(warehouseCodeOption).toBeVisible();
+    }
+    async verifyEditWareHouseFunctionality(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.systemSettingsMenu);
+        await this.base.waitAndClick(this.Elements.supportDataMenu);
+        await this.page.locator(this.Elements.typeList).click();
+        await this.page.getByRole('listitem').filter({ hasText: 'Warehouse' }).click();
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.codeList).fill(this.WarehouseCode);
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.firstRowEdit).click();
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.status).click();
+        await this.page.getByRole('listitem').filter({ hasText: 'Inactive' }).click();
+        await this.page.locator(this.Elements.save).click();
+        await this.page.locator(this.Elements.okButton).click();
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(500);
+
+    }
+
+    async verifyNewlyAddedVendorInVendoeList(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.systemSettingsMenu);
+        await this.base.waitAndClick(this.Elements.vendorMenu);
+        await this.base.waitAndClick(this.Elements.create);
+        await this.page.locator(this.Elements.vendorType).click();
+        const warehouseCodeOption = this.page.locator(`.el-select-dropdown__item:has-text("${this.vendorType}")`);
+        await expect(warehouseCodeOption).toBeVisible();
+    }
+    async verifyEditVendorTypeFunctionality(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.systemSettingsMenu);
+        await this.base.waitAndClick(this.Elements.supportDataMenu);
+        await this.page.locator(this.Elements.typeList).click();
+        await this.page.getByRole('listitem').filter({ hasText: 'Vendor Type' }).click();
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.codeList).fill(this.vendorType);
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.firstRowEdit).click();
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.status).click();
+        await this.page.getByRole('listitem').filter({ hasText: 'Inactive' }).click();
+        await this.page.locator(this.Elements.save).click();
+        await this.page.locator(this.Elements.okButton).click();
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(500);
 
     }
 

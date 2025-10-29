@@ -54,5 +54,16 @@ Then('Verify the search result displays the created vendorType', async () => {
 });
 
 Then('open the stock location and confirm that the newly added wareHouse is available in the warehouse dropdown', async () => {
-  // await supportDataPage.();
+  await supportDataPage.clickOnStockLocation();
+});
+Then('verify the edit functionality by selecting the created warehouse in the Support Data form by changing its status', async () => {
+  await supportDataPage.verifyEditWareHouseFunctionality();
+});
+
+Then('open the vendor and confirm that the newly added vendorType is available in the vendor type dropdown', async () => {
+  await supportDataPage.verifyNewlyAddedVendorInVendoeList();
+});
+
+Then('verify the edit functionality by selecting the created vendorType in the Support Data form by changing its status', async () => {
+  await supportDataPage.verifyEditVendorTypeFunctionality();
 });
