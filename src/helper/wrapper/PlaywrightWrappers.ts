@@ -26,4 +26,11 @@ export default class PlaywrightWrapper {
         ])
     }
 
+    async waitAndClickAndHandleNewPage(locator: string): Promise<Page> {
+        const [newPage] = await Promise.all([
+            this.page.context().waitForEvent('page'),
+            this.waitAndClick(locator)
+        ]);
+        return newPage;
+    }
 }
