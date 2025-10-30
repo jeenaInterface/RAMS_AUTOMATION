@@ -76,6 +76,4 @@ function getCurrentDate(): string {
     return `${year}-${monthName}-${day}`;
 }
 
-const currentDate = getCurrentDate();
-export { currentDate };
-
+export { getCurrentDate as currentDate };
