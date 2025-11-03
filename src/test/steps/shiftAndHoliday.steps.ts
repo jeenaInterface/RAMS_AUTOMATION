@@ -28,3 +28,7 @@ Then('Select any date and click on save button', async () => {
 When('Verify the confirmation message is displayed', async () => {
     await shiftAndHolidayPage.validateMessage();
 });
+
+When('Verify action log functionality in shift and holiday module', async () => {
+    await shiftAndHolidayPage.verifyActionlog();
+});
