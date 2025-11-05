@@ -9,9 +9,6 @@ setDefaultTimeout(100 * 1000);
 export default class UOMConversionPage {
     private base: PlaywrightWrapper;
     private page: Page;
-    public assetGroupCode: string = '';
-    public WarehouseCode: string = '';
-    public vendorType: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -26,16 +23,11 @@ export default class UOMConversionPage {
         fromUOMSEARCH: "//table[@class='el-table__header']/thead[1]/tr[2]/th[1]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
         toUOM: "(//input[@placeholder='--Select One--'])[4]",
         CONVERSIONfACTOR: "(//label[normalize-space(text())='Conversion Factor(From/To)']/following::input)[1]",
-        status: "//div[@class='el-input']//input[@placeholder='--Select One--']",
         save: "//span[normalize-space(text())='Save']",
         codeList: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
         searchResult: "//tbody/tr[1]/td[1]/div[1]/span[1]",
-        assetMenu: "//span[normalize-space(text())='- Asset']",
-        supportDataMenu: "//span[normalize-space(text())='- Supporting Data']",
-        assetGroup: "(//label[normalize-space(text())='Asset Group']/following::input)[1]",
         firstRowEdit: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table[1]/tbody[1]/tr[1]/td[4]/div[1]/button[1]/span[1]/i[1]",
         actionTypeTextbox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[4]/div[1]/div[1]/div[1]/div[1]/input[1]",
-        searchResultActionLog: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/span[1]",
         firstrowdelete: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table[1]/tbody[1]/tr[1]/td[4]/div[1]/button[2]/span[1]/i[1]",
         okButton: "//button[normalize-space()='OK']",
         yesButton: "//span[normalize-space()='Yes']"
