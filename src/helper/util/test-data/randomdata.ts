@@ -64,6 +64,9 @@ function generateRandomWebsite(): string {
 
 const randomWebsite = generateRandomWebsite();
 export { randomWebsite };
+// UOM constants (shared across pages)
+export const UOM_PIECES = 'PIECES';
+export const UOM_BOX50 = 'BOX50';
 
 // create a function to get current date in format YYYY-Mmm-DD e.g., 2025-Oct-16
 function getCurrentDate(): string {
