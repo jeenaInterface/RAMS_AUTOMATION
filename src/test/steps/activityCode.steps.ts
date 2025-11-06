@@ -26,3 +26,6 @@ Then('verify the edit functionality by selecting the created Activity Code', asy
 Then('verify the delete functionality by selecting the created Activity Code', async () => {
     await ActivityPage.verifyDeleteFunctionality();
 });
+Then('Verify Action log for Activity Code module', async () => {
+    await ActivityPage.verifyActionLog();
+});

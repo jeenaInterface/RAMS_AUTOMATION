@@ -28,6 +28,9 @@ export default class ActivityCodePage {
         okButton: "//button[normalize-space()='OK']",
         yesButton: "//span[normalize-space()='Yes']",
         rightSideMoveButton: "(//i[@class='el-icon-arrow-left'])[1]",
+        actionLog: "//button[contains(.,'Action Log')]",
+        headerTitle: "//div[@class='el-dialog__header']//span[1]",
+        closeButton: "(//button[@aria-label='Close']//i)[1]",
 
 
 
@@ -109,6 +112,11 @@ export default class ActivityCodePage {
         await this.page.locator(this.Elements.yesButton).click();
         await this.page.locator(this.Elements.okButton).click();
 
+    }
+    async verifyActionLog(): Promise<void> {
+        await this.page.locator(this.Elements.actionLog).click();
+        await expect(this.page.locator(this.Elements.headerTitle)).toBeVisible();
+        await this.page.locator(this.Elements.closeButton).click();
     }
 
 }

@@ -11,3 +11,4 @@ Feature: UOM Conversion Factor module
         And Verify the search result displays the Activity Code
         And verify the edit functionality by selecting the created Activity Code
         Then verify the delete functionality by selecting the created Activity Code
+        Then Verify Action log for Activity Code module

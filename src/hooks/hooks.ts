@@ -22,6 +22,7 @@ Before({ tags: "not @auth" }, async function ({ pickle }) {
             dir: "test-results/videos",
         },
     });
+    
     const page = await context.newPage();
     fixture.page = page;
     fixture.logger = createLogger(options(scenarioName));
