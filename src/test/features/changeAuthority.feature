@@ -21,3 +21,6 @@ Feature: Change authority module
 
     When the assigned user logs into the application
     Then the assigned interface mapping should no longer be visible for the user
+    Then user click on logout button
+    And the admin logs back into the application
+    Then Verify reset functionalities

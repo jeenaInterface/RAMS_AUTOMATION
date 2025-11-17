@@ -94,9 +94,25 @@ export default class ChangeAuthorityPage {
     }
 
 
-    async navigateToActionLog(): Promise<void> {
-        await this.base.waitAndClick(this.Elements.actionLog);
-        await expect(this.page.locator(this.Elements.headerTitle)).toBeVisible();
-        await this.base.waitAndClick(this.Elements.closeButton);
+    async resetFunctionality(): Promise<void> {
+         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
+         await this.base.waitAndClick(this.Elements.changeAuthorityMenu);
+        await this.page.getByPlaceholder('--Select One--').click();
+        await this.page.getByRole('listitem').filter({ hasText: 'Add' }).click();
+        await this.page.getByPlaceholder('--Select One or More--').click();
+        await this.page.getByText('Interface Mapping', { exact: true }).click();
+        await this.page.locator('#app').getByText('Change Authority').click();
+        await this.base.waitAndClick(this.Elements.searchIcdodeInput);
+        await this.page.getByPlaceholder('--Input multiple User ID with split ";"--').click();
+        await this.page.getByPlaceholder('--Input multiple User ID with split ";"--').fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await this.page.getByRole('row', { name: 'AARON.BARRIOS Aaron Barrios MECHANIC Active' }).locator('label span').nth(1).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await this.page.getByRole('button', { name: 'Reset' }).click();
+        //verify fields are reset
+        await expect(this.page.getByPlaceholder('--Select One--')).toHaveText('');
+        await expect(this.page.getByPlaceholder('--Select One or More--')).toHaveText('');
+        await expect(this.page.getByPlaceholder('--Input multiple User ID with split ";"--')).toHaveText('');
+
     }
 }
