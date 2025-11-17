@@ -17,8 +17,10 @@ export default class LoginPage {
         userName: "//input[@placeholder='User ID']",
         password: "//input[@placeholder='Password']",
         signInButton: "//span[normalize-space(text())='Go']",
-        logOutButton: "//i[@role='button']",
+        username: "//i[contains(@class,'menu-icon ivu-icon')]/following-sibling::span[1]",
+        logOutButton: "//span[normalize-space()='Log Out']",
         logOut: "//a[normalize-space(text())='Logout']",
+        yesButton: "//span[normalize-space(text())='YES']"
     };
 
     async navigateToLoginPage(): Promise<void> {
@@ -28,7 +30,7 @@ export default class LoginPage {
         //     window.resizeTo(screen.width, screen.height);
         // });
     }
-    
+
     async enterUserName(user: string): Promise<void> {
         await this.page.locator(this.Elements.userName).fill(user);
     }
@@ -38,8 +40,13 @@ export default class LoginPage {
 
     }
 
-    async clickLoginButton(): Promise<void> {     
+    async clickLoginButton(): Promise<void> {
         await this.page.locator(this.Elements.signInButton).click();
+    }
+    async clickLoginButtonMechanic(): Promise<void> {
+        await this.page.locator(this.Elements.signInButton).click();
+        await this.page.locator(this.Elements.yesButton).click();
+
     }
 
     async login(username: string, password: string): Promise<void> {
@@ -50,7 +57,7 @@ export default class LoginPage {
     }
 
     async logOutDropDownlist(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.username);
         await this.base.waitAndClick(this.Elements.logOutButton);
-        await this.base.waitAndClick(this.Elements.logOut);
     }
 }
