@@ -1,17 +1,17 @@
-Feature: Tariff module
+Feature: Add, Update, and Search Functionalities in Tariff Module
 
   @Tariff @sanity
 
-  Scenario: Add/update/search functionalities under Tariff module
+  Scenario: Manage Tariffs
     Given the admin user is logged into the application
-    When Go to create tariff page
-    And Create a new tariff with required details
-    Then Verify the newly created tariff is displayed in the tariff list
+    When the admin navigates to the create tariff page
+    And creates a new tariff with the required details
+    Then the admin searches for the created tariff by tariff name
+    And verifies that the search results display the correct tariff
 
-    When Search for the created tariff using tariff code
-    Then Verify the search results display the correct tariff
+    When the admin updates the created tariff with new details
+    Then the admin verifies that the updated details are reflected in the tariff list
 
-    When Update the created tariff with new details
-    Then Verify the updated details are reflected in the tariff list
-
-    When user click on logout button
+    And the admin verifies the copy functionality
+    And the admin verifies the New button functionality
+    And the admin verifies the action log functionality
