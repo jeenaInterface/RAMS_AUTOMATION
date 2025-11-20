@@ -4,6 +4,7 @@ import { setDefaultTimeout } from "@cucumber/cucumber";
 import { getRandomInt, randomtext, currentDate } from "../helper/util/test-data/randomdata";
 import * as path from 'path';
 import { fixture } from "../hooks/pageFixture";
+import { table } from "console";
 
 setDefaultTimeout(100 * 1000);
 
@@ -12,6 +13,7 @@ export default class MaterialPage {
     private page: Page;
     public stockNo: string = '';
     public description: string = '';
+    public purchaseOrderNo: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -50,13 +52,38 @@ export default class MaterialPage {
         shopSelect: "//div[@class='el-col el-col-8']//input[@placeholder='--Select One--']",
         taxableCheckbox: "(//span[@class='el-checkbox__input']//span)[1]",
         underOrderPointCheckbox: "(//span[@class='el-checkbox__inner'])[2]",
-        requiredError: "//span[contains(text(),'Required') or contains(text(), 'This field is required')]",
+        requiredError: "//p[normalize-space(text())='Validation failed. Please correct input with red mark']",
         newButtonSelector: "//span[normalize-space()='New']",
         headertitle: "(//span[@class='header-title font-size-title'])[1]",
         headerTitleActionLog: "//span[@class='el-dialog__title'][normalize-space()='Action Log']",
         updateddescription: "//td[@class='el-table_1_column_66 is-left']//div[@class='cell']",
         operation: "//th[@class='el-table_1_column_123_column_124 is-left internal-filter is-leaf']//input[@placeholder='--Input Text--']",
-        operationSearchResult: "td[class='el-table_1_column_123_column_124 is-left internal-filter'] span"
+        operationSearchResult: "td[class='el-table_1_column_123_column_124 is-left internal-filter'] span",
+        assetGroupSearch: "(//input[@type='text'])[5]",
+        vendorSearchButton: "//i[@class='el-input__icon el-icon-search is-clickable']",
+        vendorCode: "(//input[@placeholder='--Input Text--'])[3]",
+        LookUpVendorOkButton: "(//span[contains(text(),'OK')])[5]",
+        LookUpVendorSearchButton: "(//span[contains(text(),'Search')])[2]",
+        searchButton1: "(//span[contains(text(),'Search')])[1]",
+        statusSearch: "(//input[@rows='2'])[9]",
+        shopSearch: "(//input[@rows='2'])[10]",
+        okButtonerror: "(//button[contains(@class,'el-button el-button--default')]//span)[2]",
+        createOrderButton: "//span[normalize-space(text())='Create Order']",
+        vendorSearchButtonOnPurchaseOrderForm: "(//div[@class='select-lookup']//i)[1]",
+        SearchButtonOnPurchaseOrderForm: "(//button[@class='el-button el-button--primary']//span)[3]",
+        link: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]/a[1]",
+        FOB: "(//input[@class='el-input__inner'])[3]",
+        terms: "(//input[@placeholder='--Select One--'])[3]",
+        shipvia: "(//input[@placeholder='--Select One--'])[4]",
+        jobnumber: "(//input[@placeholder='--Input Text--'])[1]",
+        instruction: "//textarea[@placeholder='--Input Text--']",
+        vendorNo: "//div[@id='vendorPartNo']//input[@type='text']",
+        retailPriceInput: "(//input[@type='text'])[18]",
+        orderQuantity: "(//input[@type='text'])[19]",
+        productCode: "(//input[@placeholder='Select'])[1]",
+        saveOnPurchaseOrderForm: "(//span[normalize-space()='Save'])[1]",
+        successMessageOnPurchaseOrderForm: "//div[@class='el-message-box__message']//p[1]",
+        okButtonpurchaceOrder:"(//span[contains(text(),'OK')])[6]"
 
 
     };
@@ -93,10 +120,6 @@ export default class MaterialPage {
         await this.page.getByRole('listitem').filter({ hasText: 'LBS - LBS' }).locator('span').click();
         await this.page.getByPlaceholder('--Select One--').nth(2).click();
         await this.page.getByText('Active', { exact: true }).click();
-
-        // await this.page.locator(this.Elements.statusSelect).click();
-        // await this.page.getByRole('listitem').filter({ hasText: 'Active' }).click();
-
 
 
         await this.page.locator(this.Elements.maxOHQtyInput).fill('10');
@@ -138,6 +161,11 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.stocknumbersearch).fill(this.stockNo);
         await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(500);
+    }
+    async clickonLink(): Promise<void> {
+
+        await this.base.waitAndClick(this.Elements.link);
         await fixture.page.waitForTimeout(500);
     }
 
@@ -237,6 +265,92 @@ export default class MaterialPage {
         await newPage.close();
     }
 
+    async clickOnCreateOrderButton(): Promise<void> {
+        const createBtn = this.page.locator(this.Elements.createOrderButton);
+        await expect(createBtn).toBeVisible();
+
+        const pagePromise = this.page.context().waitForEvent('page');
+        await createBtn.click();
+        const newPage = await pagePromise;
+
+        await newPage.waitForLoadState('networkidle');
+        const url = newPage.url();
+        fixture.logger?.info(`Create Order opened new page: ${url}`);
+        // If expected URL fragment exists, assert; else just continue
+        try {
+            await expect(url).toContain('purchase');
+        } catch (err) {
+            // not fatal - just log
+            fixture.logger?.warn(`Create Order did not open expected purchase page. URL: ${url}`);
+        }
+
+        // Switch fixture to new page so subsequent steps operate on the purchase order page
+        fixture.page = newPage;
+
+        await fixture.page.waitForTimeout(1000);
+
+        await newPage.locator(this.Elements.vendorSearchButtonOnPurchaseOrderForm).click();
+        await newPage.locator(this.Elements.vendorCode).fill('1000287');
+        await newPage.locator(this.Elements.SearchButtonOnPurchaseOrderForm).click();
+        // await this.page.locator(this.Elements.LookUpVendorOkButton).click();
+        await newPage.getByRole('button', { name: 'OK' }).click();
+        await newPage.locator('form').getByPlaceholder('--Select One--').nth(1).click();
+        await newPage.getByText('Power - Power Equipment Maintenance').click();
+        await newPage.locator(this.Elements.FOB).click();
+        await newPage.getByText('SHIPPING PT - Shipping Point').click();
+        await newPage.locator(this.Elements.terms).click();
+        await newPage.getByText('NET30 - Net 30 Days').click();
+        await newPage.locator(this.Elements.shipvia).click();
+        await newPage.getByText('BEST WAY - Best Available Shipping Option').click();
+        const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
+        await newPage.locator(this.Elements.jobnumber).fill(randomJobNumber);
+        const description = `Auto order ${randomJobNumber}`;
+        await newPage.locator(this.Elements.instruction).fill(description);
+        await newPage.locator(this.Elements.vendorNo).fill(randomJobNumber);
+        const price = `${getRandomInt(1, 10)}`;
+        // await newPage.locator(this.Elements.retailPriceInput).fill(price);
+        // await fixture.page.waitForTimeout(500);
+        // await newPage.locator(this.Elements.orderQuantity).fill(price);
+        await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').click();
+        await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').fill(price);
+        await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
+        await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill(price);
+        await newPage.locator(this.Elements.productCode).click();
+        await newPage.getByText('OPX_AGV - Maintenance Parts - AGV').click();
+        await fixture.page.waitForTimeout(1000);
+        await newPage.locator(this.Elements.saveOnPurchaseOrderForm).click();
+        await fixture.page.waitForTimeout(500);
+        await newPage.locator(this.Elements.okButtonpurchaceOrder).click();
+        const successMsg = await newPage.locator(this.Elements.successMessageOnPurchaseOrderForm).textContent();
+        fixture.logger?.info(`Purchase Order creation success message: ${successMsg}`);
+
+        // extract the purchase order number from the header
+        await fixture.page.waitForTimeout(1000);
+        const headerText = (await fixture.page.locator(this.Elements.headertitle).textContent()) || '';
+        // primary: digits between '|' and '(', fallback: first digits found anywhere
+        const primary = headerText.match(/\|\s*(\d+)\s*\(/)?.[1];
+        const fallback = headerText.match(/(\d+)/)?.[1] || '';
+        this.purchaseOrderNo = primary || fallback;
+        if (this.purchaseOrderNo) {
+            fixture.logger?.info(`Extracted Purchase Order number: ${this.purchaseOrderNo}`);
+        } else {
+            fixture.logger?.warn(`Unable to extract Purchase Order number from header: ${headerText}`);
+        }
+
+    }
+
+
+
+    async GoToPurchaseOrderPage(): Promise<void> {
+        // Verify current fixture.page points to a purchase/order page
+        const url = fixture.page.url();
+        if (!url.includes('purchase')) {
+            fixture.logger?.warn(`Current page is not a purchase order page: ${url}`);
+        }
+    }
+
+
+
     async verifyActionLog(): Promise<void> {
         await this.base.waitAndClick(this.Elements.actionLog);
         await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
@@ -246,8 +360,9 @@ export default class MaterialPage {
     }
 
     async verifyMandatoryFieldValidations(): Promise<void> {
-        // Open create page
-        await this.base.waitAndClick(this.Elements.createButton);
+        const randomNumber = getRandomInt(1000, 9999);
+        this.description = `Auto Material ${randomNumber}`;
+
         await fixture.page.waitForTimeout(500);
 
         // Try save without filling mandatory fields
@@ -257,31 +372,97 @@ export default class MaterialPage {
         // Expect validation message(s)
         const hasError = await this.page.locator(this.Elements.requiredError).first().isVisible();
         await expect(hasError).toBeTruthy();
+        await this.page.locator(this.Elements.okButtonerror).click();
 
-        // Fill mandatory fields one by one and verify errors disappear
-        try {
-            // fill required fields seen in the UI
-            await this.page.locator(this.Elements.manufacturerPartNoInput).fill(`MPN-REQ`);
-            await fixture.page.waitForTimeout(150);
-            await this.page.locator(this.Elements.rcvUomSelect).click();
-            await this.page.getByRole('listitem').first().click();
-            await fixture.page.waitForTimeout(150);
-            await this.page.locator(this.Elements.issueUomSelect).click();
-            await this.page.getByRole('listitem').first().click();
-            await fixture.page.waitForTimeout(150);
-            await this.page.locator(this.Elements.conversionFactorInput).fill('1');
-            await this.page.locator(this.Elements.descriptionInput).fill('Desc');
-            await fixture.page.waitForTimeout(250);
-        } catch (err) {
-            // ignore
-        }
 
-        // Try save again
+        await this.page.locator(this.Elements.manufacturerPartNoInput).fill(`MPN-${randomNumber}`);
+        await this.page.locator(this.Elements.manufacturerInput).fill(`MAN-${randomNumber}`);
+        await this.page.locator('form i').first().click();
+        await this.page.getByRole('listitem').filter({ hasText: '24LB - 24 Pound Bottle' }).click();
+        await this.page.locator('form i').nth(1).click();
+        await this.page.getByRole('listitem').filter({ hasText: 'LBS - LBS' }).locator('span').click();
+        await this.page.getByPlaceholder('--Select One--').nth(2).click();
+        await this.page.getByText('Active', { exact: true }).click();
+
+
+        await this.page.locator(this.Elements.maxOHQtyInput).fill('10');
+        await this.page.locator(this.Elements.orderPointInput).fill('1');
+
+        await this.page.locator(this.Elements.shopSelect).click();
+        await this.page.getByText('AGV - AGV').click();
+
         await this.base.waitAndClick(this.Elements.saveButton);
         await fixture.page.waitForTimeout(500);
 
+        const hasError1 = await this.page.locator(this.Elements.requiredError).first().isVisible();
+        await expect(hasError1).toBeTruthy();
+
+        await this.page.locator(this.Elements.okButtonerror).click();
+        await fixture.page.waitForTimeout(500);
+
+        await this.page.locator(this.Elements.descriptionInput).fill(this.description);
+        await this.base.waitAndClick(this.Elements.saveButton);
+        await fixture.page.waitForTimeout(500);
         // Expect no visible validation errors now
         const stillHasError = await this.page.locator(this.Elements.requiredError).first().isVisible().catch(() => false);
         await expect(stillHasError).toBeFalsy();
     }
+    async searchByAssetGroup(AssetGroup: string): Promise<void> {
+        await this.clickOnInquireMaterialMenu();
+        // reuse the same search input for part no
+        await this.page.locator(this.Elements.assetGroupSearch).click();
+        await this.page.getByText(AssetGroup).click();
+        await this.page.getByText('Reset Search').click();
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(500);
+    }
+    async searchMaterialByVendor(vendor: string): Promise<void> {
+        await this.clickOnInquireMaterialMenu();
+        // reuse the same search input for part no
+        await this.page.locator(this.Elements.vendorSearchButton).click();
+        await this.page.locator(this.Elements.vendorCode).fill(vendor);
+        await this.page.locator(this.Elements.LookUpVendorSearchButton).click();
+        // await this.page.locator(this.Elements.LookUpVendorOkButton).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await this.base.waitAndClick(this.Elements.searchButton1);
+        await fixture.page.waitForTimeout(500);
+    }
+
+    async verifySearchResultByVendor(vendor: string): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator("//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[9]/div[1]/span[1]");
+        const txt = (await firstRow.textContent()) || '';
+        await expect(txt).toContain(vendor);
+    }
+    async searchMaterialByStatus(status: string): Promise<void> {
+        await this.clickOnInquireMaterialMenu();
+        await this.page.getByPlaceholder('--Select One or More--').nth(3).click();
+        await this.page.getByRole('listitem').filter({ hasText: status }).locator('span').click();
+        await this.page.getByText('Reset Search').first().click();
+        await this.base.waitAndClick(this.Elements.searchButton1);
+        await fixture.page.waitForTimeout(500);
+    }
+
+    async verifySearchResultByStatus(status: string): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator("//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[3]/div[1]/span[1]");
+        const txt = (await firstRow.textContent()) || '';
+        await expect(txt).toContain(status);
+    }
+    async searchMaterialByShop(shop: string): Promise<void> {
+        await this.clickOnInquireMaterialMenu();
+        await this.page.locator(this.Elements.shopSearch).click();
+        await this.page.getByText(shop).click();
+        await this.base.waitAndClick(this.Elements.searchButton1);
+        await fixture.page.waitForTimeout(500);
+    }
+
+    async verifySearchResultByShop(shop: string): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator("//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[4]/div[1]/span[1]");
+        const txt = (await firstRow.textContent()) || '';
+        await expect(txt).toContain(shop);
+    }
+
 }

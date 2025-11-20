@@ -63,12 +63,12 @@ Then('verifies that the search results display the correct Description {string}'
   await materialPage.verifySearchResultByDescription(description);
 });
 
-Then('the admin searches for an existing material by asset group', async () => {
-  // placeholder
+Then('the admin searches for an existing material by asset group {string}', async (AssetGroup: string) => {
+  await materialPage.searchByAssetGroup(AssetGroup);
 });
 
-Then('verifies that the search results display the correct asset group', async () => {
-  // placeholder
+Then('verifies that the search results display the correct asset group {string}', async (AssetGroup: string) => {
+  await materialPage.searchByAssetGroup(AssetGroup);
 });
 
 Then('the admin searches for an existing material by stock location {string}', async (stockLocation: string) => {
@@ -79,28 +79,28 @@ Then('verifies that the search results display the correct stock location {strin
   await materialPage.verifySearchResultByStockLocation(stockLocation);
 });
 
-Then('the admin searches for an existing material by vendor', async () => {
-  // placeholder
+Then('the admin searches for an existing material by vendor {string}', async (vendor: string) => {
+  await materialPage.searchMaterialByVendor(vendor);
 });
 
-Then('verifies that the search results display the correct vendor', async () => {
-  // placeholder
+Then('verifies that the search results display the correct vendor {string}', async (vendor: string) => {
+  await materialPage.verifySearchResultByVendor(vendor);
 });
 
-Then('the admin searches for an existing material by status', async () => {
-  // placeholder
+Then('the admin searches for an existing material by status {string}', async (status: string) => {
+  await materialPage.searchMaterialByStatus(status);
 });
 
-Then('verifies that the search results display the correct status', async () => {
-  // placeholder
+Then('verifies that the search results display the correct status {string}', async (status: string) => {
+  await materialPage.verifySearchResultByStatus(status);
 });
 
-Then('the admin searches for an existing material by shop', async () => {
-  // placeholder
+Then('the admin searches for an existing material by shop {string}', async (shop: string) => {
+  await materialPage.searchMaterialByShop(shop);
 });
 
-Then('verifies that the search results display the correct shop', async () => {
-  // placeholder
+Then('verifies that the search results display the correct shop {string}', async (shop: string) => {
+  await materialPage.verifySearchResultByShop(shop);
 });
 
 When('the admin navigates to the create material page', async () => {
@@ -108,22 +108,21 @@ When('the admin navigates to the create material page', async () => {
   await materialPage.clickOnCreateMaterialMenu();
 });
 
-When('attempts to create a new material without filling in the mandatory fields', async () => {
+
+Then('the admin fills in the mandatory fields one by one and attempts to submit the form each time', async () => {
   await materialPage.verifyMandatoryFieldValidations();
 });
 
-Then('verifies that appropriate validation messages are displayed for each mandatory field', async () => {
-  // handled inside verifyMandatoryFieldValidations
-});
-
-Then('the admin fills in the mandatory fields one by one and attempts to submit the form each time', async () => {
-  // handled in verifyMandatoryFieldValidations
-});
-
-Then('verifies that the validation messages disappear as the mandatory fields are filled', async () => {
-  // handled in verifyMandatoryFieldValidations
-});
-
 Then('finally, the admin fills in all mandatory fields and successfully creates the material', async () => {
-  // final save handled inside verifyMandatoryFieldValidations
+  await materialPage.createNewMaterial();
+});
+
+
+Then('submits the create order form after filling in the required order details', async () => {
+  await materialPage.clickOnCreateOrderButton();
+});
+
+
+Then('click on the link', async () => {
+  await materialPage.clickonLink();
 });
