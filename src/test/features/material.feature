@@ -7,6 +7,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Given the admin user is logged into the application
         When the admin navigates to the material creation page
         And enters all required details to create a new material
+        Then the created Stock No is captured for further use
         Then the admin searches for the newly created material using its Stock No.
         And confirms that the search results correctly display the matching Stock No.
         When the admin updates the created material by modifying its Description and confirms that the updated Description appears correctly in the material list
@@ -91,19 +92,27 @@ Feature: Add, Update, and Search Functionalities in material Module
 
     Scenario: Verify create order functionlity from material module and verify order track is recorded under the material after receiving the material
         Given the admin user is logged into the application
-        # Then the admin navigates to the material creation page
-        # When enters all required details to create a new material
-        When the admin navigates to the inquire material page
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        Then the created Stock No is captured for further use
+        # When the admin navigates to the inquire material page
+        # Then the admin searches for an existing material by Stock No.
+        # Then click on the link
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+        Then Do receive material and review for the created order
+        Then track the receiving document number for further use
+        Then the admin navigates to the inquire material page
         Then the admin searches for an existing material by Stock No.
         Then click on the link
+        And verifies that the order track is recorded under the material details
+        Then Verify OH quantity is updated in material after receiving the material
+        Then Go to material recive module and Cancel the the created recive done earlier
+        Then the admin navigates to the inquire material page
+        Then the admin searches for an existing material by Stock No.
+        Then click on the link
+        Then Verify the OH quantity is reverted back
         And submits the create order form after filling in the required order details
-#         Then Do recive material for the created order
-#         Then Do batch review for the received material
-#         Then the admin navigates back to the inquire material page
-#         Then the admin searches for the same material by Stock No.
-#         And verifies that the order track is recorded under the material details
-#         Then Verify OH quantity is updated in material after receiving the material
-        # Then Go to material recive module
-        # And search for the created order by order no
-        # Then Cancel the the created recive done earlier
-        # Then open material and verify the OH quantity is reverted back
+        Then the Purchase Order number is captured for further use
+        Then Do receive material and review for the created order
+        Then track the receiving document number for further use

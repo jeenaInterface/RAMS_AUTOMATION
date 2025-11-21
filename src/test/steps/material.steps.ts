@@ -114,7 +114,8 @@ Then('the admin fills in the mandatory fields one by one and attempts to submit 
 });
 
 Then('finally, the admin fills in all mandatory fields and successfully creates the material', async () => {
-  await materialPage.createNewMaterial();
+ await materialPage.createNewMaterial();
+
 });
 
 
@@ -125,4 +126,92 @@ Then('submits the create order form after filling in the required order details'
 
 Then('click on the link', async () => {
   await materialPage.clickonLink();
+});
+
+Then('the Purchase Order number is captured for further use', async function (this: any) {
+  // Ensure materialPage is initialized
+  materialPage = materialPage || new MaterialPage(fixture.page);
+  // Prefer the stored property set during create-order flow
+  let po = materialPage.purchaseOrderNo || '';
+  // Fallback: try reading the header directly from the current page
+  if (!po) {
+    const headerText = (await fixture.page.locator("(//span[@class='header-title font-size-title'])[1]").textContent()) || '';
+    po = headerText.match(/\|\s*(\d+)\s*\(/)?.[1] || headerText.match(/(\d+)/)?.[1] || '';
+  }
+  // Attach PO number to Cucumber report so it appears in HTML report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Purchase Order: ${po}`);
+  } else {
+    // Fallback logging
+    fixture.logger?.info(`Purchase Order: ${po}`);
+  }
+});
+
+Then('the created Stock No is captured for further use', async function (this: any) {
+  materialPage = materialPage || new MaterialPage(fixture.page);
+  // Prefer the stock number returned by createNewMaterial and stored on the page object
+  const stock = materialPage.stockNo || '';
+  if (!stock) {
+    fixture.logger?.warn('Stock No is empty; ensure createNewMaterial() returned and set it');
+  }
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Stock No: ${stock}`);
+  } else {
+    fixture.logger?.info(`Stock No: ${stock}`);
+  }
+});
+
+Then('Do receive material and review for the created order', async () => {
+  await materialPage.createReceiveMaterial();
+
+});
+
+Then('verifies that the order track is recorded under the material details', async () => {
+
+  await materialPage.verifyOrderTrack();
+});
+
+Then('track the receiving document number for further use', async function (this: any) {
+  // Ensure materialPage is initialized
+  materialPage = materialPage || new MaterialPage(fixture.page);
+
+  // Prefer stored property if set during previous flow
+  let receivingDocNo = materialPage.ReceivingDocumentNo || '';
+
+  // Fallback: read from header if not already stored
+  if (!receivingDocNo) {
+    const headerText = (await fixture.page.locator("(//span[@class='header-title font-size-title'])[1]").textContent()) || '';
+    // Extract number after "Receiving Doc. No.:"
+    receivingDocNo = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/)?.[1] || '';
+  }
+
+  // Attach Receiving Doc number to Cucumber report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Receiving Document No: ${receivingDocNo}`);
+  } else {
+    fixture.logger?.info(`Receiving Document No: ${receivingDocNo}`);
+  }
+
+  // Optionally store it for later use
+  materialPage.ReceivingDocumentNo = receivingDocNo;
+});
+Then('Verify OH quantity is updated in material after receiving the material', async () => {
+
+  await materialPage.verifyStockLocation();
+  await materialPage.verifyStockCount();
+});
+
+
+
+Then('Go to material recive module and Cancel the the created recive done earlier', async () => {
+
+  await materialPage.canceltheMaterialReceive();
+
+});
+
+
+Then('Verify the OH quantity is reverted back', async () => {
+
+  await materialPage.verifyStockCountAfterCancel();
+
 });
