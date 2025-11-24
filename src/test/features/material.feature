@@ -42,52 +42,6 @@ Feature: Add, Update, and Search Functionalities in material Module
         When the admin navigates to the material creation page
         And the admin fills in the mandatory fields one by one and attempts to submit the form each time
 
-    #     @transferLocation @sanity
-    #     Scenario: Verify material transfer between stock locations
-    #         Given the admin user is logged into the application
-    #         When the admin navigates to the inquire material page
-    #         Then the admin searches for an existing material by Stock No.
-    #         And Click stock No. link from the search results
-    #         Then click on the transfer location button
-    #         And verifies that the transfer location dialog is displayed
-    #         Then the admin selects a different stock location to transfer the material to
-    #         And submits the transfer location form
-    #         Then verifies that the material transfer is completed successfully with a confirmation message
-    #         Then the admin navigates back to the inquire material page
-    #         Then the admin searches for the same material by Stock No.
-    #         And verifies that the material's stock location is updated to the new location
-    #         Then Verify OH quantity is updated in both stock locations after transfer
-    #         And the admin verifies that the transfer is recorded in the material's action log
-
-
-
-    #     @adjustOHQuantity @sanity
-    #     Scenario: Verify OH quantity adjustment for a material
-    #         Given the admin user is logged into the application
-    #         When the admin navigates to the inquire material page
-    #         Then the admin searches for an existing material by Stock No.
-    #         And Click stock No. link from the search results
-    #         Then click on the adjust OH quantity button
-    #         And verifies that the adjust OH quantity dialog is displayed
-    #         Then the admin enters the adjustment details (increase or decrease quantity and reason)
-    #         And submits the adjust OH quantity form
-    #         Then verifies that the OH quantity adjustment is completed successfully with a confirmation message
-    #         Then the admin navigates back to the inquire material page
-    #         Then the admin searches for the same material by Stock No.
-    #         And verifies that the material's OH quantity is updated accordingly
-    #         Then the admin verifies that the OH quantity adjustment is recorded in the material's action log
-
-
-    # @materialUsage @sanity
-    # Scenario: Verify material usage recording and OH quantity update
-    #     Given the admin user is logged into the application
-    #     When the admin navigates to the inquire material page
-    #     Then the admin searches for an existing material by Stock No.
-    #     And Click stock No. link from the search results
-    #     Then click on the record material usage button
-    #     And verifies that the record material usage dialog is displayed
-    # # Do the integration once complete the work order
-
     @createOrder @sanity
 
     Scenario: Verify create order functionlity from material module and verify order track is recorded under the material after receiving the material
@@ -102,13 +56,11 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the Purchase Order number is captured for further use
         Then Do receive material and review for the created order
         Then track the receiving document number for further use
-        Then the admin navigates to the inquire material page
         Then the admin searches for an existing material by Stock No.
         Then click on the link
         And verifies that the order track is recorded under the material details
         Then Verify OH quantity is updated in material after receiving the material
         Then Go to material recive module and Cancel the the created recive done earlier
-        Then the admin navigates to the inquire material page
         Then the admin searches for an existing material by Stock No.
         Then click on the link
         Then Verify the OH quantity is reverted back
@@ -116,3 +68,59 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the Purchase Order number is captured for further use
         Then Do receive material and review for the created order
         Then track the receiving document number for further use
+
+    @transferLocation @sanity
+    Scenario: Verify material transfer between stock locations
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        Then the created Stock No is captured for further use
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+        Then Do receive material and review for the created order
+        Then track the receiving document number for further use
+        Then the admin searches for an existing material by Stock No.
+        Then click on the link
+        Then Do transfer material to another location
+        Then the admin searches for an existing material by Stock No.
+        Then click on the link
+        And Verify OH quantity and location are updated in material after transfer the material
+        And the admin verifies that the transfer is recorded in the materials action log
+
+
+    @transferLocation @sanity
+    Scenario: Verify transfer material from menu
+        Given the admin user is logged into the application
+        Then Go to transfer material and verify its navigate to transfer material screen
+        Then Enter stock number captured
+        Then Click on Reset button and verify reset functionlity is working as expected
+
+
+#     @adjustOHQuantity @sanity
+#     Scenario: Verify OH quantity adjustment for a material
+#         Given the admin user is logged into the application
+#         When the admin navigates to the inquire material page
+#         Then the admin searches for an existing material by Stock No.
+#         And Click stock No. link from the search results
+#         Then click on the adjust OH quantity button
+#         And verifies that the adjust OH quantity dialog is displayed
+#         Then the admin enters the adjustment details (increase or decrease quantity and reason)
+#         And submits the adjust OH quantity form
+#         Then verifies that the OH quantity adjustment is completed successfully with a confirmation message
+#         Then the admin navigates back to the inquire material page
+#         Then the admin searches for the same material by Stock No.
+#         And verifies that the material's OH quantity is updated accordingly
+#         Then the admin verifies that the OH quantity adjustment is recorded in the material's action log
+
+
+# @materialUsage @sanity
+# Scenario: Verify material usage recording and OH quantity update
+#     Given the admin user is logged into the application
+#     When the admin navigates to the inquire material page
+#     Then the admin searches for an existing material by Stock No.
+#     And Click stock No. link from the search results
+#     Then click on the record material usage button
+#     And verifies that the record material usage dialog is displayed
+# # Do the integration once complete the work order
+
+

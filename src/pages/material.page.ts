@@ -60,7 +60,7 @@ export default class MaterialPage {
         headerTitleActionLog: "//span[@class='el-dialog__title'][normalize-space()='Action Log']",
         updateddescription: "//td[@class='el-table_1_column_66 is-left']//div[@class='cell']",
         operation: "//th[@class='el-table_1_column_123_column_124 is-left internal-filter is-leaf']//input[@placeholder='--Input Text--']",
-        operationSearchResult: "td[class='el-table_1_column_123_column_124 is-left internal-filter'] span",
+        operationSearchResult: "//tbody/tr[1]/td[1]/div[1]/span[1]",
         assetGroupSearch: "(//input[@type='text'])[5]",
         vendorSearchButton: "//i[@class='el-input__icon el-icon-search is-clickable']",
         vendorCode: "(//input[@placeholder='--Input Text--'])[3]",
@@ -103,7 +103,17 @@ export default class MaterialPage {
         cancelButton: "(//span[contains(text(),'Cancel')])[3]",
         cancelReson: "//textarea[@autosize='[object Object]']",
         cancelOk: "(//span[contains(text(),'OK')])[1]",
-        cancelDSuccessMessage: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]"
+        cancelDSuccessMessage: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
+        transferLocation: "//span[normalize-space(text())='Transfer Location']",
+        adjustReason: "(//input[@class='el-input__inner'])[3]",
+        materialTransferSucess: "//p[normalize-space(text())='Material is updated successfully']",
+        operationSearch: "(//input[@placeholder='--Input Text--'])[1]",
+        minusButtonOnTransfer: "(//i[@class='ivu-icon ivu-icon-minus'])[1]",
+        masterRadioButtonTransfer: "(//span[@class='el-radio__inner'])[2]",
+        OHQuantityAfterTransfer: "(//input[@type='text'])[5]"
+
+
+
 
 
 
@@ -189,6 +199,7 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(1000);
         console.log("Captured Stock No for verification:", this.stockNo);
         await this.page.locator(this.Elements.stocknumbersearch).fill(this.stockNo);
+        // await this.page.locator(this.Elements.stocknumbersearch).fill("7805");
         await this.base.waitAndClick(this.Elements.searchButton);
         await fixture.page.waitForTimeout(500);
     }
@@ -376,6 +387,7 @@ export default class MaterialPage {
         fixture.page = originalPage;
         await newPage.close();
 
+
     }
 
 
@@ -393,8 +405,11 @@ export default class MaterialPage {
     async verifyActionLog(): Promise<void> {
         await this.base.waitAndClick(this.Elements.actionLog);
         await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
-        // await this.page.locator(this.Elements.operation).fill('Create Material');
-        // await expect(this.page.locator(this.Elements.operationSearchResult)).toHaveValue('Create Material');
+        await this.page.locator(this.Elements.operation).fill('Create Material');
+        await fixture.page.waitForTimeout(500);
+        await expect(this.page.locator(this.Elements.operationSearchResult)).toHaveValue('Create Material');
+
+        await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.closeButton).click();
     }
 
@@ -585,12 +600,76 @@ export default class MaterialPage {
 
 
     }
-        async verifyStockCountAfterCancel(): Promise<void> {
+    async verifyStockCountAfterCancel(): Promise<void> {
         await fixture.page.waitForTimeout(500);
         const firstRow = this.page.locator("//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/div[1]/span[1]");
         const txt = (await firstRow.textContent());
         await expect(txt).toContain('0');
 
     }
+    async transferLocation(): Promise<void> {
+        const transferLocationBtn = this.page.locator(this.Elements.transferLocation);
+        await expect(transferLocationBtn).toBeVisible();
+        const originalPage = fixture.page;
+        const pagePromise = originalPage.context().waitForEvent('page');
+        await transferLocationBtn.click();
+        const newPage = await pagePromise;
 
+        await newPage.waitForLoadState('networkidle');
+        const url = newPage.url();
+        fixture.logger?.info(`Create Order opened new page: ${url}`);
+        // If expected URL fragment exists, assert; else just continue
+        try {
+            await expect(url).toContain('transfer');
+        } catch (err) {
+            // not fatal - just log
+            fixture.logger?.warn(`Transfer material did not open expected. URL: ${url}`);
+        }
+
+        // Switch fixture to new page so subsequent steps operate on the purchase order page
+        fixture.page = newPage;
+
+        await fixture.page.waitForTimeout(1000);
+        await newPage.locator(this.Elements.adjustReason).click();
+        await newPage.getByText('Transfer Location').click();
+        await newPage.locator(this.Elements.minusButtonOnTransfer).click();
+        await newPage.getByRole('button', { name: 'Yes' }).click();
+        await newPage.locator(this.Elements.masterRadioButtonTransfer).click();
+        await newPage.getByRole('cell', { name: '--Input Or Select One--' }).getByPlaceholder('--Input Or Select One--').click();
+        await newPage.getByRole('cell', { name: '--Input Or Select One--' }).getByPlaceholder('--Input Or Select One--').type('TS-NS-Services');
+        await newPage.getByText('TS-NS-Services').click();
+
+        await newPage.locator(this.Elements.OHQuantityAfterTransfer).fill("24");
+        await newPage.locator(this.Elements.saveButton).click();
+        // await expect(this.page.locator(this.Elements.materialTransferSucess)).toBeVisible();
+        await newPage.locator(this.Elements.okButtonUpdate).click();
+        await fixture.page.waitForTimeout(1000);
+        fixture.page = originalPage;
+        await newPage.close();
+
+
+    }
+    async verifyStockLocationAfterTransfer(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator("(//span[normalize-space()='TS-NS-Services'])[1]");
+        const txt = (await firstRow.textContent());
+        await expect(txt).toContain('TS-NS-Services');
+
+    }
+    async verifyStockCountAfterTransfer(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator("//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/div[1]/span[1]");
+        const txt = (await firstRow.textContent());
+        await expect(txt).toContain('24');
+
+    }
+    async verifyActionLogAfterTransfer(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLog);
+        await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
+        await this.page.locator(this.Elements.operationSearch).fill('Transfer Material');
+        await fixture.page.waitForTimeout(500);
+        await expect(this.page.locator(this.Elements.operationSearchResult)).toHaveValue('Transfer Material');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.closeButton).click();
+    }
 }

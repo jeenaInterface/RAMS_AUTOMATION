@@ -114,7 +114,7 @@ Then('the admin fills in the mandatory fields one by one and attempts to submit 
 });
 
 Then('finally, the admin fills in all mandatory fields and successfully creates the material', async () => {
- await materialPage.createNewMaterial();
+  await materialPage.createNewMaterial();
 
 });
 
@@ -148,7 +148,8 @@ Then('the Purchase Order number is captured for further use', async function (th
 });
 
 Then('the created Stock No is captured for further use', async function (this: any) {
-  materialPage = materialPage || new MaterialPage(fixture.page);
+  // materialPage = materialPage || new MaterialPage(fixture.page);
+// 
   // Prefer the stock number returned by createNewMaterial and stored on the page object
   const stock = materialPage.stockNo || '';
   if (!stock) {
@@ -213,5 +214,23 @@ Then('Go to material recive module and Cancel the the created recive done earlie
 Then('Verify the OH quantity is reverted back', async () => {
 
   await materialPage.verifyStockCountAfterCancel();
+
+});
+
+
+Then('Do transfer material to another location', async () => {
+
+  await materialPage.transferLocation();
+
+});
+Then('Verify OH quantity and location are updated in material after transfer the material', async () => {
+
+  await materialPage.verifyStockLocationAfterTransfer();
+  await materialPage.verifyStockCountAfterTransfer();
+});
+
+Then('the admin verifies that the transfer is recorded in the materials action log', async () => {
+
+  await materialPage.verifyActionLogAfterTransfer();
 
 });
