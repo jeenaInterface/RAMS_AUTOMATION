@@ -110,7 +110,13 @@ export default class MaterialPage {
         operationSearch: "(//input[@placeholder='--Input Text--'])[1]",
         minusButtonOnTransfer: "(//i[@class='ivu-icon ivu-icon-minus'])[1]",
         masterRadioButtonTransfer: "(//span[@class='el-radio__inner'])[2]",
-        OHQuantityAfterTransfer: "(//input[@type='text'])[5]"
+        OHQuantityAfterTransfer: "(//input[@type='text'])[5]",
+        transferMatrialMenu: "//span[normalize-space(text())='- Transfer Material']",
+        stockNoTransfer: "(//input[@class='el-input__inner'])[1]",
+        searchButtonOnTransfer: "(//button[@type='button']//span)[2]",
+        okButton2:"//span[normalize-space(text())='OK']",
+        closeButtonTransfer:"(//i[@class='el-message-box__close el-icon-close'])[1]"
+
 
 
 
@@ -672,4 +678,28 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.closeButton).click();
     }
+    async transferLocationFromMenu(): Promise<void> {
+        this.page.locator(this.Elements.materialMenu).click();
+        this.page.locator(this.Elements.transferMatrialMenu).click();
+        await fixture.page.waitForTimeout(1000);
+        this.page.locator(this.Elements.stockNoTransfer).fill(this.stockNo);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.searchButtonOnTransfer).click();
+        await this.page.locator(this.Elements.adjustReason).click();
+        await this.page.getByText('Transfer Location').click();
+        await this.page.locator(this.Elements.minusButtonOnTransfer).click();
+        await this.page.getByRole('button', { name: 'Yes' }).click();
+        await this.page.locator(this.Elements.masterRadioButtonTransfer).click();
+        await this.page.getByRole('cell', { name: '--Input Or Select One--' }).getByPlaceholder('--Input Or Select One--').click();
+        await this.page.getByRole('cell', { name: '--Input Or Select One--' }).getByPlaceholder('--Input Or Select One--').type('TS-NS-Services');
+        await this.page.getByText('TS-NS-Services').click();
+
+        await this.page.locator(this.Elements.OHQuantityAfterTransfer).fill("24");
+        await this.page.locator(this.Elements.saveButton).click();
+        // await expect(this.page.locator(this.Elements.materialTransferSucess)).toBeVisible();
+        await this.page.locator(this.Elements.closeButtonTransfer).click();
+        await fixture.page.waitForTimeout(5000);
+
+    }
+
 }

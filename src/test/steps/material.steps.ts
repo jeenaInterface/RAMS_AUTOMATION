@@ -129,8 +129,7 @@ Then('click on the link', async () => {
 });
 
 Then('the Purchase Order number is captured for further use', async function (this: any) {
-  // Ensure materialPage is initialized
-  materialPage = materialPage || new MaterialPage(fixture.page);
+
   // Prefer the stored property set during create-order flow
   let po = materialPage.purchaseOrderNo || '';
   // Fallback: try reading the header directly from the current page
@@ -149,9 +148,9 @@ Then('the Purchase Order number is captured for further use', async function (th
 
 Then('the created Stock No is captured for further use', async function (this: any) {
   // materialPage = materialPage || new MaterialPage(fixture.page);
-// 
+  // 
   // Prefer the stock number returned by createNewMaterial and stored on the page object
-  const stock = materialPage.stockNo || '';
+  const stock = materialPage.stockNo;
   if (!stock) {
     fixture.logger?.warn('Stock No is empty; ensure createNewMaterial() returned and set it');
   }
@@ -173,8 +172,7 @@ Then('verifies that the order track is recorded under the material details', asy
 });
 
 Then('track the receiving document number for further use', async function (this: any) {
-  // Ensure materialPage is initialized
-  materialPage = materialPage || new MaterialPage(fixture.page);
+
 
   // Prefer stored property if set during previous flow
   let receivingDocNo = materialPage.ReceivingDocumentNo || '';
@@ -232,5 +230,11 @@ Then('Verify OH quantity and location are updated in material after transfer the
 Then('the admin verifies that the transfer is recorded in the materials action log', async () => {
 
   await materialPage.verifyActionLogAfterTransfer();
+
+});
+
+Then('Go to transfer material menu and Do transfer material to another location', async () => {
+
+  await materialPage.transferLocationFromMenu();
 
 });

@@ -88,12 +88,21 @@ Feature: Add, Update, and Search Functionalities in material Module
         And the admin verifies that the transfer is recorded in the materials action log
 
 
-    @transferLocation @sanity
+    @transferLocationMenu @sanity
     Scenario: Verify transfer material from menu
         Given the admin user is logged into the application
-        Then Go to transfer material and verify its navigate to transfer material screen
-        Then Enter stock number captured
-        Then Click on Reset button and verify reset functionlity is working as expected
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        Then the created Stock No is captured for further use
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+        Then Do receive material and review for the created order
+        Then track the receiving document number for further use
+        Then Go to transfer material menu and Do transfer material to another location
+        Then the admin searches for an existing material by Stock No.
+        Then click on the link
+        And Verify OH quantity and location are updated in material after transfer the material
+        And the admin verifies that the transfer is recorded in the materials action log
 
 
 #     @adjustOHQuantity @sanity
