@@ -60,6 +60,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then click on the link
         And verifies that the order track is recorded under the material details
         Then Verify OH quantity is updated in material after receiving the material
+        Then Verify the vendor details are displayed in material after Purchase order
         Then Go to material recive module and Cancel the the created recive done earlier
         Then the admin searches for an existing material by Stock No.
         Then click on the link

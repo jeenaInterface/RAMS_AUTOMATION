@@ -278,3 +278,9 @@ Then('the admin updates the OH quantity of multiple stocks and verifies the succ
   await materialPage.UpdatemultipleStock();
 
 });
+
+
+Then('Verify the vendor details are displayed in material after Purchase order', async () => {
+  await materialPage.verifyVendorDetails();
+
+});

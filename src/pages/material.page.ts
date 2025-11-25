@@ -126,9 +126,9 @@ export default class MaterialPage {
         TotalOHQuantity1: "(//input[@type='text'])[4]",
 
         TotalOHQuantity2: "(//input[@type='text'])[5]",
-        OHSuccussMessage: "//p[normalize-space()='OH quantity has been adjusted successfully']"
+        OHSuccussMessage: "//p[normalize-space()='OH quantity has been adjusted successfully']",
 
-
+        vendorDetails: "(//span[normalize-space()='1000287 - OCEAN BLUE ENVIRONMENTAL'])[1]"
 
 
 
@@ -803,5 +803,11 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.cancelDSuccessMessage).click();
 
     }
+        async verifyVendorDetails(): Promise<void> {
+        const errorText = await this.page.locator(this.Elements.vendorDetails).textContent();
+        expect(errorText).toContain('1000287 ');
+
+    }
+
 
 }
