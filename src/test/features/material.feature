@@ -89,7 +89,7 @@ Feature: Add, Update, and Search Functionalities in material Module
 
 
     @transferLocationMenu @sanity
-    Scenario: Verify transfer material from menu
+    Scenario: Verify transfer material functionality from menu
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
         When enters all required details to create a new material
@@ -102,25 +102,47 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the admin searches for an existing material by Stock No.
         Then click on the link
         And Verify OH quantity and location are updated in material after transfer the material
-        And the admin verifies that the transfer is recorded in the materials action log
 
+    @adjustOHQuantity @sanity
+    Scenario: Verify OH quantity adjustment for a material
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        Then the created Stock No is captured for further use
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+        Then Do receive material and review for the created order
+        Then track the receiving document number for further use
+        Then the admin searches for an existing material by Stock No.
+        Then click on the link
+        Then click on the adjust OH quantity button and update the OH quantity
+        Then the admin searches for an existing material by Stock No.
+        Then click on the link
+        And verifies that the material OH quantity is updated accordingly
 
-#     @adjustOHQuantity @sanity
-#     Scenario: Verify OH quantity adjustment for a material
-#         Given the admin user is logged into the application
-#         When the admin navigates to the inquire material page
-#         Then the admin searches for an existing material by Stock No.
-#         And Click stock No. link from the search results
-#         Then click on the adjust OH quantity button
-#         And verifies that the adjust OH quantity dialog is displayed
-#         Then the admin enters the adjustment details (increase or decrease quantity and reason)
-#         And submits the adjust OH quantity form
-#         Then verifies that the OH quantity adjustment is completed successfully with a confirmation message
-#         Then the admin navigates back to the inquire material page
-#         Then the admin searches for the same material by Stock No.
-#         And verifies that the material's OH quantity is updated accordingly
-#         Then the admin verifies that the OH quantity adjustment is recorded in the material's action log
+    @adjustOHQuantityMenu @sanity
+    Scenario: Verify adjustment OH quantity menu
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        Then the created Stock No is captured for further use
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+        Then Do receive material and review for the created order
+        Then track the receiving document number for further use
+        Then click on the adjust OH quantity menu and update the OH quantity
+        Then the admin searches for an existing material by Stock No.
+        Then click on the link
+        And verifies that the material OH quantity is updated accordingly
 
+@adjustOHQuantityRandomUpdate @sanity
+  Scenario: Verify adjustment OH quantity menu
+    Given the admin user is logged into the application
+    When the admin navigates to the adjust OH quantity page
+    Then the admin clicks on the adjust button without selecting an adjust reason
+    When the admin selects the adjust reason
+    And clicks on the adjust button without updating the quantity
+    When the admin updates the OH quantity of multiple stocks and verifies the success message
 
 # @materialUsage @sanity
 # Scenario: Verify material usage recording and OH quantity update

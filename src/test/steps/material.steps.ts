@@ -238,3 +238,43 @@ Then('Go to transfer material menu and Do transfer material to another location'
   await materialPage.transferLocationFromMenu();
 
 });
+
+Then('click on the adjust OH quantity button and update the OH quantity', async () => {
+
+  await materialPage.adjustOHQuantity();
+
+});
+Then('verifies that the material OH quantity is updated accordingly', async () => {
+
+  await materialPage.verifyStockCountAfterAdjust();
+
+});
+Then('click on the adjust OH quantity menu and update the OH quantity', async () => {
+
+  await materialPage.adjustOHQuantityMenu();
+
+});
+
+Then('the admin navigates to the adjust OH quantity page', async () => {
+  materialPage = new MaterialPage(fixture.page);
+  await materialPage.adjustOHQuantityMenuForCheckingRandomScenarios();
+
+});
+
+Then('the admin clicks on the adjust button without selecting an adjust reason', async () => {
+  await materialPage.validationForAdjustReason();
+
+});
+Then('the admin selects the adjust reason', async () => {
+  await materialPage.selectAdjustReason();
+
+});
+Then('clicks on the adjust button without updating the quantity', async () => {
+  await materialPage.validationForAdjustStock();
+
+});
+
+Then('the admin updates the OH quantity of multiple stocks and verifies the success message', async () => {
+  await materialPage.UpdatemultipleStock();
+
+});

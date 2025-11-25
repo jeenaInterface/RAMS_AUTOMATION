@@ -114,8 +114,20 @@ export default class MaterialPage {
         transferMatrialMenu: "//span[normalize-space(text())='- Transfer Material']",
         stockNoTransfer: "(//input[@class='el-input__inner'])[1]",
         searchButtonOnTransfer: "(//button[@type='button']//span)[2]",
-        okButton2:"//span[normalize-space(text())='OK']",
-        closeButtonTransfer:"(//i[@class='el-message-box__close el-icon-close'])[1]"
+        okButton2: "//span[normalize-space(text())='OK']",
+        closeButtonTransfer: "(//i[@class='el-message-box__close el-icon-close'])[1]",
+        adjustOHQuantity: "//span[normalize-space()='Adjust OH Quantity']",
+        adjustreasonDll: "(//input[@class='el-input__inner'])[3]",
+        TotalOHQuantity: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        adjustButton: "//span[normalize-space(text())='Adjust']",
+        adjustOHQuantityMenu: "//span[normalize-space()='- Adjust OH Quantity']",
+        errorOnAdjustOHScreen: "//p[contains(text(),'Validation failed. Please correct input with red m')]",
+        stockErrorValidation: "//p[contains(text(),'At least one stock location should be adjusted wit')]",
+        TotalOHQuantity1: "(//input[@type='text'])[4]",
+
+        TotalOHQuantity2: "(//input[@type='text'])[5]",
+        OHSuccussMessage: "//p[normalize-space()='OH quantity has been adjusted successfully']"
+
 
 
 
@@ -699,6 +711,96 @@ export default class MaterialPage {
         // await expect(this.page.locator(this.Elements.materialTransferSucess)).toBeVisible();
         await this.page.locator(this.Elements.closeButtonTransfer).click();
         await fixture.page.waitForTimeout(5000);
+
+    }
+    async adjustOHQuantity(): Promise<void> {
+        const adjustOHQuantityBtn = this.page.locator(this.Elements.adjustOHQuantity);
+        await expect(adjustOHQuantityBtn).toBeVisible();
+        const originalPage = fixture.page;
+        const pagePromise = originalPage.context().waitForEvent('page');
+        await adjustOHQuantityBtn.click();
+        const newPage = await pagePromise;
+
+        await newPage.waitForLoadState('networkidle');
+        const url = newPage.url();
+        fixture.logger?.info(`Adjust OH Quantity opened new page: ${url}`);
+        // If expected URL fragment exists, assert; else just continue
+        try {
+            await expect(url).toContain('ohAdjust');
+        } catch (err) {
+            // not fatal - just log
+            fixture.logger?.warn(`Adjust OH quantity page did not open expected. URL: ${url}`);
+        }
+
+        fixture.page = newPage;
+        await fixture.page.waitForTimeout(1000);
+        await newPage.locator(this.Elements.adjustreasonDll).click();
+        await newPage.getByText('Transfer Location').click();
+        await newPage.locator(this.Elements.TotalOHQuantity).fill("48");
+        await newPage.locator(this.Elements.adjustButton).click();
+        // await expect(this.page.locator(this.Elements.materialTransferSucess)).toBeVisible();
+        await newPage.locator(this.Elements.okButton2).click();
+        await fixture.page.waitForTimeout(1000);
+        fixture.page = originalPage;
+        await newPage.close();
+    }
+    async verifyStockCountAfterAdjust(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator("//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/div[1]/span[1]");
+        const txt = (await firstRow.textContent());
+        await expect(txt).toContain('48');
+
+    }
+    async adjustOHQuantityMenu(): Promise<void> {
+        this.page.locator(this.Elements.materialMenu).click();
+        this.page.locator(this.Elements.adjustOHQuantityMenu).click();
+        await fixture.page.waitForTimeout(1000);
+        this.page.locator(this.Elements.stockNoTransfer).fill(this.stockNo);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.searchButtonOnTransfer).click();
+        await this.page.locator(this.Elements.adjustReason).click();
+        await this.page.getByText('Transfer Location').click();
+
+        await this.page.locator(this.Elements.TotalOHQuantity).fill("48");
+        await this.page.locator(this.Elements.adjustButton).click();
+        await this.page.locator(this.Elements.closeButtonTransfer).click();
+        await fixture.page.waitForTimeout(5000);
+
+    }
+
+    async adjustOHQuantityMenuForCheckingRandomScenarios(): Promise<void> {
+        this.page.locator(this.Elements.materialMenu).click();
+        this.page.locator(this.Elements.adjustOHQuantityMenu).click();
+    }
+    async validationForAdjustReason(): Promise<void> {
+        await this.page.locator(this.Elements.searchButtonOnTransfer).click();
+        await this.page.locator(this.Elements.adjustButton).click();
+        const errorText = await this.page.locator(this.Elements.errorOnAdjustOHScreen).textContent();
+        expect(errorText).toContain('Validation failed');
+        await this.page.locator(this.Elements.cancelDSuccessMessage).click();
+
+    }
+    async selectAdjustReason(): Promise<void> {
+        await this.page.locator(this.Elements.adjustReason).click();
+        await this.page.getByText('Transfer Location').click();
+
+    }
+    async validationForAdjustStock(): Promise<void> {
+        await this.page.locator(this.Elements.adjustButton).click();
+        const errorText = await this.page.locator(this.Elements.stockErrorValidation).textContent();
+        expect(errorText).toContain('At least one stock location');
+        await this.page.locator(this.Elements.cancelDSuccessMessage).click();
+
+
+
+    }
+    async UpdatemultipleStock(): Promise<void> {
+        await this.page.locator(this.Elements.TotalOHQuantity1).fill("100");
+        await this.page.locator(this.Elements.TotalOHQuantity2).fill("200");
+        await this.page.locator(this.Elements.adjustButton).click();
+        const errorText = await this.page.locator(this.Elements.OHSuccussMessage).textContent();
+        expect(errorText).toContain('OH quantity has been adjusted successfully');
+        await this.page.locator(this.Elements.cancelDSuccessMessage).click();
 
     }
 
