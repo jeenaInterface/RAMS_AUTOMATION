@@ -14,5 +14,6 @@ Feature: Verify functionalities under inventory count
     When the user clicks on complete
     Then verifies adjust OH Quantity after complete
     Then the user click on close button
-    When the user verifies the cancel functionality
     And verifies the inventory count download functionality
+    When the user verifies the cancel functionality
+

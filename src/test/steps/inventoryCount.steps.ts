@@ -1,6 +1,7 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import inventoryCountPage from "../../pages/inventoryCount.page";
 import { fixture } from "../../hooks/pageFixture";
+import * as fs from 'fs';
 
 let inventoryCount: inventoryCountPage;
 
@@ -47,7 +48,14 @@ Then('the user verifies the cancel functionality', async () => {
     await inventoryCount.ClickinventoryCountID();
     await inventoryCount.clickOnCancelButton();
 });
-Then('verifies the inventory count download functionality', async () => {
+Then('verifies the inventory count download functionality', async function () {
+    const filePath = await inventoryCount.downloadReport();
 
+    // Attach a clickable text or path to the report for users to access manually
+    if (this.attach) {
+        // Attach as plain text or as HTML link if supported
+        const sharedFilePathText = `Report available at shared location: ${filePath}`;
+        await this.attach(sharedFilePathText, 'text/plain');
+    }
 });
 

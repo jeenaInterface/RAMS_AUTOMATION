@@ -3,6 +3,8 @@ import PlaywrightWrapper from "../helper/wrapper/PlaywrightWrappers";
 import { setDefaultTimeout } from "@cucumber/cucumber";
 import { getRandomInt, randomName, randomtext, currentDate, UOM_PIECES, UOM_BOX50 } from "../helper/util/test-data/randomdata";
 import { fixture } from "../hooks/pageFixture";
+import * as fs from 'fs';
+import * as path from 'path';
 
 setDefaultTimeout(100 * 1000);
 
@@ -53,6 +55,7 @@ export default class inventoryCountPage {
         statusList: "(//input[@placeholder='--Select One--'])[2]",
         OHQuantityAvailable: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/div[1]/span[1]",
         TotalOHQuantity: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        downloadButton: "//span[normalize-space(text())='Download Inventory Count']"
     };
 
     async clickOnInventoryCountMenu(): Promise<void> {
@@ -77,7 +80,7 @@ export default class inventoryCountPage {
     }
     async ClickinventoryCountID(): Promise<void> {
         await this.base.waitAndClick(this.Elements.inventoryCountID);
-         await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(1000);
 
     }
 
@@ -192,6 +195,34 @@ export default class inventoryCountPage {
         // expect(Text).toContain('cancelled successfully');
         await this.page.getByRole('button', { name: 'OK' }).click();
 
+    }
+    async downloadReport(): Promise<string> {
+        // const downloadPath = path.resolve(__dirname, 'downloads');
+            const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\RAMS Reports\\InventoryCount_Report.xlsx';
+
+        if (!fs.existsSync(downloadPath)) {
+            fs.mkdirSync(downloadPath, { recursive: true });
+        }
+        this.clearDownloadFolder(downloadPath);
+        const [download] = await Promise.all([
+            this.page.waitForEvent('download'),
+            this.page.locator(this.Elements.downloadButton).click()
+        ]);
+        const downloadPathWithFileName = path.join(downloadPath, 'InventoryCount_Report.xlsx');
+        await download.saveAs(downloadPathWithFileName);
+        expect(fs.existsSync(downloadPathWithFileName)).toBeTruthy();
+        return downloadPathWithFileName;
+    }
+
+    clearDownloadFolder(downloadPath: string): void {
+        fs.readdir(downloadPath, (err, files) => {
+            if (err) throw err;
+            for (const file of files) {
+                fs.unlink(path.join(downloadPath, file), err => {
+                    if (err) throw err;
+                });
+            }
+        });
     }
 
 }
