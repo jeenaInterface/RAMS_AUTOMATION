@@ -28,7 +28,6 @@ Then('the purchase order number is captured', async function (this: any) {
     }
 });
 When('the user searches for the newly created order in the inquiry list page', async () => {
-
     await purchasePage.clickOnInquireOrderMenu();
     await purchasePage.SearchPONumber();
 });
@@ -36,7 +35,6 @@ When('updates the description, adds one more stock detail, and verifies the upda
     await purchasePage.updatePurchaseOrder();
 });
 Then('verifies the value in the receive status field', async function (this: any) {
-    // Call the function to update the status before reading it
     let status = await purchasePage.receiveStatusValue() || '';
 
     if (this && typeof this.attach === 'function') {
@@ -67,4 +65,23 @@ Then('select external rebuild option', async () => {
 });
 Then('updates the description, adds one more stock detail in external rebuild order', async () => {
     await purchasePage.updateExternalPurchaseOrder();
+});
+Then('verifies the value in the receive status field in PO', async function (this: any) {
+
+    let status = await purchasePage.receiveStatusValuepo() || '';
+
+    if (this && typeof this.attach === 'function') {
+        await this.attach(`Receive Status: ${status}`);
+    } else {
+        fixture.logger?.info(`Receive Status: ${status}`);
+    }
+});
+
+Then('updates the description and verifies the update is correct', async () => {
+    await purchasePage.UpdateInternalRebuildOrder();
+});
+
+Then('select internal rebuild option', async () => {
+    await purchasePage.selectInternalRebuildOrder();
+    await purchasePage.CreateOnInternalRebuildOrder();
 });
