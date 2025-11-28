@@ -8,9 +8,10 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the purchase order number is captured
         Then the user searches for the newly created order in the inquiry list page
         Then updates the description, adds one more stock detail, and verifies the update is correct
-        Then verifies the value in the receive status field and attaches that status to the report
+        Then verifies the value in the receive status field
         Then verifies the print functionality
         Then verifies the email functionality
+        Then Verify Cancel functionality
         Then verifies the action log in the purchase order
 
     @createexternalRebuildOrder @sanity
@@ -18,14 +19,14 @@ Feature: Add, Update, and Search Functionalities in order Module
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
         Then select external rebuild option
-        And enters all the required fields and clicks on the save button
-        Then the purchase order number is captured for further use
+        Then the purchase order number is captured
         Then the user searches for the newly created order in the inquiry list page
-        Then updates the description, adds one more stock detail, and verifies the update is correct
-        Then verifies the value in the receive status field and attaches that status to the report
+        Then updates the description, adds one more stock detail in external rebuild order
+        Then verifies the value in the receive status field
         Then verifies the print functionality
         Then verifies the email functionality
-        Then verifies the action log in the purchase order
+        Then Verify Cancel functionality
+        Then verifies the action log in the external purchase order
 
     @createInternalRebuildOrder @sanity
     Scenario: Verify create and update internal rebuild order functionality
@@ -39,6 +40,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then verifies the value in the receive status field and attaches that status to the report
         Then verifies the print functionality
         Then verifies the email functionality
+        Then Verify Cancel functionality
         Then verifies the action log in the purchase order
 
 
