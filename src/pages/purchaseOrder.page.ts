@@ -65,6 +65,7 @@ export default class PurchaseOrderPage {
         searchButton2MaterialLookUp: "(//span[normalize-space()='Search'])[1]",
         stockDescription: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[2]/div[1]/div[1]/input[1]",
         receiveStatusField: "(//input[@type='text'])[9]",
+        receiveStatusiNTERNALroField: "//div[@class='el-form-item']//div[@class='el-input is-disabled']//input[@type='text']",
         receiveStatusPO: "(//input[@type='text'])[10]",
         printButton: "//span[normalize-space()='Print']",
         withCheckBox: "//span[@class='el-checkbox__inner']",
@@ -87,7 +88,7 @@ export default class PurchaseOrderPage {
         vendorPartNo: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[5]/div[3]/table[1]/tbody[1]/tr[2]/td[3]/div[1]/div[1]/input[1]",
         totalOrderQuantity: "//b[normalize-space()='10']",
         internalRebildOrderCheckBox: "(//span[@class='el-radio__inner'])[3]",
-        shop:"(//input[@placeholder='--Select One--'])[1]"
+        shop: "(//input[@placeholder='--Select One--'])[1]"
 
 
 
@@ -210,6 +211,15 @@ export default class PurchaseOrderPage {
     }
     async receiveStatusValue(): Promise<string | null> {
         const locator = this.page.locator(this.Elements.receiveStatusField);
+
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        // Get the value from the input field, not textContent
+        this.receiveStatus = await locator.inputValue();
+        return this.receiveStatus;
+    }
+    async receiveStatusValueInternalRO(): Promise<string | null> {
+        const locator = this.page.locator(this.Elements.receiveStatusiNTERNALroField);
 
         await locator.waitFor({ state: 'visible', timeout: 5000 });
 
@@ -444,14 +454,14 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(1000);
         await await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
         await fixture.page.waitForTimeout(500);
-        await await this.page.locator(this.Elements.okButtonpurchaceOrder).click();
+        await await this.page.locator(this.Elements.okUpdateButton).click();
         const successMsg = await await this.page.locator(this.Elements.successMessageOnPurchaseOrderForm).textContent();
         fixture.logger?.info(`Purchase Order creation success message: ${successMsg}`);
 
         // Wait briefly and read the header text directly (same pattern as stockNo)
         await fixture.page.waitForTimeout(2000);
         const poHeaderText = (await fixture.page.locator(this.Elements.headertitle).textContent());
-        if (poHeaderText && poHeaderText.includes(' Internal Rebuild Order |')) {
+        if (poHeaderText && poHeaderText.includes('Internal Rebuild Order |')) {
             // Extract the number after "Purchase Order | "
             const match = poHeaderText.match(/Internal Rebuild Order\s*\|\s*(\d+)/);
             if (match && match[1]) {
@@ -470,14 +480,25 @@ export default class PurchaseOrderPage {
 
         this.description = `Auto order ${randomJobNumber}`;
         await await this.page.locator(this.Elements.instruction).fill(this.description);
-        await await this.page.locator(this.Elements.okButtonpurchaceOrder).click();
+        await await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
+        await fixture.page.waitForTimeout(500);
+        await await this.page.locator(this.Elements.okUpdateButton).click();
         const successMsg = await await this.page.locator(this.Elements.successMessageOnPurchaseOrderForm).textContent();
         fixture.logger?.info(`Purchase Order creation success message: ${successMsg}`);
 
         // Wait briefly and read the header text directly (same pattern as stockNo)
 
-
-
+    }
+        async verifyActionLogInternalRebuildOrder(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLog);
+        await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.operationSearch).fill('Cancel Internal Rebuild Order');
+        await fixture.page.waitForTimeout(500);
+        const errorText = await this.page.locator(this.Elements.operationSearchResult).textContent();
+        expect(errorText).toContain('Cancel Internal Rebuild Order');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.closeButton).click();
     }
 
 }

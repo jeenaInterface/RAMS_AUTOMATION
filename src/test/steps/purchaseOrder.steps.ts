@@ -85,3 +85,15 @@ Then('select internal rebuild option', async () => {
     await purchasePage.selectInternalRebuildOrder();
     await purchasePage.CreateOnInternalRebuildOrder();
 });
+Then('verifies the value in the receive status field in internal RO', async function (this: any) {
+    let status = await purchasePage.receiveStatusValueInternalRO() || '';
+
+    if (this && typeof this.attach === 'function') {
+        await this.attach(`Receive Status: ${status}`);
+    } else {
+        fixture.logger?.info(`Receive Status: ${status}`);
+    }
+});
+Then('verifies the action log in the Internal purchase order', async () => {
+    await purchasePage.verifyActionLogInternalRebuildOrder();
+});

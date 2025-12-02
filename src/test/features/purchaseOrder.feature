@@ -36,9 +36,9 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the purchase order number is captured
         Then the user searches for the newly created order in the inquiry list page
         Then updates the description and verifies the update is correct
-        Then verifies the value in the receive status field
+        Then verifies the value in the receive status field in internal RO
         Then Verify Cancel functionality
-        Then verifies the action log in the purchase order
+        Then verifies the action log in the Internal purchase order
 
 
 @search @sanity
