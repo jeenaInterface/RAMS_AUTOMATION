@@ -99,6 +99,12 @@ export default class PurchaseOrderPage {
         approveButton: "//span[normalize-space(text())='Approve']",
         rejectReason: "(//textarea[@rows='2'])[1]",
         rejectOKButton: "(//button[@class='el-button el-button--primary']//span)[1]",
+        batchApproveMenu: "//span[normalize-space(text())='- Batch Approve Order']",
+        batchRejectButton: "//span[normalize-space(text())='Batch Reject']",
+        batchApproveButton: "//span[normalize-space()='Batch Approve']",
+        RejectOkButton1: "//button[contains(@class,'el-button el-button--default el-button--primary')]",
+        confirmButton: "//span[normalize-space()='Confirm']",
+
 
 
 
@@ -183,6 +189,7 @@ export default class PurchaseOrderPage {
         // await this.page.locator(this.Elements.purchaseOrderNoSearch).fill("325865");
         await await this.page.locator(this.Elements.searchButton).click();
         await await this.page.locator(this.Elements.orderNoSearchrESULT).click();
+        await fixture.page.waitForTimeout(1000);
 
     }
     async selectExternalRebuildOrder(): Promise<void> {
@@ -796,10 +803,34 @@ export default class PurchaseOrderPage {
         }
         // Return null if status not found
         return null;
+         await fixture.page.waitForTimeout(2000);
     }
     async clickOnApprove(): Promise<void> {
         await this.page.locator(this.Elements.approveButton).click();
         await this.page.locator(`//div[position()=3]/div[position()=1]/div[position()=3]/button[position()=2]/span[position()=1]`).click();
+        await fixture.page.waitForTimeout(2000);
+    }
+    async clickOnBatchApproveMenu(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.orderMenu);
+        await this.page.locator(this.Elements.batchApproveMenu).click();
+        await fixture.page.waitForTimeout(2000);
+    }
+    async DoRejectOperation(): Promise<void> {
+
+        await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[9]`).check()
+        await this.page.locator(this.Elements.batchRejectButton).click();
+        await this.page.locator(`//form[position()=1]/div[position()=1]/div[position()=1]/div[position()=1]/textarea[position()=1]`).fill("Rejected")
+        await this.page.locator(this.Elements.rejectOKButton).click();
+        await this.page.locator(this.Elements.RejectOkButton1).click();
+        await fixture.page.waitForTimeout(2000);
+    }
+    async DoApproveOperation(): Promise<void> {
+        await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[9]`).check()
+        await this.page.locator(this.Elements.batchApproveButton).click();
+        await this.page.locator(this.Elements.confirmButton).click();
+        await this.page.locator(this.Elements.okUpdateButton).click();
         await fixture.page.waitForTimeout(2000);
     }
 }

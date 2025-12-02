@@ -168,7 +168,7 @@ Then('enters all the required fields for approval and clicks on the save button'
 Then('performs batch reject', async () => {
     await purchasePage.clickOnReject();
 });
-Then('Then verify the status', async function (this: any) {
+Then('verify the status of the po', async function (this: any) {
     let status = await purchasePage.extractStatusFromHeader() || '';
 
     if (this && typeof this.attach === 'function') {
@@ -179,4 +179,14 @@ Then('Then verify the status', async function (this: any) {
 });
 Then('performs batch approve', async () => {
     await purchasePage.clickOnApprove();
+});
+Then('the admin navigates to the batch approve order page', async () => {
+    await purchasePage.clickOnBatchApproveMenu();
+});
+
+Then('performs a batch reject by selecting the order', async () => {
+    await purchasePage.DoRejectOperation();
+});
+Then('performs a batch approve by selecting the order', async () => {
+    await purchasePage.DoApproveOperation();
 });
