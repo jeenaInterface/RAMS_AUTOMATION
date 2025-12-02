@@ -97,3 +97,86 @@ Then('verifies the value in the receive status field in internal RO', async func
 Then('verifies the action log in the Internal purchase order', async () => {
     await purchasePage.verifyActionLogInternalRebuildOrder();
 });
+Then('the admin navigates to the inquire order page', async () => {
+    purchasePage = new purchaseOrderPage(fixture.page);
+    await purchasePage.clickOnInquireOrderMenu();
+});
+Then('the admin searches for the orders created on the current date', async () => {
+    await purchasePage.selectOrderDate();
+});
+Then('verifies that the search results display the orders created on the current date', async () => {
+    await purchasePage.verifyOrdeDateResult();
+});
+Then('the admin searches by Order Request Date', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.selectRequestDate();
+});
+Then('verifies that the search results display based on the Order Request Date', async () => {
+    await purchasePage.verifyRequestDateResult();
+});
+Then('the admin searches by Order Status', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.selectStatusForsEARCH();
+});
+Then('verifies that the search results display based on the Order Status', async () => {
+    await purchasePage.VerifyStatusForsEARCH();
+});
+
+Then('the admin searches for an existing po by vendor {string}', async (vendor: string) => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.searchPOByVendor(vendor);
+});
+Then('verifies that the PO search results display the correct vendor {string}', async (vendor: string) => {
+    await purchasePage.verifySearchResultByVendor(vendor);
+});
+
+Then('the admin searches by Category', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.selectCategory();
+});
+Then('the admin searches by Receive Status', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.selectReceiveStatusForsEARCH();
+});
+Then('verifies that the search results display based on the Receive Status', async () => {
+    await purchasePage.VerifyReceiveStatusForsEARCH();
+});
+Then('the admin searches by Matched Status', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.selectMatchStatusForsEARCH();
+});
+Then('verifies that the search results display based on the Matched Status', async () => {
+    await purchasePage.VerifyMatchStatusForsEARCH();
+});
+Then('the admin searches by Order Type', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.TypeEARCH();
+});
+Then('verifies that the search results display based on the Order Type', async () => {
+    await purchasePage.VerifyPOSEARCH();
+});
+Then('the admin searches by Shop', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.ShopSEARCH();
+});
+Then('verifies that the search results display based on the Shop', async () => {
+    await purchasePage.VerifyShopSEARCH();
+});
+Then('enters all the required fields for approval and clicks on the save button', async () => {
+    await purchasePage.clickOnCreateOrderHavingApproval();
+});
+Then('performs batch reject', async () => {
+    await purchasePage.clickOnReject();
+});
+Then('Then verify the status', async function (this: any) {
+    let status = await purchasePage.extractStatusFromHeader() || '';
+
+    if (this && typeof this.attach === 'function') {
+        await this.attach(`PO Status: ${status}`);
+    } else {
+        fixture.logger?.info(`PO Status: ${status}`);
+    }
+});
+Then('performs batch approve', async () => {
+    await purchasePage.clickOnApprove();
+});

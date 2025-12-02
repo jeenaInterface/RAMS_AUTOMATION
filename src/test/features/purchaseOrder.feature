@@ -41,88 +41,134 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then verifies the action log in the Internal purchase order
 
 
-@search @sanity
-Scenario: Search purchase orders
-    Given the admin user is logged into the application
-    When the admin navigates to the inquire order page
+    @searchPO @sanity
+    Scenario: Search purchase orders
+        Given the admin user is logged into the application
+        When the admin navigates to the inquire order page
 
-    Then the admin searches for the orders created on the current date
-    And verifies that the search results display the orders created on the current date
+        Then the admin searches for the orders created on the current date
+        And verifies that the search results display the orders created on the current date
 
-    Then the admin searches by Order Request Date
-    And verifies that the search results display based on the Order Request Date
+        Then the admin searches by Order Request Date
+        And verifies that the search results display based on the Order Request Date
 
-    Then the admin searches by Order Status
-    And verifies that the search results display based on the Order Status
+        Then the admin searches by Order Status
+        And verifies that the search results display based on the Order Status
 
-    Then the admin searches by Vendor
-    And verifies that the search results display based on the Vendor
+        Then the admin searches for an existing po by vendor '1080233500'
+        And verifies that the PO search results display the correct vendor '1080233500'
 
-    Then the admin searches by Category
-    And verifies that the search results display based on the Category
+        Then the admin searches by Category
 
-    Then the admin searches by Asset Number
-    And verifies that the search results display based on the Asset Number
+        Then the admin searches by Receive Status
+        And verifies that the search results display based on the Receive Status
 
-    Then the admin searches by Receive Status
-    And verifies that the search results display based on the Receive Status
+        Then the admin searches by Order Type
+        And verifies that the search results display based on the Order Type
 
-    Then the admin searches by Matched Status
-    And verifies that the search results display based on the Matched Status
-
-    Then the admin searches by Order Type
-    And verifies that the search results display based on the Order Type
-
-    Then the admin searches by Shop
-    And verifies that the search results display based on the Shop
-
-    Then the admin searches by Order Capture Date
-    And verifies that the search results display based on the Order Capture Date
-
-    Then the admin searches by Orders with Outstanding Cost
-    And verifies that the search results display based on Outstanding Cost
-
-    Then the admin searches by Job Number
-    And verifies that the search results display based on the Job Number
+        Then the admin searches by Shop
+        And verifies that the search results display based on the Shop
 
 
 
-@VerifyBatchApproveOrder @sanity
-Scenario: Verify batch approve and reject functionalities
-    Given the admin user is logged into the application
-    Then the admin navigates to the order creation menu
-    And enters all the required fields and clicks on the save button
-    Then the purchase order number is captured for further use
+    @VerifyBatchRejectOrder @sanity
+    Scenario: Verify batch approve and reject functionalities
+        Given the admin user is logged into the application
+        Then the admin navigates to the order creation menu
+        And enters all the required fields for approval and clicks on the save button
+        Then the purchase order number is captured
+        And performs batch reject
+        Then Then verify the status
 
-    Then the admin navigates to the batch approve order page
-    And performs batch reject
+    @VerifyBatchApproveOrder @sanity
+    Scenario: Verify batch approve and reject functionalities
+        Given the admin user is logged into the application
+        Then the admin navigates to the order creation menu
+        And enters all the required fields for approval and clicks on the save button
+        Then the purchase order number is captured
+        And performs batch approve
+        Then Then verify the status
 
-    Then the admin navigates to the order creation menu
-    And enters all the required fields and clicks on the save button
-    Then the purchase order number is captured for further use
+    @VerifyBatchRejectOrderFromForm @sanity
+    Scenario: Verify batch reject functionality for orders
+        Given the admin user is logged into the application
+        When the admin navigates to the order creation menu
+        And fills in all required fields for order approval
+        And saves the order
+        Then the purchase order number is captured for further use
 
-    Then the admin navigates to the batch approve order page
-    And performs batch approve
+        When the admin navigates to the batch approve order page
+        And performs a batch reject by selecting the order
+        And searches for the newly created order in the inquiry list page
+        Then the system verifies that the order status is updated accordingly
 
-    Then the admin verifies the refresh button functionality
+    @VerifyBatchApproveOrderFromForm @sanity
+    Scenario: Verify batch approve functionality for orders
+        Given the admin user is logged into the application
+        When the admin navigates to the order creation menu
+        And fills in all required fields for order approval
+        And saves the order
+        Then the purchase order number is captured for further use
 
+        When the admin navigates to the batch approve order page
+        And performs a batch approve by selecting the order
+        And searches for the newly created order in the inquiry list page
+        Then the system verifies that the order status reflects approval
 
-Scenario: Verify create order and receive functionalities
-    Given the admin user is logged into the application
-    Then the admin navigates to the order creation menu
-    And enters all the required fields and clicks on the save button
-    Then the purchase order number is captured for further use
+    @VerifyBatchApproveFormFunctionalities @sanity
+    Scenario: Verify search functionalities in batch approve order page
+        Given the admin user is logged into the application
+        When the admin navigates to the order creation menu
+        And fills in all required fields for order approval
+        And saves the order
+        Then the purchase order number is captured for further use
 
-    Then partially receive the order
-    And track the receiving document number for further use
+        When the admin navigates to the batch approve order page
+        Then the admin verifies search functionality by shop
+        And verifies search functionality by order type
+        And verifies search functionality by order date
+        And verifies search functionality by vendor
 
-    Then the user searches for the newly created order in the inquiry list page
-    And verifies the receive status and attaches that status in the report
-    And verifies total order quantity and total outstanding quantity
+    @VerifyOrderLinkInBatch @sanity
+    Scenario: Verify navigation on clicking purchase order number link
+        Given the admin user is logged into the application
+        When the admin navigates to the order creation menu
+        And fills in all required fields for order approval
+        And saves the order
+        Then the purchase order number is captured for further use
 
-    Then perform full receive
-    And the user searches for the newly created order in the inquiry list page
-    And verifies the receive status and attaches that status in the report
-    And verifies total order quantity and total outstanding quantity after full receive
+        When the admin navigates to the batch approve order page
+        And clicks on the purchase order number link
+        Then the system verifies navigation to the corresponding purchase order screen
 
-       
+    @VerifyMultipleOrderApproval @sanity
+    Scenario: Verify multiple purchase order approval functionality
+        Given the admin user is logged into the application
+        When the admin navigates to the order creation menu
+        And fills in all required fields for order approval
+        And saves the order
+        Then the purchase order number is captured for further use
+
+        When the admin navigates to the batch approve order page
+        And selects multiple purchase orders
+        And performs batch approval on the selected orders
+        Then the system verifies that all selected orders are approved successfully
+
+    Scenario: Verify create order and receive functionalities
+        Given the admin user is logged into the application
+        Then the admin navigates to the order creation menu
+        And enters all the required fields and clicks on the save button
+        Then the purchase order number is captured for further use
+
+        Then partially receive the order
+        And track the receiving document number for further use
+
+        Then the user searches for the newly created order in the inquiry list page
+        And verifies the receive status and attaches that status in the report
+        And verifies total order quantity and total outstanding quantity
+
+        Then perform full receive
+        And the user searches for the newly created order in the inquiry list page
+        And verifies the receive status and attaches that status in the report
+        And verifies total order quantity and total outstanding quantity after full receive
+
