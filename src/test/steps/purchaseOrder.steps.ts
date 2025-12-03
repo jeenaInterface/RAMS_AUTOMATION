@@ -190,3 +190,7 @@ Then('performs a batch reject by selecting the order', async () => {
 Then('performs a batch approve by selecting the order', async () => {
     await purchasePage.DoApproveOperation();
 });
+
+Then('the system verifies navigation to the corresponding purchase order screen once click on the link', async () => {
+    await purchasePage.verifyRedirection();
+});

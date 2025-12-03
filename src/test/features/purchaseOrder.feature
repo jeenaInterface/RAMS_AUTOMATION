@@ -95,7 +95,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         When the admin navigates to the order creation menu
         And enters all the required fields for approval and clicks on the save button
         Then the purchase order number is captured
-
+        Then verify the status of the po
         When the admin navigates to the batch approve order page
         And performs a batch reject by selecting the order
         And the user searches for the newly created order in the inquiry list page
@@ -107,37 +107,24 @@ Feature: Add, Update, and Search Functionalities in order Module
         When the admin navigates to the order creation menu
         And enters all the required fields for approval and clicks on the save button
         Then the purchase order number is captured
-
+        Then verify the status of the po
         When the admin navigates to the batch approve order page
         And performs a batch approve by selecting the order
         And the user searches for the newly created order in the inquiry list page
         Then verify the status of the po
 
-    @VerifyBatchApproveFormFunctionalities @sanity
-    Scenario: Verify search functionalities in batch approve order page
-        Given the admin user is logged into the application
-        When the admin navigates to the order creation menu
-        And fills in all required fields for order approval
-        And saves the order
-        Then the purchase order number is captured for further use
-
-        When the admin navigates to the batch approve order page
-        Then the admin verifies search functionality by shop
-        And verifies search functionality by order type
-        And verifies search functionality by order date
-        And verifies search functionality by vendor
 
     @VerifyOrderLinkInBatch @sanity
     Scenario: Verify navigation on clicking purchase order number link
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu
-        And fills in all required fields for order approval
-        And saves the order
-        Then the purchase order number is captured for further use
+        And enters all the required fields for approval and clicks on the save button
+        Then the purchase order number is captured
+        Then verify the status of the po
+        When the admin navigates to the batch approve order page
 
         When the admin navigates to the batch approve order page
-        And clicks on the purchase order number link
-        Then the system verifies navigation to the corresponding purchase order screen
+        Then the system verifies navigation to the corresponding purchase order screen once click on the link
 
     @VerifyMultipleOrderApproval @sanity
     Scenario: Verify multiple purchase order approval functionality
@@ -158,7 +145,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         And enters all the required fields and clicks on the save button
         Then the purchase order number is captured for further use
 
-        Then partially receive the order
+        Then partially receive and review the order
         And track the receiving document number for further use
 
         Then the user searches for the newly created order in the inquiry list page
@@ -170,3 +157,49 @@ Feature: Add, Update, and Search Functionalities in order Module
         And verifies the receive status and attaches that status in the report
         And verifies total order quantity and total outstanding quantity after full receive
 
+    Scenario: Verify cancel and action log functionalities in receiving material page
+        Given the admin user is logged into the application
+        Then the admin navigates to the order creation menu
+        And enters all the required fields and clicks on the save button
+        Then the purchase order number is captured for further use
+
+        Then partially receive the order and review
+        And track the receiving document number for further use
+        Then verify the action Log
+        Then the user searches for the newly created order in the inquiry list page
+        And verifies the receive status and attaches that status in the report
+        And verifies total order quantity and total outstanding quantity
+
+        Then go to inquire material receive screen
+        Then search the material receive and do cancel
+
+         Then the user searches for the newly created order in the inquiry list page
+        And verifies the receive status and attaches that status in the report
+        And verifies total order quantity and total outstanding quantity
+
+        Scenario: Verify search functionalities in inquire material receive page
+        Given the admin user is logged into the application
+        Then the admin navigates to inquire material receive screen
+        And verify the search by po number
+        Then verify the search by Pack Slip No.
+        Then verify the search by Receiving Date
+        Then verify the serach by Vendor
+        Then verify the serach by Stock No.
+        Then verify the serach by Status
+        Then verify the serach by Order Type
+        Then verify the serach by Receiving Doc. No.
+
+
+
+   Scenario: Verify Batch Review Receiving functionalities 
+        Given the admin user is logged into the application
+        Then the admin navigates to the order creation menu
+        And enters all the required fields and clicks on the save button
+        Then the purchase order number is captured for further use
+
+        Then partially receive the order
+        And track the receiving document number for further use
+        Then go to batch review receiving screena and search by payslip number
+        Then the user searches for the newly created order in the inquiry list page
+        And verifies the receive status and attaches that status in the report
+        And verifies total order quantity and total outstanding quantity

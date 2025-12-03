@@ -792,6 +792,8 @@ export default class PurchaseOrderPage {
     }
 
     async extractStatusFromHeader(): Promise<string | null> {
+        await fixture.page.waitForSelector(this.Elements.headertitle, { state: 'visible' });
+        await fixture.page.waitForTimeout(1000);
         const poHeaderText = await fixture.page.locator(this.Elements.headertitle).textContent();
 
         if (poHeaderText && poHeaderText.includes('Purchase Order |')) {
@@ -803,7 +805,7 @@ export default class PurchaseOrderPage {
         }
         // Return null if status not found
         return null;
-         await fixture.page.waitForTimeout(2000);
+
     }
     async clickOnApprove(): Promise<void> {
         await this.page.locator(this.Elements.approveButton).click();
@@ -832,5 +834,32 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.confirmButton).click();
         await this.page.locator(this.Elements.okUpdateButton).click();
         await fixture.page.waitForTimeout(2000);
+    }
+    async verifyRedirection(): Promise<void> {
+        await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[9]`).check()
+        const poLinkText = await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=3]/div[position()=1]/a[position()=1]`).textContent();
+        await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=3]/div[position()=1]/a[position()=1]`).click();
+
+        await fixture.page.waitForTimeout(2000);
+        const poHeaderText = (await fixture.page.locator(this.Elements.headertitle).textContent());
+        if (poHeaderText && poHeaderText.includes('Purchase Order |')) {
+            // Extract the number after "Purchase Order | "
+            const match = poHeaderText.match(/Purchase Order\s*\|\s*(\d+)/);
+            if (match && match[1]) {
+                this.purchaseOrderNo = match[1];
+                fixture.logger?.info(`Extracted Purchase Order number: ${this.purchaseOrderNo}`);
+            }
+        }
+
+        const normalizedLinkText = poLinkText.trim();
+        const normalizedPurchaseOrderNo = this.purchaseOrderNo.trim();
+
+        if (normalizedLinkText !== normalizedPurchaseOrderNo) {
+            throw new Error(`Mismatch: Link text '${normalizedLinkText}' does not match purchaseOrderNo '${normalizedPurchaseOrderNo}'`);
+        } else {
+            fixture.logger?.info(`Purchase order link text matches purchaseOrderNo: ${normalizedPurchaseOrderNo}`);
+        }
+
     }
 }
