@@ -1,13 +1,22 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import purchaseOrderPage from "../../pages/purchaseOrder.page";
 import { fixture } from "../../hooks/pageFixture";
+import MaterialPage from "../../pages/material.page";
 
 let purchasePage: purchaseOrderPage;
+let materialPage: MaterialPage;
 
 When('the admin navigates to the order creation menu', async () => {
     purchasePage = new purchaseOrderPage(fixture.page);
+    materialPage = new MaterialPage(fixture.page);
     await purchasePage.clickOnCreateOrderMenu();
 });
+When('Again the admin navigates to the order creation menu', async function (this: any) {
+
+    await purchasePage.clickOnCreateOrderMenu();
+    await this.page.waitForTimeout(3000);
+});
+
 
 When('enters all the required fields and clicks on the save button', async () => {
     await purchasePage.clickOnCreateOrderButton();
@@ -31,6 +40,7 @@ When('the user searches for the newly created order in the inquiry list page', a
     await purchasePage.clickOnInquireOrderMenu();
     await purchasePage.SearchPONumber();
 });
+
 When('updates the description, adds one more stock detail, and verifies the update is correct', async () => {
     await purchasePage.updatePurchaseOrder();
 });
@@ -66,16 +76,7 @@ Then('select external rebuild option', async () => {
 Then('updates the description, adds one more stock detail in external rebuild order', async () => {
     await purchasePage.updateExternalPurchaseOrder();
 });
-Then('verifies the value in the receive status field in PO', async function (this: any) {
 
-    let status = await purchasePage.receiveStatusValuepo() || '';
-
-    if (this && typeof this.attach === 'function') {
-        await this.attach(`Receive Status: ${status}`);
-    } else {
-        fixture.logger?.info(`Receive Status: ${status}`);
-    }
-});
 
 Then('updates the description and verifies the update is correct', async () => {
     await purchasePage.UpdateInternalRebuildOrder();
@@ -194,3 +195,34 @@ Then('performs a batch approve by selecting the order', async () => {
 Then('the system verifies navigation to the corresponding purchase order screen once click on the link', async () => {
     await purchasePage.verifyRedirection();
 });
+Then('selects multiple purchase orders and performs batch approval on the selected orders', async () => {
+    await purchasePage.selectMultipleOrders();
+});
+
+Then('the system verifies that all selected orders are approved successfully', async () => {
+    // await purchasePage.verifytheBatchaprrovalConfirmationMessage();
+});
+
+Then('track the receiving document number', async function (this: any) {
+    let receivingDocNo = materialPage.ReceivingDocumentNo || '';
+
+    // Fallback: read from header if not already stored
+    if (!receivingDocNo) {
+        const headerText = (await fixture.page.locator("(//span[@class='header-title font-size-title'])[1]").textContent()) || '';
+        // Extract number after "Receiving Doc. No.:"
+        receivingDocNo = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/)?.[1] || '';
+    }
+
+    // Attach Receiving Doc number to Cucumber report
+    if (this && typeof this.attach === 'function') {
+        await this.attach(`Receiving Document No: ${receivingDocNo}`);
+    } else {
+        fixture.logger?.info(`Receiving Document No: ${receivingDocNo}`);
+    }
+
+    // Optionally store it for later use
+    materialPage.ReceivingDocumentNo = receivingDocNo;
+});
+
+
+

@@ -1,10 +1,13 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import MaterialPage from "../../pages/material.page";
 import { fixture } from "../../hooks/pageFixture";
+import purchaseOrderPage from "../../pages/purchaseOrder.page";
 
 let materialPage: MaterialPage;
+let purchasePage: purchaseOrderPage;
 
 When('the admin navigates to the material creation page', async () => {
+  purchasePage = new purchaseOrderPage(fixture.page);
   materialPage = new MaterialPage(fixture.page);
   await materialPage.clickOnCreateMaterialMenu();
 });
@@ -283,4 +286,39 @@ Then('the admin updates the OH quantity of multiple stocks and verifies the succ
 Then('Verify the vendor details are displayed in material after Purchase order', async () => {
   await materialPage.verifyVendorDetails();
 
+});
+Then('partially receive the order and review', async () => {
+    await materialPage.createPartialReceiveMaterial();
+});
+When('the user searches for the last created order in the inquiry list page', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.SearchPONumber();
+});
+Then('verifies the value in the receive status field in PO', async function (this: any) {
+
+    let status = await purchasePage.receiveStatusValuepo() || '';
+
+    if (this && typeof this.attach === 'function') {
+        await this.attach(`Receive Status: ${status}`);
+    } else {
+        fixture.logger?.info(`Receive Status: ${status}`);
+    }
+});
+Then('Go to inquire material receive screen', async () => {
+    await purchasePage.inquireMaterialReceiveScreen();
+});
+Then('search for the material receive and click on the link to edit the quantity', async () => {
+    await materialPage.searchByDocNumber();
+
+});
+
+Then('update the received quantity to perform full receive', async () => {
+    await materialPage.DoFullReceive();
+});
+Then('verifies total order quantity and total outstanding quantity after full receive', async () => {
+    await purchasePage.totalOrderQuantity();
+});
+
+Then('verify the action Log in Receiving Material', async () => {
+    await materialPage.verifyActionLogMaterialReceive();
 });

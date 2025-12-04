@@ -104,7 +104,18 @@ export default class PurchaseOrderPage {
         batchApproveButton: "//span[normalize-space()='Batch Approve']",
         RejectOkButton1: "//button[contains(@class,'el-button el-button--default el-button--primary')]",
         confirmButton: "//span[normalize-space()='Confirm']",
-
+        receiveMaterial: "//span[normalize-space()='- Receive Material']",
+        orderNoTextBox: "(//input[@rows='2'])[1]",
+        RetrieveButton: "//span[normalize-space()='Retrieve']",
+        receivingDate: "//div[@class='el-date-editor el-input el-date-editor--date']//input[@placeholder='--Input Text--']",
+        packSlipNumber: "(//input[@placeholder='--Input Text--'])[2]",
+        receiveQuantityInput: "(//input[@type='text'])[5]",
+        masterCheckbox: "(//span[@class='el-radio__inner'])[1]",
+        receivingDocumentNumber: "(//span[@class='header-title font-size-title'])[2]",
+        totalOrderQuantoty: "//table[3]//tr[1]//td[2]//b[1]",
+        totalOutStandingQuantity: "//table[3]//tr[2]//td[2]//b[1]",
+        inquireMaterialReceive: "//span[normalize-space(text())='- Inquire Material Receiving']",
+        receivingDocumentSearchBox: "(//label[normalize-space(text())='Receiving Doc. No.']/following::input)[1]",
 
 
 
@@ -161,7 +172,7 @@ export default class PurchaseOrderPage {
         await await this.page.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').click();
         await await this.page.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').fill('10');
         await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
-        await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('5');
+        await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('10');
         await await this.page.locator(this.Elements.productCode).click();
         await await this.page.getByText('OPX_AGV - Maintenance Parts - AGV').click();
         await fixture.page.waitForTimeout(1000);
@@ -245,7 +256,30 @@ export default class PurchaseOrderPage {
         this.receiveStatus = await locator.inputValue();
         return this.receiveStatus;
     }
+    async totalOrderQuantity(): Promise<string | null> {
+        const orderQuantity = this.page.locator(this.Elements.totalOrderQuantity);
+        const totalOutStandingQuantity = this.page.locator(this.Elements.totalOutStandingQuantity);
+
+        // Wait for both elements to be visible before getting their content
+        await orderQuantity.waitFor({ state: 'visible', timeout: 5000 });
+        await totalOutStandingQuantity.waitFor({ state: 'visible', timeout: 5000 });
+
+        const orderQty = await orderQuantity.textContent();
+        const outStandingQty = await totalOutStandingQuantity.textContent();
+
+        fixture.logger?.info(`Total Order Quantity: ${orderQty}`);
+        fixture.logger?.info(`Total Outstanding Quantity: ${outStandingQty}`);
+
+        // You can add a check here if you want to log or handle the zero state explicitly
+        if (outStandingQty === '0' || outStandingQty === '0.0' || outStandingQty?.trim() === '0') {
+            fixture.logger?.info('Full quantity received; outstanding quantity is zero.');
+        }
+
+        // Return the outstanding quantity as fetched
+        return outStandingQty;
+    }
     async receiveStatusValuepo(): Promise<string | null> {
+        await fixture.page.waitForTimeout(500);
         const locator = this.page.locator(this.Elements.receiveStatusPO);
 
         await locator.waitFor({ state: 'visible', timeout: 5000 });
@@ -862,4 +896,37 @@ export default class PurchaseOrderPage {
         }
 
     }
+    async selectMultipleOrders(): Promise<void> {
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[9]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[10]`).check()
+        await this.page.locator(this.Elements.batchApproveButton).click();
+        await this.page.locator(this.Elements.confirmButton).click();
+        await this.page.locator(this.Elements.okUpdateButton).click();
+        await fixture.page.waitForTimeout(2000);
+    }
+    async verifytheBatchaprrovalConfirmationMessage(): Promise<void> {
+
+        const successMessage = this.page.locator(`//div[position()=1]/div[position()=2]/div[position()=2]/div[position()=1]/div[position()=1]`)
+
+
+        // Wait for the confirmation message to appear and be visible (timeout optional)
+        await successMessage.waitFor({ state: 'visible', timeout: 5000 });
+
+        const isVisible = await successMessage.isVisible();
+
+        if (!isVisible) {
+            throw new Error("Batch approval confirmation message not found or not visible.");
+        }
+
+        // Optional: log success
+        console.log("Batch approval confirmation message is displayed.");
+    }
+
+    async inquireMaterialReceiveScreen(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.orderMenu).click();
+        await this.page.locator(this.Elements.inquireMaterialReceive).click();
+    }
+
+
 }

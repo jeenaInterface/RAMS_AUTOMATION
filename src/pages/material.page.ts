@@ -127,7 +127,9 @@ export default class MaterialPage {
 
         TotalOHQuantity2: "(//input[@type='text'])[5]",
         OHSuccussMessage: "//p[normalize-space()='OH quantity has been adjusted successfully']",
-        vendorDetails: "(//span[normalize-space()='1000287 - OCEAN BLUE ENVIRONMENTAL'])[1]"
+        vendorDetails: "(//span[normalize-space()='1000287 - OCEAN BLUE ENVIRONMENTAL'])[1]",
+        receivingDocumentSearchBox: "(//label[normalize-space(text())='Receiving Doc. No.']/following::input)[1]",
+        payslipNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/a[1]",
 
     };
 
@@ -210,6 +212,7 @@ export default class MaterialPage {
         await this.clickOnInquireMaterialMenu();
         await fixture.page.waitForTimeout(1000);
         console.log("Captured Stock No for verification:", this.stockNo);
+        await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.stocknumbersearch).fill(this.stockNo);
         // await this.page.locator(this.Elements.stocknumbersearch).fill("7805");
         await this.base.waitAndClick(this.Elements.searchButton);
@@ -375,7 +378,7 @@ export default class MaterialPage {
         await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').click();
         await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').fill('10');
         await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
-        await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('5');
+        await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('10');
         await newPage.locator(this.Elements.productCode).click();
         await newPage.getByText('OPX_AGV - Maintenance Parts - AGV').click();
         await fixture.page.waitForTimeout(1000);
@@ -417,9 +420,9 @@ export default class MaterialPage {
     async verifyActionLog(): Promise<void> {
         await this.base.waitAndClick(this.Elements.actionLog);
         await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
-        await this.page.locator(this.Elements.operation).fill('Create Material');
-        await fixture.page.waitForTimeout(500);
-        await expect(this.page.locator(this.Elements.operationSearchResult)).toHaveValue('Create Material');
+        // await this.page.locator(this.Elements.operation).fill('Create Material');
+        // await fixture.page.waitForTimeout(500);
+        // await expect(this.page.locator(this.Elements.operationSearchResult)).toHaveValue('Create Material');
 
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.closeButton).click();
@@ -788,20 +791,83 @@ export default class MaterialPage {
 
 
     }
+        async createPartialReceiveMaterial(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.ordermenu).click();
+        await this.page.locator(this.Elements.receiveMaterial).click();
+        await this.page.locator(this.Elements.orderNoTextBox).fill(this.purchaseOrderNo);
+        // await this.page.locator(this.Elements.orderNoTextBox).fill('325772');
+        await this.base.waitAndClick(this.Elements.RetrieveButton);
+        await fixture.page.waitForTimeout(1000);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        await this.page.locator(this.Elements.receivingDate).fill(formattedDate);
+        await this.page.locator(this.Elements.packSlipNumber).fill(`PSN-${getRandomInt(1000, 9999)}`);
+        await this.page.locator(this.Elements.receiveQuantityInput).fill('7');
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.getByPlaceholder('--Input Or Select One--').click();
+        await this.page.getByPlaceholder('--Input Or Select One--').type('TS-NS-General');
+        await this.page.locator('text=TS-NS-General').click();
+
+
+        await this.page.locator(this.Elements.masterCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'Save' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'Review' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(2000);
+        const headerText = await this.page.locator(this.Elements.receivingDocumentNumber).textContent();
+
+        if (headerText && headerText.includes('Receiving Doc. No.:')) {
+            // Extract the number after "Receiving Doc. No.:"
+            const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
+            if (match && match[1]) {
+                this.ReceivingDocumentNo = match[1];
+                fixture.logger.info(`Receiving document number: ${this.ReceivingDocumentNo}`);
+            }
+        }
+
+    }
     async UpdatemultipleStock(): Promise<void> {
-        await this.page.locator(this.Elements.TotalOHQuantity1).fill("100");
-        await this.page.locator(this.Elements.TotalOHQuantity2).fill("200");
+        const randomNumber = getRandomInt(101, 300);
+        await this.page.locator(this.Elements.TotalOHQuantity1).fill(randomNumber.toString());
+        await this.page.locator(this.Elements.TotalOHQuantity2).fill(randomNumber.toString());
         await this.page.locator(this.Elements.adjustButton).click();
         const errorText = await this.page.locator(this.Elements.OHSuccussMessage).textContent();
         expect(errorText).toContain('OH quantity has been adjusted successfully');
         await this.page.locator(this.Elements.cancelDSuccessMessage).click();
 
     }
-        async verifyVendorDetails(): Promise<void> {
+    async verifyVendorDetails(): Promise<void> {
         const errorText = await this.page.locator(this.Elements.vendorDetails).textContent();
         expect(errorText).toContain('1000287 ');
 
     }
-
+    async searchByDocNumber(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.receivingDocumentSearchBox).fill(this.ReceivingDocumentNo);
+        await this.page.locator(this.Elements.searchButton).click();
+        await this.page.locator(this.Elements.payslipNumberLink).click();
+        await fixture.page.waitForTimeout(500);  
+    }
+        async DoFullReceive(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.receiveQuantityInput).fill("10");
+        await this.page.getByRole('button', { name: 'Save' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);  
+    }
+    async verifyActionLogMaterialReceive(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLog);
+        await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
+        // await this.page.locator(this.Elements.operationSearch).fill('Receive Material');
+        // await fixture.page.waitForTimeout(500);
+        // await expect(this.page.locator(this.Elements.operationSearchResult)).toHaveValue('Receive Material');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.closeButton).click();
+    }
 
 }

@@ -1,6 +1,6 @@
 Feature: Add, Update, and Search Functionalities in order Module
 
-    @createPurchaseOrder @sanity
+    @createPurchaseOrder @sanity @po
     Scenario: Verify create and update purchase order functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -14,7 +14,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then Verify Cancel functionality
         Then verifies the action log in the purchase order
 
-    @createexternalRebuildOrder @sanity
+    @createexternalRebuildOrder @sanity @po
     Scenario: Verify create and update external rebuild order functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -28,7 +28,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then Verify Cancel functionality
         Then verifies the action log in the external purchase order
 
-    @createInternalRebuildOrder @sanity
+    @createInternalRebuildOrder @sanity @po
     Scenario: Verify create and update internal rebuild order functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -41,7 +41,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then verifies the action log in the Internal purchase order
 
 
-    @searchPO @sanity
+    @searchPO @sanity @po
     Scenario: Search purchase orders
         Given the admin user is logged into the application
         When the admin navigates to the inquire order page
@@ -71,7 +71,7 @@ Feature: Add, Update, and Search Functionalities in order Module
 
 
 
-    @VerifyBatchRejectOrder @sanity
+    @VerifyBatchRejectOrder @sanity @po
     Scenario: Verify batch reject functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -80,7 +80,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         And performs batch reject
         Then verify the status of the po
 
-    @VerifyBatchApproveOrder @sanity
+    @VerifyBatchApproveOrder @sanity @po
     Scenario: Verify batch approve functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -89,7 +89,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         And performs batch approve
         Then verify the status of the po
 
-    @VerifyBatchRejectOrderFromForm @sanity
+    @VerifyBatchRejectOrderFromForm @sanity @po
     Scenario: Verify batch reject functionality for orders
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu
@@ -101,7 +101,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         And the user searches for the newly created order in the inquiry list page
         Then verify the status of the po
 
-    @VerifyBatchApproveOrderFromForm @sanity
+    @VerifyBatchApproveOrderFromForm @sanity @po
     Scenario: Verify batch approve functionality for orders
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu
@@ -114,7 +114,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then verify the status of the po
 
 
-    @VerifyOrderLinkInBatch @sanity
+    @VerifyOrderLinkInBatch @sanity @po
     Scenario: Verify navigation on clicking purchase order number link
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu
@@ -122,62 +122,23 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the purchase order number is captured
         Then verify the status of the po
         When the admin navigates to the batch approve order page
-
-        When the admin navigates to the batch approve order page
         Then the system verifies navigation to the corresponding purchase order screen once click on the link
 
-    @VerifyMultipleOrderApproval @sanity
+    @VerifyMultipleOrderApproval @sanity @po
     Scenario: Verify multiple purchase order approval functionality
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu
-        And fills in all required fields for order approval
-        And saves the order
-        Then the purchase order number is captured for further use
+        And enters all the required fields for approval and clicks on the save button
+        Then the purchase order number is captured
+        Then verify the status of the po
 
         When the admin navigates to the batch approve order page
-        And selects multiple purchase orders
-        And performs batch approval on the selected orders
+        And selects multiple purchase orders and performs batch approval on the selected orders
         Then the system verifies that all selected orders are approved successfully
+        
+    @VerifySearchInquireMaterialReceive @sanity @po
 
-    Scenario: Verify create order and receive functionalities
-        Given the admin user is logged into the application
-        Then the admin navigates to the order creation menu
-        And enters all the required fields and clicks on the save button
-        Then the purchase order number is captured for further use
-
-        Then partially receive and review the order
-        And track the receiving document number for further use
-
-        Then the user searches for the newly created order in the inquiry list page
-        And verifies the receive status and attaches that status in the report
-        And verifies total order quantity and total outstanding quantity
-
-        Then perform full receive
-        And the user searches for the newly created order in the inquiry list page
-        And verifies the receive status and attaches that status in the report
-        And verifies total order quantity and total outstanding quantity after full receive
-
-    Scenario: Verify cancel and action log functionalities in receiving material page
-        Given the admin user is logged into the application
-        Then the admin navigates to the order creation menu
-        And enters all the required fields and clicks on the save button
-        Then the purchase order number is captured for further use
-
-        Then partially receive the order and review
-        And track the receiving document number for further use
-        Then verify the action Log
-        Then the user searches for the newly created order in the inquiry list page
-        And verifies the receive status and attaches that status in the report
-        And verifies total order quantity and total outstanding quantity
-
-        Then go to inquire material receive screen
-        Then search the material receive and do cancel
-
-         Then the user searches for the newly created order in the inquiry list page
-        And verifies the receive status and attaches that status in the report
-        And verifies total order quantity and total outstanding quantity
-
-        Scenario: Verify search functionalities in inquire material receive page
+    Scenario: Verify search functionalities in inquire material receive page
         Given the admin user is logged into the application
         Then the admin navigates to inquire material receive screen
         And verify the search by po number
@@ -191,7 +152,7 @@ Feature: Add, Update, and Search Functionalities in order Module
 
 
 
-   Scenario: Verify Batch Review Receiving functionalities 
+    Scenario: Verify Batch Review Receiving functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
         And enters all the required fields and clicks on the save button

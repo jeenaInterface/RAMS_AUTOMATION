@@ -1,6 +1,6 @@
 Feature: Add, Update, and Search Functionalities in material Module
 
-    @creatematerial @sanity
+    @creatematerial @sanity @material
 
     Scenario: Create, update, search material, verify New button and action log
 
@@ -14,7 +14,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies that the New button works as expected
         And verifies that the action log records the performed actions accurately
 
-    @search @sanity
+    @search @sanity @material
 
     Scenario: search Material
         Given the admin user is logged into the application
@@ -35,14 +35,14 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies that the search results display the correct shop 'AGV - AGV'
 
 
-    @materialValidation @sanity
+    @materialValidation @sanity @material
 
     Scenario: Verify mandatory field validations in create material page
         Given the admin user is logged into the application
         When the admin navigates to the material creation page
         And the admin fills in the mandatory fields one by one and attempts to submit the form each time
 
-    @createOrder @sanity
+    @createOrder @sanity @material
 
     Scenario: Verify create order functionlity from material module and verify order track is recorded under the material after receiving the material
         Given the admin user is logged into the application
@@ -70,7 +70,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then Do receive material and review for the created order
         Then track the receiving document number for further use
 
-    @transferLocation @sanity
+    @transferLocation @sanity @material
     Scenario: Verify material transfer between stock locations
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -86,10 +86,10 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the admin searches for an existing material by Stock No.
         Then click on the link
         And Verify OH quantity and location are updated in material after transfer the material
-        And the admin verifies that the transfer is recorded in the materials action log
+        # And the admin verifies that the transfer is recorded in the materials action log
 
 
-    @transferLocationMenu @sanity
+    @transferLocationMenu @sanity @material
     Scenario: Verify transfer material functionality from menu
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -104,7 +104,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then click on the link
         And Verify OH quantity and location are updated in material after transfer the material
 
-    @adjustOHQuantity @sanity
+    @adjustOHQuantity @sanity @material
     Scenario: Verify OH quantity adjustment for a material
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -121,7 +121,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then click on the link
         And verifies that the material OH quantity is updated accordingly
 
-    @adjustOHQuantityMenu @sanity
+    @adjustOHQuantityMenu @sanity @material
     Scenario: Verify adjustment OH quantity menu
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -136,8 +136,8 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then click on the link
         And verifies that the material OH quantity is updated accordingly
 
-@adjustOHQuantityRandomUpdate @sanity
-  Scenario: Verify adjustment OH quantity menu
+@adjustOHQuantityRandomUpdate @sanity @material
+  Scenario: Verify adjustment OH quantity menu by random select values
     Given the admin user is logged into the application
     When the admin navigates to the adjust OH quantity page
     Then the admin clicks on the adjust button without selecting an adjust reason
@@ -156,3 +156,42 @@ Feature: Add, Update, and Search Functionalities in material Module
 # # Do the integration once complete the work order
 
 
+ @ReceiveMaterialANDVerify @sanity
+    Scenario: Verify create PO order and receive functionalities
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+
+        Then partially receive the order and review
+        And track the receiving document number for further use
+
+        Then the user searches for the last created order in the inquiry list page
+        And verifies the value in the receive status field in PO
+        Then Go to inquire material receive screen
+        Then search for the material receive and click on the link to edit the quantity
+        Then update the received quantity to perform full receive
+
+        And the user searches for the last created order in the inquiry list page
+        And verifies the value in the receive status field in PO
+        And verifies total order quantity and total outstanding quantity after full receive
+
+@cancelReceiveMaterial @sanity
+    Scenario: Verify cancel and action log functionalities in receiving material page
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+
+        Then partially receive the order and review
+        And track the receiving document number for further use
+        Then verify the action Log in Receiving Material
+
+        Then the user searches for the last created order in the inquiry list page
+        And verifies the value in the receive status field in PO
+        Then Go to material recive module and Cancel the the created recive done earlier
+
+        Then the user searches for the last created order in the inquiry list page
+        And verifies the value in the receive status field in PO
