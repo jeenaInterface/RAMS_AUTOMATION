@@ -136,19 +136,6 @@ Feature: Add, Update, and Search Functionalities in order Module
         And selects multiple purchase orders and performs batch approval on the selected orders
         Then the system verifies that all selected orders are approved successfully
         
-    @VerifySearchInquireMaterialReceive @sanity @po
-
-    Scenario: Verify search functionalities in inquire material receive page
-        Given the admin user is logged into the application
-        Then the admin navigates to inquire material receive screen
-        And verify the search by po number
-        Then verify the search by Pack Slip No.
-        Then verify the search by Receiving Date
-        Then verify the serach by Vendor
-        Then verify the serach by Stock No.
-        Then verify the serach by Status
-        Then verify the serach by Order Type
-        Then verify the serach by Receiving Doc. No.
 
 
 

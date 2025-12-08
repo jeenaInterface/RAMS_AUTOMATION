@@ -86,7 +86,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the admin searches for an existing material by Stock No.
         Then click on the link
         And Verify OH quantity and location are updated in material after transfer the material
-        # And the admin verifies that the transfer is recorded in the materials action log
+    # And the admin verifies that the transfer is recorded in the materials action log
 
 
     @transferLocationMenu @sanity @material
@@ -136,27 +136,27 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then click on the link
         And verifies that the material OH quantity is updated accordingly
 
-@adjustOHQuantityRandomUpdate @sanity @material
-  Scenario: Verify adjustment OH quantity menu by random select values
-    Given the admin user is logged into the application
-    When the admin navigates to the adjust OH quantity page
-    Then the admin clicks on the adjust button without selecting an adjust reason
-    When the admin selects the adjust reason
-    And clicks on the adjust button without updating the quantity
-    When the admin updates the OH quantity of multiple stocks and verifies the success message
+    @adjustOHQuantityRandomUpdate @sanity @material
+    Scenario: Verify adjustment OH quantity menu by random select values
+        Given the admin user is logged into the application
+        When the admin navigates to the adjust OH quantity page
+        Then the admin clicks on the adjust button without selecting an adjust reason
+        When the admin selects the adjust reason
+        And clicks on the adjust button without updating the quantity
+        When the admin updates the OH quantity of multiple stocks and verifies the success message
 
-# @materialUsage @sanity
-# Scenario: Verify material usage recording and OH quantity update
-#     Given the admin user is logged into the application
-#     When the admin navigates to the inquire material page
-#     Then the admin searches for an existing material by Stock No.
-#     And Click stock No. link from the search results
-#     Then click on the record material usage button
-#     And verifies that the record material usage dialog is displayed
-# # Do the integration once complete the work order
+    # @materialUsage @sanity
+    # Scenario: Verify material usage recording and OH quantity update
+    #     Given the admin user is logged into the application
+    #     When the admin navigates to the inquire material page
+    #     Then the admin searches for an existing material by Stock No.
+    #     And Click stock No. link from the search results
+    #     Then click on the record material usage button
+    #     And verifies that the record material usage dialog is displayed
+    # # Do the integration once complete the work order
 
 
- @ReceiveMaterialANDVerify @sanity
+    @ReceiveMaterialANDVerify @sanity
     Scenario: Verify create PO order and receive functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -177,7 +177,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies the value in the receive status field in PO
         And verifies total order quantity and total outstanding quantity after full receive
 
-@cancelReceiveMaterial @sanity
+    @cancelReceiveMaterial @sanity
     Scenario: Verify cancel and action log functionalities in receiving material page
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -195,3 +195,43 @@ Feature: Add, Update, and Search Functionalities in material Module
 
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
+
+    @VerifySearchInquireMaterialReceive @sanity @po
+
+    Scenario: Verify search functionalities in inquire material receive page
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+
+        Then partially receive the order and review
+        And track the receiving document number for further use
+        And track the Pack slip number for further use
+        Then go to inquire material receive screen and search by po number
+        Then go to inquire material receive screen and search by Pack Slip No.
+        Then go to inquire material receive screen and search by Receiving Date
+        Then the admin searches for an existing by vendor '1080233500'
+        Then go to inquire material receive screen and search by Stock No.
+        Then go to inquire material receive screen and search by Status
+        Then go to inquire material receive screen and search by Order Type
+
+    @ReceiveMaterialANDVerifyExternalRo @sanity
+    Scenario: Verify create External RO order and receive functionalities
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        Then select external rebuild option
+        Then the purchase order number is captured
+
+        Then partially receive the order and review
+        And track the receiving document number for further use
+
+        Then the user searches for the last created order in the inquiry list page
+        And verifies the value in the receive status field in PO
+        Then Go to inquire material receive screen
+        Then search for the material receive and click on the link to edit the quantity
+        Then update the received quantity to perform full receive
+
+        And the user searches for the last created order in the inquiry list page
+        And verifies the value in the receive status field in PO
+        And verifies total order quantity and total outstanding quantity after full receive

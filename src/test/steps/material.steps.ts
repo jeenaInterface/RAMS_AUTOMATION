@@ -197,6 +197,23 @@ Then('track the receiving document number for further use', async function (this
   // Optionally store it for later use
   materialPage.ReceivingDocumentNo = receivingDocNo;
 });
+Then('track the Pack slip number for further use', async function (this: any) {
+
+
+  // Prefer stored property if set during previous flow
+  let packSlipNumber = materialPage.payslipNumber || '';
+
+
+  // Attach Receiving Doc number to Cucumber report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Pack slip number: ${packSlipNumber}`);
+  } else {
+    fixture.logger?.info(`Pack slip number: ${packSlipNumber}`);
+  }
+
+  // Optionally store it for later use
+  materialPage.payslipNumber = packSlipNumber;
+});
 Then('Verify OH quantity is updated in material after receiving the material', async () => {
 
   await materialPage.verifyStockLocation();
@@ -321,4 +338,26 @@ Then('verifies total order quantity and total outstanding quantity after full re
 
 Then('verify the action Log in Receiving Material', async () => {
     await materialPage.verifyActionLogMaterialReceive();
+});
+Then('go to inquire material receive screen and search by po number', async () => {
+    await materialPage.searchByPONumber();
+});
+Then('go to inquire material receive screen and search by Pack Slip No.', async () => {
+    await materialPage.searchByPayslipNumber();
+});
+Then('go to inquire material receive screen and search by Receiving Date', async () => {
+    await materialPage.verifyRequestDateResult();
+});
+Then('the admin searches for an existing by vendor {string}', async (vendor: string) => {
+    await materialPage.searchPOByVendor(vendor);
+});
+
+Then('go to inquire material receive screen and search by Status', async () => {
+    await materialPage.selectReceiveStatusForsEARCH();
+});
+Then('go to inquire material receive screen and search by Stock No.', async () => {
+    await materialPage.searchBystockNumber();
+});
+Then('go to inquire material receive screen and search by Order Type', async () => {
+    await materialPage.TypeSEARCH();
 });

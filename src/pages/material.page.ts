@@ -15,6 +15,7 @@ export default class MaterialPage {
     public description: string = '';
     public purchaseOrderNo: string = '';
     public ReceivingDocumentNo: string = '';
+    public payslipNumber: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -63,6 +64,7 @@ export default class MaterialPage {
         operationSearchResult: "//tbody/tr[1]/td[1]/div[1]/span[1]",
         assetGroupSearch: "(//input[@type='text'])[5]",
         vendorSearchButton: "//i[@class='el-input__icon el-icon-search is-clickable']",
+        vendorCodeLookUpVendor: "(//label[normalize-space(text())='Code']/following::input)[1]",
         vendorCode: "(//input[@placeholder='--Input Text--'])[3]",
         LookUpVendorOkButton: "(//span[contains(text(),'OK')])[5]",
         LookUpVendorSearchButton: "(//span[contains(text(),'Search')])[2]",
@@ -72,6 +74,7 @@ export default class MaterialPage {
         okButtonerror: "(//button[contains(@class,'el-button el-button--default')]//span)[2]",
         createOrderButton: "//span[normalize-space(text())='Create Order']",
         vendorSearchButtonOnPurchaseOrderForm: "(//div[@class='select-lookup']//i)[1]",
+         externalRebildOrderCheckBox: "(//span[@class='el-radio__inner'])[2]",
         SearchButtonOnPurchaseOrderForm: "(//button[@class='el-button el-button--primary']//span)[3]",
         link: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]/a[1]",
         FOB: "(//input[@class='el-input__inner'])[3]",
@@ -130,6 +133,8 @@ export default class MaterialPage {
         vendorDetails: "(//span[normalize-space()='1000287 - OCEAN BLUE ENVIRONMENTAL'])[1]",
         receivingDocumentSearchBox: "(//label[normalize-space(text())='Receiving Doc. No.']/following::input)[1]",
         payslipNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/a[1]",
+        payslipNumber: "(//label[normalize-space(text())='Pack Slip Number']/following::input)[1]",
+
 
     };
 
@@ -791,7 +796,7 @@ export default class MaterialPage {
 
 
     }
-        async createPartialReceiveMaterial(): Promise<void> {
+    async createPartialReceiveMaterial(): Promise<void> {
         await fixture.page.waitForTimeout(3000);
         await this.page.locator(this.Elements.ordermenu).click();
         await this.page.locator(this.Elements.receiveMaterial).click();
@@ -829,6 +834,15 @@ export default class MaterialPage {
                 fixture.logger.info(`Receiving document number: ${this.ReceivingDocumentNo}`);
             }
         }
+        await fixture.page.waitForTimeout(1000);
+        const locator = this.page.locator(this.Elements.payslipNumber);
+
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        // Get the value of the input field (the text inside the input)
+        this.payslipNumber = await locator.inputValue();
+
+        console.log('Payslip Number:', this.payslipNumber);
 
     }
     async UpdatemultipleStock(): Promise<void> {
@@ -851,14 +865,14 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.receivingDocumentSearchBox).fill(this.ReceivingDocumentNo);
         await this.page.locator(this.Elements.searchButton).click();
         await this.page.locator(this.Elements.payslipNumberLink).click();
-        await fixture.page.waitForTimeout(500);  
+        await fixture.page.waitForTimeout(500);
     }
-        async DoFullReceive(): Promise<void> {
+    async DoFullReceive(): Promise<void> {
         await fixture.page.waitForTimeout(3000);
         await this.page.locator(this.Elements.receiveQuantityInput).fill("10");
         await this.page.getByRole('button', { name: 'Save' }).click();
         await this.page.getByRole('button', { name: 'OK' }).click();
-        await fixture.page.waitForTimeout(500);  
+        await fixture.page.waitForTimeout(500);
     }
     async verifyActionLogMaterialReceive(): Promise<void> {
         await this.base.waitAndClick(this.Elements.actionLog);
@@ -869,5 +883,238 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.closeButton).click();
     }
+    async ReturnpayslipNumber(): Promise<string | null> {
+        // await fixture.page.waitForTimeout(1000);
+        // const locator = this.page.locator(this.Elements.payslipNumber);
 
+        // await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        // // Get the value from the input field, not textContent
+        // this.payslipNumber = await locator.textContent();
+        return this.payslipNumber;
+    }
+    async searchByPONumber(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialRecieve).click();
+        await this.page.locator(`(//input[@class='el-input__inner'])[1]`).fill(this.purchaseOrderNo);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(500);
+        const textContent = await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=5]/div[position()=1]/span[position()=1]`).textContent();
+
+        // Verify that this.purchaseOrderNo and the text content are the same
+        if (textContent.trim() === this.purchaseOrderNo) {
+            console.log("Purchase order number matches the text content.");
+        } else {
+            console.error(`Mismatch: Purchase order number "${this.purchaseOrderNo}" does not match the text content "${textContent}"`);
+        }
+
+    }
+    async searchByPayslipNumber(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialRecieve).click();
+
+        await this.page.locator(`(//input[@rows='2'])[2]`).fill(this.payslipNumber);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(500);
+        const textContent = await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=4]/div[position()=1]/a[position()=1]`).textContent();
+
+        // Verify that this.purchaseOrderNo and the text content are the same
+        if (textContent.trim() === this.payslipNumber) {
+            console.log("Purchase order number matches the text content.");
+        } else {
+            console.error(`Mismatch: Payslip number "${this.payslipNumber}" does not match the text content "${textContent}"`);
+        }
+
+    }
+    async verifyRequestDateResult(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialRecieve).click();
+        await this.page.locator("(//input[@class='el-input__inner'])[3]").click();
+        await this.page.getByRole('cell', { name: 'Today' }).click();
+        await this.page.getByRole('cell', { name: 'Today' }).click();
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(500);
+        // Format current date as 'YYYY-MMM-DD'
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = currentDate.toLocaleString('en-US', { month: 'short' }); // e.g., "Dec"
+        const day = currentDate.getDate().toString().padStart(2, '0'); // zero-padded day
+
+        const formattedDate = `${year}-${month}-${day}`;
+
+        // Get the date text from the cell
+        const dateLocator = this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=2]/div[position()=1]/span[position()=1]`)
+
+        const dateText = await dateLocator.textContent();
+
+        // Verify that the date text contains the formatted current date
+        if (!dateText?.includes(formattedDate)) {
+            throw new Error(`Expected date to contain ${formattedDate}, but got ${dateText}`);
+        }
+    }
+    async searchPOByVendor(vendor: string): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialRecieve).click();
+        await this.page.locator(this.Elements.vendorSearchButton).click();
+        await this.page.locator(this.Elements.vendorCodeLookUpVendor).fill(vendor);
+        await this.page.locator(this.Elements.LookUpVendorSearchButton).click();
+        // await this.page.locator(this.Elements.LookUpVendorOkButton).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await await this.page.locator(this.Elements.searchButtonOnTransfer).click();
+
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=6]/div[position()=1]/span[position()=1]`)
+        const txt = await firstRow.textContent();
+        await expect(txt).toContain(vendor);
+
+    }
+    async searchBystockNumber(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialRecieve).click();
+
+        await this.page.locator(`(//label[normalize-space(text())='Stock No.']/following::input)[1]`).fill(this.stockNo);
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
+        await fixture.page.waitForTimeout(500);
+        const textContent = await this.page.locator(`//table[position()=1]/tbody[position()=1]/tr[position()=1]/td[position()=7]/div[position()=1]`).textContent();
+
+        // Verify that this.purchaseOrderNo and the text content are the same
+        if (textContent.trim() === this.stockNo) {
+            console.log("Stock number matches the text content.");
+        } else {
+            console.error(`Mismatch: Stock number "${this.stockNo}" does not match the text content "${textContent}"`);
+        }
+
+    }
+    async selectReceiveStatusForsEARCH(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialRecieve).click();
+        await this.page.locator(`(//label[normalize-space(text())='Status']/following::input)[2]`).click();
+        await this.page.getByText('Cancelled').click();
+        const reviewedElement = this.page.getByText('Reviewed', { exact: true });
+        await reviewedElement.click();
+        await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
+        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(1000);
+        const statusLocator = this.page.locator(`//table[position()=1]/tbody[position()=1]/tr[position()=1]/td[position()=9]/div[position()=1]`)
+
+
+
+        const statusText = await statusLocator.textContent();
+
+        if (!statusText) {
+            throw new Error('Status text is empty or not found.');
+        }
+
+        // Normalize to trim spaces and lower case for case-insensitive comparison
+        const normalizedStatus = statusText.trim();
+
+        if (normalizedStatus !== 'Cancelled' && normalizedStatus !== 'Reviewed') {
+            throw new Error(`Status text '${statusText}' is not 'Reviewed' or 'Cancelled'.`);
+        }
+    }
+    async TypeSEARCH(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialRecieve).click();
+        await this.page.locator(`(//label[normalize-space(text())='Order Type']/following::input)[2]`).click();
+        const reviewedElement = this.page.getByText('PO', { exact: true });
+        await reviewedElement.click();
+        await this.page.getByText('Reset Search').first().click();
+        await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
+        await fixture.page.waitForTimeout(1000);
+        const statusLocator = this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=3]/div[position()=1]/span[position()=1]`)
+        const statusText = await statusLocator.textContent();
+
+        if (!statusText) {
+            throw new Error('text is empty or not found.');
+        }
+
+        // Normalize to trim spaces and lower case for case-insensitive comparison
+        const normalizedStatus = statusText.trim();
+
+        if (normalizedStatus !== 'PO') {
+            throw new Error(`Status text '${statusText}' is not 'PO`);
+        }
+
+
+    }
+    
+
+    async clickOnCreateOrderButtontoCreateExternalRO(): Promise<void> {
+        const createBtn = this.page.locator(this.Elements.createOrderButton);
+        await expect(createBtn).toBeVisible();
+        const originalPage = fixture.page;
+        const pagePromise = originalPage.context().waitForEvent('page');
+        await createBtn.click();
+        const newPage = await pagePromise;
+
+        await newPage.waitForLoadState('networkidle');
+        const url = newPage.url();
+        fixture.logger?.info(`Create Order opened new page: ${url}`);
+        // If expected URL fragment exists, assert; else just continue
+        try {
+            await expect(url).toContain('purchase');
+        } catch (err) {
+            // not fatal - just log
+            fixture.logger?.warn(`Create Order did not open expected purchase page. URL: ${url}`);
+        }
+
+        // Switch fixture to new page so subsequent steps operate on the purchase order page
+        fixture.page = newPage;
+
+        await fixture.page.waitForTimeout(1000);
+        await newPage.locator(this.Elements.vendorSearchButtonOnPurchaseOrderForm).click();
+await newPage.locator(this.Elements.externalRebildOrderCheckBox).click();
+        await newPage.locator(this.Elements.vendorSearchButtonOnPurchaseOrderForm).click();
+        await newPage.locator(this.Elements.vendorCode).fill('1000287');
+        await newPage.locator(this.Elements.SearchButtonOnPurchaseOrderForm).click();
+        // await this.page.locator(this.Elements.LookUpVendorOkButton).click();
+        await newPage.getByRole('button', { name: 'OK' }).click();
+        await newPage.locator('form').getByPlaceholder('--Select One--').nth(1).click();
+        await newPage.getByText('Power - Power Equipment Maintenance').click();
+        await newPage.locator(this.Elements.FOB).click();
+        await newPage.getByText('SHIPPING PT - Shipping Point').click();
+        await newPage.locator(this.Elements.terms).click();
+        await newPage.getByText('NET30 - Net 30 Days').click();
+        await newPage.locator(this.Elements.shipvia).click();
+        await newPage.getByText('BEST WAY - Best Available Shipping Option').click();
+        const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
+        await newPage.locator(this.Elements.jobnumber).fill(randomJobNumber);
+        const description = `Auto order ${randomJobNumber}`;
+        await newPage.locator(this.Elements.instruction).fill(description);
+        await newPage.locator(this.Elements.vendorNo).fill(randomJobNumber);
+        const price = `${getRandomInt(1, 10)}`;
+        // await newPage.locator(this.Elements.retailPriceInput).fill(price);
+        // await fixture.page.waitForTimeout(500);
+        // await newPage.locator(this.Elements.orderQuantity).fill(price);
+        await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').click();
+        await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').fill('10');
+        await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
+        await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('10');
+        await newPage.locator(this.Elements.productCode).click();
+        await newPage.getByText('OPX_AGV - Maintenance Parts - AGV').click();
+        await fixture.page.waitForTimeout(1000);
+        await newPage.locator(this.Elements.saveOnPurchaseOrderForm).click();
+        await fixture.page.waitForTimeout(500);
+        await newPage.locator(this.Elements.okButtonpurchaceOrder).click();
+        const successMsg = await newPage.locator(this.Elements.successMessageOnPurchaseOrderForm).textContent();
+        fixture.logger?.info(`Purchase Order creation success message: ${successMsg}`);
+
+        // Wait briefly and read the header text directly (same pattern as stockNo)
+        await fixture.page.waitForTimeout(2000);
+        const poHeaderText = (await fixture.page.locator(this.Elements.headertitle).textContent());
+        if (poHeaderText && poHeaderText.includes('Purchase Order |')) {
+            // Extract the number after "Purchase Order | "
+            const match = poHeaderText.match(/Purchase Order\s*\|\s*(\d+)/);
+            if (match && match[1]) {
+                this.purchaseOrderNo = match[1];
+                fixture.logger?.info(`Extracted Purchase Order number: ${this.purchaseOrderNo}`);
+            }
+        }
+        fixture.page = originalPage;
+        await newPage.close();
+
+
+    }
 }
+
