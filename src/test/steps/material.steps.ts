@@ -361,3 +361,7 @@ Then('go to inquire material receive screen and search by Stock No.', async () =
 Then('go to inquire material receive screen and search by Order Type', async () => {
     await materialPage.TypeSEARCH();
 });
+
+Then('select external rebuild option and enter all required details to create a new External RO', async () => {
+    await materialPage.clickOnCreateOrderButtontoCreateExternalRO();
+});

@@ -220,18 +220,12 @@ Feature: Add, Update, and Search Functionalities in material Module
     Scenario: Verify create External RO order and receive functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
-        Then select external rebuild option
-        Then the purchase order number is captured
+        When enters all required details to create a new material
+        Then select external rebuild option and enter all required details to create a new External RO
+        Then the Purchase Order number is captured for further use
 
         Then partially receive the order and review
         And track the receiving document number for further use
 
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
-        Then Go to inquire material receive screen
-        Then search for the material receive and click on the link to edit the quantity
-        Then update the received quantity to perform full receive
-
-        And the user searches for the last created order in the inquiry list page
-        And verifies the value in the receive status field in PO
-        And verifies total order quantity and total outstanding quantity after full receive

@@ -31,6 +31,8 @@ export default class MaterialPage {
         saveButton: "//span[normalize-space(text())='Save']",
         okButton: "//button[normalize-space()='OK']",
         okButtonUpdate: "(//span[normalize-space()='OK'])[1]",
+        lookUpMaterialSearch: "//div[@class='el-dialog__wrapper inquiryPurchaseOrder']//span[contains(text(),'Search')]",
+        lookUpMaterlOk: "(//span[contains(text(),'OK')])[4]",
         stocknumbersearch: "(//input[@rows='2'])[1]",
         partnoSearch: "(//input[@rows='2'])[2]",
         searchButton: "//span[normalize-space(text())='Search']",
@@ -74,7 +76,8 @@ export default class MaterialPage {
         okButtonerror: "(//button[contains(@class,'el-button el-button--default')]//span)[2]",
         createOrderButton: "//span[normalize-space(text())='Create Order']",
         vendorSearchButtonOnPurchaseOrderForm: "(//div[@class='select-lookup']//i)[1]",
-         externalRebildOrderCheckBox: "(//span[@class='el-radio__inner'])[2]",
+        vendorCode2: "(//input[@placeholder='--Input Text--'])[2]",
+        externalRebildOrderCheckBox: "(//span[@class='el-radio__inner'])[2]",
         SearchButtonOnPurchaseOrderForm: "(//button[@class='el-button el-button--primary']//span)[3]",
         link: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]/a[1]",
         FOB: "(//input[@class='el-input__inner'])[3]",
@@ -82,6 +85,8 @@ export default class MaterialPage {
         shipvia: "(//input[@placeholder='--Select One--'])[4]",
         jobnumber: "(//input[@placeholder='--Input Text--'])[1]",
         instruction: "//textarea[@placeholder='--Input Text--']",
+        stockNumberSearch: "//div[@class='cell']//i[@class='el-input__icon el-icon-search is-clickable']",
+        stockNumberSearchPopupfield: "(//label[normalize-space(text())='Stock No.']/following::input)[1]",
         vendorNo: "//div[@id='vendorPartNo']//input[@type='text']",
         retailPriceInput: "(//input[@type='text'])[18]",
         orderQuantity: "(//input[@type='text'])[19]",
@@ -1038,7 +1043,7 @@ export default class MaterialPage {
 
 
     }
-    
+
 
     async clickOnCreateOrderButtontoCreateExternalRO(): Promise<void> {
         const createBtn = this.page.locator(this.Elements.createOrderButton);
@@ -1063,10 +1068,9 @@ export default class MaterialPage {
         fixture.page = newPage;
 
         await fixture.page.waitForTimeout(1000);
-        await newPage.locator(this.Elements.vendorSearchButtonOnPurchaseOrderForm).click();
-await newPage.locator(this.Elements.externalRebildOrderCheckBox).click();
-        await newPage.locator(this.Elements.vendorSearchButtonOnPurchaseOrderForm).click();
-        await newPage.locator(this.Elements.vendorCode).fill('1000287');
+        await newPage.locator(this.Elements.externalRebildOrderCheckBox).click();
+         await newPage.locator(this.Elements.vendorSearchButtonOnPurchaseOrderForm).click();
+        await newPage.locator(this.Elements.vendorCode2).fill('1000287');
         await newPage.locator(this.Elements.SearchButtonOnPurchaseOrderForm).click();
         // await this.page.locator(this.Elements.LookUpVendorOkButton).click();
         await newPage.getByRole('button', { name: 'OK' }).click();
@@ -1079,14 +1083,23 @@ await newPage.locator(this.Elements.externalRebildOrderCheckBox).click();
         await newPage.locator(this.Elements.shipvia).click();
         await newPage.getByText('BEST WAY - Best Available Shipping Option').click();
         const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
-        await newPage.locator(this.Elements.jobnumber).fill(randomJobNumber);
-        const description = `Auto order ${randomJobNumber}`;
-        await newPage.locator(this.Elements.instruction).fill(description);
-        await newPage.locator(this.Elements.vendorNo).fill(randomJobNumber);
-        const price = `${getRandomInt(1, 10)}`;
-        // await newPage.locator(this.Elements.retailPriceInput).fill(price);
-        // await fixture.page.waitForTimeout(500);
-        // await newPage.locator(this.Elements.orderQuantity).fill(price);
+        const jobNumberLocator = newPage.locator(this.Elements.jobnumber);
+
+        if (await jobNumberLocator.isVisible()) {
+            await jobNumberLocator.fill(randomJobNumber);
+        } else {
+            console.log('Job number field is not visible, skipping fill.');
+        }
+        this.description = `Auto order ${randomJobNumber}`;
+        await newPage.locator(this.Elements.instruction).fill(this.description);
+        // await await this.page.locator(this.Elements.createButton).click();
+        // await newPage.locator(this.Elements.stockNumberSearch).click();
+        // await newPage.locator(this.Elements.stockNumberSearchPopupfield).fill('1008');
+        // await newPage.locator(this.Elements.lookUpMaterialSearch).click();
+        // await newPage.locator(this.Elements.lookUpMaterlOk).click();
+        await fixture.page.waitForTimeout(500);
+        await  newPage.locator(this.Elements.vendorNo).fill(randomJobNumber);
+        await fixture.page.waitForTimeout(500);
         await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').click();
         await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').fill('10');
         await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
@@ -1097,18 +1110,18 @@ await newPage.locator(this.Elements.externalRebildOrderCheckBox).click();
         await newPage.locator(this.Elements.saveOnPurchaseOrderForm).click();
         await fixture.page.waitForTimeout(500);
         await newPage.locator(this.Elements.okButtonpurchaceOrder).click();
-        const successMsg = await newPage.locator(this.Elements.successMessageOnPurchaseOrderForm).textContent();
+        const successMsg = await await this.page.locator(this.Elements.successMessageOnPurchaseOrderForm).textContent();
         fixture.logger?.info(`Purchase Order creation success message: ${successMsg}`);
 
         // Wait briefly and read the header text directly (same pattern as stockNo)
         await fixture.page.waitForTimeout(2000);
         const poHeaderText = (await fixture.page.locator(this.Elements.headertitle).textContent());
-        if (poHeaderText && poHeaderText.includes('Purchase Order |')) {
+        if (poHeaderText && poHeaderText.includes('External Rebuild Order |')) {
             // Extract the number after "Purchase Order | "
-            const match = poHeaderText.match(/Purchase Order\s*\|\s*(\d+)/);
+            const match = poHeaderText.match(/External Rebuild Order\s*\|\s*(\d+)/);
             if (match && match[1]) {
                 this.purchaseOrderNo = match[1];
-                fixture.logger?.info(`Extracted Purchase Order number: ${this.purchaseOrderNo}`);
+                fixture.logger?.info(`Extracted  External Rebuild Order number: ${this.purchaseOrderNo}`);
             }
         }
         fixture.page = originalPage;
