@@ -137,17 +137,3 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the system verifies that all selected orders are approved successfully
         
 
-
-
-    Scenario: Verify Batch Review Receiving functionalities
-        Given the admin user is logged into the application
-        Then the admin navigates to the order creation menu
-        And enters all the required fields and clicks on the save button
-        Then the purchase order number is captured for further use
-
-        Then partially receive the order
-        And track the receiving document number for further use
-        Then go to batch review receiving screena and search by payslip number
-        Then the user searches for the newly created order in the inquiry list page
-        And verifies the receive status and attaches that status in the report
-        And verifies total order quantity and total outstanding quantity

@@ -305,63 +305,79 @@ Then('Verify the vendor details are displayed in material after Purchase order',
 
 });
 Then('partially receive the order and review', async () => {
-    await materialPage.createPartialReceiveMaterial();
+  await materialPage.createPartialReceiveMaterial();
 });
 When('the user searches for the last created order in the inquiry list page', async () => {
-    await purchasePage.clickOnInquireOrderMenu();
-    await purchasePage.SearchPONumber();
+  await purchasePage.clickOnInquireOrderMenu();
+  await purchasePage.SearchPONumber();
 });
 Then('verifies the value in the receive status field in PO', async function (this: any) {
 
-    let status = await purchasePage.receiveStatusValuepo() || '';
+  let status = await purchasePage.receiveStatusValuepo() || '';
 
-    if (this && typeof this.attach === 'function') {
-        await this.attach(`Receive Status: ${status}`);
-    } else {
-        fixture.logger?.info(`Receive Status: ${status}`);
-    }
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Receive Status: ${status}`);
+  } else {
+    fixture.logger?.info(`Receive Status: ${status}`);
+  }
 });
 Then('Go to inquire material receive screen', async () => {
-    await purchasePage.inquireMaterialReceiveScreen();
+  await purchasePage.inquireMaterialReceiveScreen();
 });
 Then('search for the material receive and click on the link to edit the quantity', async () => {
-    await materialPage.searchByDocNumber();
+  await materialPage.searchByDocNumber();
 
 });
 
 Then('update the received quantity to perform full receive', async () => {
-    await materialPage.DoFullReceive();
+  await materialPage.DoFullReceive();
 });
 Then('verifies total order quantity and total outstanding quantity after full receive', async () => {
-    await purchasePage.totalOrderQuantity();
+  await purchasePage.totalOrderQuantity();
 });
 
 Then('verify the action Log in Receiving Material', async () => {
-    await materialPage.verifyActionLogMaterialReceive();
+  await materialPage.verifyActionLogMaterialReceive();
 });
 Then('go to inquire material receive screen and search by po number', async () => {
-    await materialPage.searchByPONumber();
+  await materialPage.searchByPONumber();
 });
 Then('go to inquire material receive screen and search by Pack Slip No.', async () => {
-    await materialPage.searchByPayslipNumber();
+  await materialPage.searchByPayslipNumber();
 });
 Then('go to inquire material receive screen and search by Receiving Date', async () => {
-    await materialPage.verifyRequestDateResult();
+  await materialPage.verifyRequestDateResult();
 });
 Then('the admin searches for an existing by vendor {string}', async (vendor: string) => {
-    await materialPage.searchPOByVendor(vendor);
+  await materialPage.searchPOByVendor(vendor);
 });
 
 Then('go to inquire material receive screen and search by Status', async () => {
-    await materialPage.selectReceiveStatusForsEARCH();
+  await materialPage.selectReceiveStatusForsEARCH();
 });
 Then('go to inquire material receive screen and search by Stock No.', async () => {
-    await materialPage.searchBystockNumber();
+  await materialPage.searchBystockNumber();
 });
 Then('go to inquire material receive screen and search by Order Type', async () => {
-    await materialPage.TypeSEARCH();
+  await materialPage.TypeSEARCH();
 });
 
 Then('select external rebuild option and enter all required details to create a new External RO', async () => {
-    await materialPage.clickOnCreateOrderButtontoCreateExternalRO();
+  await materialPage.clickOnCreateOrderButtontoCreateExternalRO();
+});
+Then('go to batch review receiving screen', async () => {
+  await materialPage.clickOnBatchReviewReceivingMenu();
+});
+Then('partially receive the order', async () => {
+  await materialPage.createPartialReceiveMaterialNotToReview();
+});
+Then('search by Pack Slip No. and review the material', async () => {
+  await materialPage.DoMaterialReview();
+});
+
+Then('search by Pack Slip No. and click on the link and verifies the redirection to correct page', async () => {
+  await materialPage.ClickonPackSlipLink();
+});
+Then('search by PO No. and click on the link and verifies the redirection to correct page', async () => {
+  await materialPage.ClickonPOLink();
 });

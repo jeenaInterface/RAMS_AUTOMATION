@@ -229,3 +229,40 @@ Feature: Add, Update, and Search Functionalities in material Module
 
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
+
+@BatchReviewReceiving   @sanity
+   Scenario: Verify Batch Review Receiving Module functionalities
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+
+        Then partially receive the order
+        And track the receiving document number for further use
+
+
+        Then go to batch review receiving screen
+        Then search by Pack Slip No. and review the material
+
+        Then the user searches for the last created order in the inquiry list page
+        And verifies the value in the receive status field in PO
+
+
+    @BatchReviewReceivingLinks   @sanity
+   Scenario: Packslip number and PO number links are redirecting to correct pages
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+
+        Then partially receive the order
+        And track the receiving document number for further use
+
+
+        Then go to batch review receiving screen
+        Then search by Pack Slip No. and click on the link and verifies the redirection to correct page
+
+        Then go to batch review receiving screen
+        Then search by PO No. and click on the link and verifies the redirection to correct page

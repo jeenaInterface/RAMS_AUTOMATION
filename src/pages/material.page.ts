@@ -139,7 +139,11 @@ export default class MaterialPage {
         receivingDocumentSearchBox: "(//label[normalize-space(text())='Receiving Doc. No.']/following::input)[1]",
         payslipNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/a[1]",
         payslipNumber: "(//label[normalize-space(text())='Pack Slip Number']/following::input)[1]",
-
+        batchReviewReceivingMenu: "//span[normalize-space(text())='- Batch Review Receiving']",
+        batchReviewButton: "//span[normalize-space()='Batch Review']",
+        okUpdateButton: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
+        packslipNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]/a[1]",
+        poNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/a[1]/span[1]"
 
     };
 
@@ -1069,7 +1073,7 @@ export default class MaterialPage {
 
         await fixture.page.waitForTimeout(1000);
         await newPage.locator(this.Elements.externalRebildOrderCheckBox).click();
-         await newPage.locator(this.Elements.vendorSearchButtonOnPurchaseOrderForm).click();
+        await newPage.locator(this.Elements.vendorSearchButtonOnPurchaseOrderForm).click();
         await newPage.locator(this.Elements.vendorCode2).fill('1000287');
         await newPage.locator(this.Elements.SearchButtonOnPurchaseOrderForm).click();
         // await this.page.locator(this.Elements.LookUpVendorOkButton).click();
@@ -1098,7 +1102,7 @@ export default class MaterialPage {
         // await newPage.locator(this.Elements.lookUpMaterialSearch).click();
         // await newPage.locator(this.Elements.lookUpMaterlOk).click();
         await fixture.page.waitForTimeout(500);
-        await  newPage.locator(this.Elements.vendorNo).fill(randomJobNumber);
+        await newPage.locator(this.Elements.vendorNo).fill(randomJobNumber);
         await fixture.page.waitForTimeout(500);
         await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').click();
         await newPage.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').fill('10');
@@ -1128,6 +1132,109 @@ export default class MaterialPage {
         await newPage.close();
 
 
+    }
+    async createPartialReceiveMaterialNotToReview(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.ordermenu).click();
+        await this.page.locator(this.Elements.receiveMaterial).click();
+        await this.page.locator(this.Elements.orderNoTextBox).fill(this.purchaseOrderNo);
+        // await this.page.locator(this.Elements.orderNoTextBox).fill('325772');
+        await this.base.waitAndClick(this.Elements.RetrieveButton);
+        await fixture.page.waitForTimeout(1000);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        await this.page.locator(this.Elements.receivingDate).fill(formattedDate);
+        await this.page.locator(this.Elements.packSlipNumber).fill(`PSN-${getRandomInt(1000, 9999)}`);
+        await this.page.locator(this.Elements.receiveQuantityInput).fill('7');
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.getByPlaceholder('--Input Or Select One--').click();
+        await this.page.getByPlaceholder('--Input Or Select One--').type('TS-NS-General');
+        await this.page.locator('text=TS-NS-General').click();
+
+
+        await this.page.locator(this.Elements.masterCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'Save' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(1000);
+
+        const headerText = await this.page.locator(this.Elements.receivingDocumentNumber).textContent();
+
+        if (headerText && headerText.includes('Receiving Doc. No.:')) {
+            // Extract the number after "Receiving Doc. No.:"
+            const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
+            if (match && match[1]) {
+                this.ReceivingDocumentNo = match[1];
+                fixture.logger.info(`Receiving document number: ${this.ReceivingDocumentNo}`);
+            }
+        }
+        await fixture.page.waitForTimeout(1000);
+        const locator = this.page.locator(this.Elements.payslipNumber);
+
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        // Get the value of the input field (the text inside the input)
+        this.payslipNumber = await locator.inputValue();
+
+        console.log('Payslip Number:', this.payslipNumber);
+    }
+    async clickOnBatchReviewReceivingMenu(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.batchReviewReceivingMenu).click();
+        await fixture.page.waitForTimeout(10000);
+    }
+    async DoMaterialReview(): Promise<void> {
+        await this.page.locator(`(//input[@placeholder='--Input Text--'])[1]`).fill(this.payslipNumber);
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[2]`).check()
+        await this.page.locator(this.Elements.batchReviewButton).click();
+        await this.page.locator(this.Elements.okUpdateButton).click();
+        await fixture.page.waitForTimeout(2000);
+    }
+    async ClickonPackSlipLink(): Promise<void> {
+        await this.page.locator(`(//input[@placeholder='--Input Text--'])[1]`).fill(this.payslipNumber);
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[2]`).check();
+        await this.page.locator(this.Elements.packslipNumberLink).click();
+
+        await fixture.page.waitForTimeout(2000);
+        const packSlipNumberLocator = this.page.locator(this.Elements.payslipNumber);
+        const txt = await packSlipNumberLocator.inputValue();
+        console.log('Pack Slip Number from link:', txt);
+
+        // Verify the text values are equal
+        if (txt === this.payslipNumber) {
+            console.log('Verification passed: Pack slip number matches the expected payslipNumber.');
+        } else {
+            console.error(`Verification failed: Pack slip number '${txt}' does not match the expected '${this.payslipNumber}'.`);
+        }
+    }
+    async ClickonPOLink(): Promise<void> {
+        await this.page.locator(`(//input[@placeholder='--Input Text--'])[3]`).fill(this.purchaseOrderNo);
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[2]`).check();
+
+        // Capture the text before clicking, if needed
+        const poLinkLocator = this.page.locator(this.Elements.poNumberLink);
+        const poLinkText = await poLinkLocator.textContent();
+
+        await poLinkLocator.click();
+
+        await fixture.page.waitForTimeout(2000);
+        const poHeaderText = await fixture.page.locator(this.Elements.headertitle).textContent();
+        if (poHeaderText && poHeaderText.includes('Purchase Order |')) {
+            // Extract the number after "Purchase Order | "
+            const match = poHeaderText.match(/Purchase Order\s*\|\s*(\d+)/);
+            if (match && match[1]) {
+                this.purchaseOrderNo = match[1];
+                fixture.logger?.info(`Extracted Purchase Order number: ${this.purchaseOrderNo}`);
+            }
+        }
+
+        // Verification step - compare the purchaseOrderNo with the poNumberLink text (trimmed)
+        if (poLinkText && poLinkText.trim() === this.purchaseOrderNo) {
+            fixture.logger?.info('Verification passed: poNumberLink text matches purchaseOrderNo');
+        } else {
+            fixture.logger?.error(`Verification failed: poNumberLink text '${poLinkText?.trim()}' does not match purchaseOrderNo '${this.purchaseOrderNo}'`);
+        }
     }
 }
 
