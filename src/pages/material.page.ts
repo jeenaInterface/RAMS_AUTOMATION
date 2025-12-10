@@ -143,7 +143,19 @@ export default class MaterialPage {
         batchReviewButton: "//span[normalize-space()='Batch Review']",
         okUpdateButton: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
         packslipNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]/a[1]",
-        poNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/a[1]/span[1]"
+        poNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/a[1]/span[1]",
+        returnToVendorMenu: "//span[normalize-space(text())='- Return to Vendor']",
+        retreiveReceiveButton: "//span[normalize-space(text())='Retrieve Receive']",
+        retrunQuantity: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[8]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        RMANo: "(//label[normalize-space(text())='RMA No.']/following::input)[1]",
+        returnDate: "(//label[normalize-space(text())='Return Date']/following::input)[1]",
+        reasonForReturn: "//textarea[@placeholder='--Input Text Area--']",
+        courierName: "(//label[normalize-space(text())='Courier Name']/following::input)[1]",
+        courierNumber: "(//label[normalize-space(text())='Courier Number']/following::input)[1]",
+        contact: "(//label[normalize-space(text())='Contact']/following::input)[1]"
+
+
+
 
     };
 
@@ -1235,6 +1247,37 @@ export default class MaterialPage {
         } else {
             fixture.logger?.error(`Verification failed: poNumberLink text '${poLinkText?.trim()}' does not match purchaseOrderNo '${this.purchaseOrderNo}'`);
         }
+    }
+    async clickmaterialReturnMenu(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.returnToVendorMenu).click();
+        await fixture.page.waitForTimeout(10000);
+    }
+    async returnOperation(): Promise<void> {
+        const randomNumber = getRandomInt(1000, 9999);
+
+        await this.page.locator(this.Elements.stockNoTransfer).fill(this.payslipNumber);
+        await this.base.waitAndClick(this.Elements.retreiveReceiveButton);
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.retrunQuantity).fill("3");
+        const rmaNoLocator = this.page.locator(this.Elements.RMANo);
+        await rmaNoLocator.fill(`RMA-${getRandomInt(1000, 9999)}`);
+        await fixture.page.waitForTimeout(1000);
+        const returnDateLocator = this.page.locator(this.Elements.returnDate);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        await returnDateLocator.fill(formattedDate);
+        const description = `Damaged ${randomNumber}`;
+
+        await this.page.locator(this.Elements.reasonForReturn).fill(description);
+        await this.page.locator(this.Elements.courierName).fill(`Courier ${randomNumber}`);
+        await this.page.locator(this.Elements.courierNumber).fill(`CN-${randomNumber}`);
+        await this.page.locator(this.Elements.contact).fill(`Contact ${randomNumber}`);
+        await this.page.locator(this.Elements.saveButton).click();
+        await this.page.locator(this.Elements.cancelDSuccessMessage).click();
+        await fixture.page.waitForTimeout(2000);
+
+
     }
 }
 

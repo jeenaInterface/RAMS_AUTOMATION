@@ -381,3 +381,10 @@ Then('search by Pack Slip No. and click on the link and verifies the redirection
 Then('search by PO No. and click on the link and verifies the redirection to correct page', async () => {
   await materialPage.ClickonPOLink();
 });
+
+Then('go to return material screen', async () => {
+  await materialPage.clickmaterialReturnMenu();
+});
+Then('search by pack slip number and perform return material operation', async () => {
+  await materialPage.returnOperation();
+});
