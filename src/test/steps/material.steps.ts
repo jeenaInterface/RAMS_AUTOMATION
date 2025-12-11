@@ -388,3 +388,42 @@ Then('go to return material screen', async () => {
 Then('search by pack slip number and perform return material operation', async () => {
   await materialPage.returnOperation();
 });
+Then('verify the value in Total Order Quantity and Total Outstanding Quantity before material receive', async function (this: any) {
+
+  let orderQtyuantity = await materialPage.orderQtyuantity || '';
+  let outStandingQuantity = await materialPage.outStandingQuantity || '';
+  await this.attach(`Total order quantity: ${orderQtyuantity}, Total outstanding quantity: ${outStandingQuantity}`);
+
+});
+Then('verify the value in Total Order Quantity and Total Outstanding Quantity after material receive', async function (this: any) {
+
+  let orderQtyuantity = await purchasePage.totalOrderQuantity() || '';
+  let outStandingQuantity = await purchasePage.totaloutStandingQuantity() || '';
+  await this.attach(`Total order quantity: ${orderQtyuantity}, Total outstanding quantity: ${outStandingQuantity}`);
+
+});
+Then('the admin go to inquire material return screen', async () => {
+  await materialPage.inquireMaterialReturnScreen();
+});
+Then('search by pack slip number and click on search', async () => {
+  await materialPage.searchByPackSlip();
+});
+Then('Cancel the return material done earlier', async () => {
+  await materialPage.cancelReturn();
+});
+Then('verify the value in Total Order Quantity and Total Outstanding Quantity after return material', async function (this: any) {
+  let orderQtyuantity = await purchasePage.totalOrderQuantity() || '';
+  let outStandingQuantity = await purchasePage.totaloutStandingQuantity() || '';
+  await this.attach(`Total order quantity: ${orderQtyuantity}, Total outstanding quantity: ${outStandingQuantity}`);
+
+});
+
+Then('verify the value in Total Order Quantity and Total Outstanding Quantity after cancel the return material', async function (this: any) {
+  let orderQtyuantity = await purchasePage.totalOrderQuantity() || '';
+  let outStandingQuantity = await purchasePage.totaloutStandingQuantity() || '';
+  await this.attach(`Total order quantity: ${orderQtyuantity}, Total outstanding quantity: ${outStandingQuantity}`);
+
+});
+Then('verify the action log in Return Material', async () => {
+  await materialPage.verifyActionLogRetrurn();
+});

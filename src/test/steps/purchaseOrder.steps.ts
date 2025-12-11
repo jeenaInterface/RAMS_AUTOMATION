@@ -81,6 +81,9 @@ Then('updates the description, adds one more stock detail in external rebuild or
 Then('updates the description and verifies the update is correct', async () => {
     await purchasePage.UpdateInternalRebuildOrder();
 });
+Then('Verify Cancel functionality in external RO', async () => {
+    await purchasePage.cancelExternalRO();
+});
 
 Then('select internal rebuild option', async () => {
     await purchasePage.selectInternalRebuildOrder();
@@ -223,6 +226,15 @@ Then('track the receiving document number', async function (this: any) {
     // Optionally store it for later use
     materialPage.ReceivingDocumentNo = receivingDocNo;
 });
+Then('verifies the value in the receive status field in Purchase Order', async function (this: any) {
 
+  let status = await purchasePage.receiveStatusValuepo() || '';
+
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Receive Status: ${status}`);
+  } else {
+    fixture.logger?.info(`Receive Status: ${status}`);
+  }
+});
 
 

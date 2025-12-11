@@ -16,6 +16,8 @@ export default class PurchaseOrderPage {
     public purchaseOrderNo: string = '';
     public ReceivingDocumentNo: string = '';
     public receiveStatus: string = '    ;'
+    public orderQtyuantity: string = '';
+    public outStandingQuantity: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -89,7 +91,7 @@ export default class PurchaseOrderPage {
         closeButton: "//body/div[@id='app']/div[@class='app-body']/div[@class='app-body-container']/div[@class='app-page']/div[@id='app-modal']/div[@class='el-dialog__wrapper']/div[@class='el-dialog el-dialog--full full-dialog']/div[@class='el-dialog__header']/button[@aria-label='Close']/i[1]",
         stockLocation2: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[2]/div[1]/div[1]/input[1]",
         vendorPartNo: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[5]/div[3]/table[1]/tbody[1]/tr[2]/td[3]/div[1]/div[1]/input[1]",
-        totalOrderQuantity: "//b[normalize-space()='10']",
+        totalOrderQuantity: "//table[3]//tr[1]//td[2]//b[1]",
         internalRebildOrderCheckBox: "(//span[@class='el-radio__inner'])[3]",
         shop: "(//input[@placeholder='--Select One--'])[1]",
         orderDate: "(//input[@placeholder='-- Select Date Range--'])[1]",
@@ -116,7 +118,7 @@ export default class PurchaseOrderPage {
         totalOutStandingQuantity: "//table[3]//tr[2]//td[2]//b[1]",
         inquireMaterialReceive: "//span[normalize-space(text())='- Inquire Material Receiving']",
         receivingDocumentSearchBox: "(//label[normalize-space(text())='Receiving Doc. No.']/following::input)[1]",
-
+        okButtonOncancelPopup:"//html/body/div[3]/div/div[3]/button[2]/span"
 
 
 
@@ -258,25 +260,22 @@ export default class PurchaseOrderPage {
     }
     async totalOrderQuantity(): Promise<string | null> {
         const orderQuantity = this.page.locator(this.Elements.totalOrderQuantity);
-        const totalOutStandingQuantity = this.page.locator(this.Elements.totalOutStandingQuantity);
 
         // Wait for both elements to be visible before getting their content
         await orderQuantity.waitFor({ state: 'visible', timeout: 5000 });
+
+        this.orderQtyuantity = await orderQuantity.textContent();
+        return this.orderQtyuantity;
+    }
+    async totaloutStandingQuantity(): Promise<string | null> {
+        const totalOutStandingQuantity = this.page.locator(this.Elements.totalOutStandingQuantity);
+
+        // Wait for both elements to be visible before getting their content
         await totalOutStandingQuantity.waitFor({ state: 'visible', timeout: 5000 });
 
-        const orderQty = await orderQuantity.textContent();
-        const outStandingQty = await totalOutStandingQuantity.textContent();
+        this.outStandingQuantity = await totalOutStandingQuantity.textContent();
+        return this.outStandingQuantity;
 
-        fixture.logger?.info(`Total Order Quantity: ${orderQty}`);
-        fixture.logger?.info(`Total Outstanding Quantity: ${outStandingQty}`);
-
-        // You can add a check here if you want to log or handle the zero state explicitly
-        if (outStandingQty === '0' || outStandingQty === '0.0' || outStandingQty?.trim() === '0') {
-            fixture.logger?.info('Full quantity received; outstanding quantity is zero.');
-        }
-
-        // Return the outstanding quantity as fetched
-        return outStandingQty;
     }
     async receiveStatusValuepo(): Promise<string | null> {
         await fixture.page.waitForTimeout(500);
@@ -345,6 +344,26 @@ export default class PurchaseOrderPage {
         // Optionally, you can log success or continue your flow
         console.log('Confirmation message verified.');
         await this.page.getByRole('button', { name: 'OK' }).click();
+
+    }
+        async cancelExternalRO(): Promise<void> {
+        await this.page.locator(this.Elements.cancelButton).click();
+        await this.page.locator('form').filter({ hasText: 'Cancel Reason' }).getByPlaceholder('--Input Text--').click();
+        await this.page.locator('form').filter({ hasText: 'Cancel Reason' }).getByPlaceholder('--Input Text--').fill('cancel');
+        // await this.page.locator(this.Elements.cancelReson).fill(this.description);
+        await await this.page.locator(this.Elements.okCancel).click();
+        // Capture the email validation message
+        const cancelMessage = await this.page.locator(this.Elements.cancelMessage).textContent();
+
+        // Verify the message contains the expected success text
+        if (!cancelMessage || !cancelMessage.includes('Cancel Order successfully and Order status is Cancelled.')) {
+            throw new Error(`success message not found. Actual message: "${cancelMessage}"`);
+        }
+
+        // Optionally, you can log success or continue your flow
+        console.log('Confirmation message verified.');
+        // await this.page.getByRole('button', { name: 'OK' }).click();
+        await await this.page.locator(this.Elements.okButtonOncancelPopup).click();
 
     }
     async verifyActionLog(): Promise<void> {

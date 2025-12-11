@@ -81,7 +81,7 @@ export default class ChangeAuthorityPage {
         await this.page.getByPlaceholder('--Select One--').click();
         await this.page.getByRole('listitem').filter({ hasText: 'Remove' }).click();
     }
-    
+
 
     async removeInterfaceMappingFromUser(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
@@ -95,8 +95,8 @@ export default class ChangeAuthorityPage {
 
 
     async resetFunctionality(): Promise<void> {
-         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
-         await this.base.waitAndClick(this.Elements.changeAuthorityMenu);
+        await this.base.waitAndClick(this.Elements.systemSettingsMenu);
+        await this.base.waitAndClick(this.Elements.changeAuthorityMenu);
         await this.page.getByPlaceholder('--Select One--').click();
         await this.page.getByRole('listitem').filter({ hasText: 'Add' }).click();
         await this.page.getByPlaceholder('--Select One or More--').click();
@@ -111,7 +111,9 @@ export default class ChangeAuthorityPage {
         await this.page.getByRole('button', { name: 'Reset' }).click();
         //verify fields are reset
         await expect(this.page.getByPlaceholder('--Select One--')).toHaveText('');
-        await expect(this.page.getByPlaceholder('--Select One or More--')).toHaveText('');
+        const element = this.page.locator('input[placeholder="--Select One or More--"]').first();
+        await expect(element).toHaveText('');
+        // await expect(this.page.getByPlaceholder('--Select One or More--')).toHaveText('');
         await expect(this.page.getByPlaceholder('--Input multiple User ID with split ";"--')).toHaveText('');
 
     }

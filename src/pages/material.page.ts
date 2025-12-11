@@ -16,6 +16,8 @@ export default class MaterialPage {
     public purchaseOrderNo: string = '';
     public ReceivingDocumentNo: string = '';
     public payslipNumber: string = '';
+    public orderQtyuantity: string = '';
+    public outStandingQuantity: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -152,9 +154,14 @@ export default class MaterialPage {
         reasonForReturn: "//textarea[@placeholder='--Input Text Area--']",
         courierName: "(//label[normalize-space(text())='Courier Name']/following::input)[1]",
         courierNumber: "(//label[normalize-space(text())='Courier Number']/following::input)[1]",
-        contact: "(//label[normalize-space(text())='Contact']/following::input)[1]"
-
-
+        contact: "(//label[normalize-space(text())='Contact']/following::input)[1]",
+        inquireMaterialReturnMenu: "//span[normalize-space(text())='- Inquire Vendor Return']",
+        inquireRetrunPackslipNumberSearch: "(//label[normalize-space(text())='Pack Slip No.']/following::input)[1]",
+        rmoLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
+        totalOrderQuantity: "//table[3]//tr[1]//td[2]//b[1]",
+        totalOutStandingQuantity: "//table[3]//tr[2]//td[2]//b[1]",
+        cancelReasonTextArea: "//textarea[@placeholder='--Input Text--']",
+        closeButtonOnActionLog: "xpath=//*[@id='app-modal']/div/div/div[1]/button/i"
 
 
     };
@@ -425,6 +432,18 @@ export default class MaterialPage {
                 fixture.logger?.info(`Extracted Purchase Order number: ${this.purchaseOrderNo}`);
             }
         }
+        const orderQuantity = newPage.locator(this.Elements.totalOrderQuantity);
+
+        // Wait for both elements to be visible before getting their content
+        await orderQuantity.waitFor({ state: 'visible', timeout: 5000 });
+
+        this.orderQtyuantity = await orderQuantity.textContent();
+        const totalOutStandingQuantity = newPage.locator(this.Elements.totalOutStandingQuantity);
+
+        // Wait for both elements to be visible before getting their content
+        await totalOutStandingQuantity.waitFor({ state: 'visible', timeout: 5000 });
+
+        this.outStandingQuantity = await totalOutStandingQuantity.textContent();
         fixture.page = originalPage;
         await newPage.close();
 
@@ -452,6 +471,14 @@ export default class MaterialPage {
 
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.closeButton).click();
+    }
+    async verifyActionLogRetrurn(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLog);
+        await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
+
+
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.closeButtonOnActionLog).click();
     }
 
     async verifyMandatoryFieldValidations(): Promise<void> {
@@ -1251,7 +1278,7 @@ export default class MaterialPage {
     async clickmaterialReturnMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.ordermenu);
         await this.page.locator(this.Elements.returnToVendorMenu).click();
-        await fixture.page.waitForTimeout(10000);
+        await fixture.page.waitForTimeout(1000);
     }
     async returnOperation(): Promise<void> {
         const randomNumber = getRandomInt(1000, 9999);
@@ -1278,6 +1305,22 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(2000);
 
 
+    }
+    async inquireMaterialReturnScreen(): Promise<void> {
+        this.base.waitAndClick(this.Elements.ordermenu);
+        this.base.waitAndClick(this.Elements.inquireMaterialReturnMenu);
+    }
+    async searchByPackSlip(): Promise<void> {
+        await this.page.locator(this.Elements.inquireRetrunPackslipNumberSearch).fill(this.payslipNumber);
+        await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.rmoLink);
+    }
+    async cancelReturn(): Promise<void> {
+        await this.page.locator(this.Elements.cancelButton).click();
+        await this.page.locator(this.Elements.cancelReasonTextArea).fill('Automation Testing');
+        await this.page.locator(this.Elements.cancelOk).click();
+        await this.page.locator(this.Elements.cancelDSuccessMessage).click();
     }
 }
 
