@@ -301,4 +301,14 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies the value in the receive status field in PO
         Then verify the value in Total Order Quantity and Total Outstanding Quantity after cancel the return material
 
+   @searchInquireReturnMaterial @sanity
+    Scenario: Verify search functionality in inquire material return page
+        Given the admin user is logged into the application
+        When the admin go to inquire material return screen
 
+        Then the admin searches by Order number and verify results
+        Then the admin searches by packslip number and verify results
+        Then the admin searches by RMA number and verify results
+        Then the admin searches by return date and verify results
+        Then the admin searches by vendor and verify results
+        Then the admin searches by status and verify results
