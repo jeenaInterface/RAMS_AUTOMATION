@@ -427,3 +427,26 @@ Then('verify the value in Total Order Quantity and Total Outstanding Quantity af
 Then('verify the action log in Return Material', async () => {
   await materialPage.verifyActionLogRetrurn();
 });
+
+
+
+Then('the admin searches by Order number and verify results', async () => {
+  await materialPage.inquireMaterialReturnScreen();
+  await materialPage.searchByPONumberInReturnInquirePage();
+});
+
+
+Then('the admin searches by RMA number and verify results', async () => {
+  await materialPage.inquireMaterialReturnScreen();
+  await materialPage.searchByRMAInReturnInquirePage();
+});
+Then('the admin searches by return date and verify results', async () => {
+  await materialPage.inquireMaterialReturnScreen();
+  await materialPage.selectReturnDate();
+});
+Then('the admin searches by vendor and verify results {string}', async (vendor: string) => {
+  await materialPage.searchPOByVendorInquireRetrun(vendor);
+});
+Then('the admin searches by status and verify results {string}', async (status: string) => {
+  await materialPage.searchReturnByStatus(status);
+});

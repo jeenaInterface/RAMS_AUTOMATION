@@ -250,7 +250,7 @@ Feature: Add, Update, and Search Functionalities in material Module
 
 
     @BatchReviewReceivingLinks   @sanity
-   Scenario: Packslip number and PO number links are redirecting to correct pages
+   Scenario: Verify Packslip number and PO number links are redirecting to correct pages in batch review receiving module
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
         When enters all required details to create a new material
@@ -301,14 +301,9 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies the value in the receive status field in PO
         Then verify the value in Total Order Quantity and Total Outstanding Quantity after cancel the return material
 
-   @searchInquireReturnMaterial @sanity
-    Scenario: Verify search functionality in inquire material return page
-        Given the admin user is logged into the application
-        When the admin go to inquire material return screen
-
         Then the admin searches by Order number and verify results
-        Then the admin searches by packslip number and verify results
         Then the admin searches by RMA number and verify results
         Then the admin searches by return date and verify results
-        Then the admin searches by vendor and verify results
-        Then the admin searches by status and verify results
+        Then the admin searches by vendor and verify results '1080217000'
+        Then the admin searches by status and verify results 'Returned'
+

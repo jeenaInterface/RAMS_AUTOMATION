@@ -18,6 +18,7 @@ export default class MaterialPage {
     public payslipNumber: string = '';
     public orderQtyuantity: string = '';
     public outStandingQuantity: string = '';
+    public RMA: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -161,7 +162,11 @@ export default class MaterialPage {
         totalOrderQuantity: "//table[3]//tr[1]//td[2]//b[1]",
         totalOutStandingQuantity: "//table[3]//tr[2]//td[2]//b[1]",
         cancelReasonTextArea: "//textarea[@placeholder='--Input Text--']",
-        closeButtonOnActionLog: "xpath=//*[@id='app-modal']/div/div/div[1]/button/i"
+        closeButtonOnActionLog: "xpath=//*[@id='app-modal']/div/div/div[1]/button/i",
+        inquirePONumberSearch: "(//label[normalize-space(text())='Order No.']/following::input)[1]",
+        inquireRMASearch: "(//label[normalize-space(text())='RMA No.']/following::input)[1]",
+        vendorSearchReturnSearch: "//i[contains(@class,'el-input__icon el-icon-search')]",
+
 
 
     };
@@ -1288,7 +1293,9 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.retrunQuantity).fill("3");
         const rmaNoLocator = this.page.locator(this.Elements.RMANo);
-        await rmaNoLocator.fill(`RMA-${getRandomInt(1000, 9999)}`);
+        const rmaValue = `RMA-${getRandomInt(1000, 9999)}`;
+        await rmaNoLocator.fill(rmaValue);
+        this.RMA = rmaValue;
         await fixture.page.waitForTimeout(1000);
         const returnDateLocator = this.page.locator(this.Elements.returnDate);
         const today = new Date();
@@ -1321,6 +1328,53 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.cancelReasonTextArea).fill('Automation Testing');
         await this.page.locator(this.Elements.cancelOk).click();
         await this.page.locator(this.Elements.cancelDSuccessMessage).click();
+    }
+    async searchByPONumberInReturnInquirePage(): Promise<void> {
+        await this.page.locator(this.Elements.inquirePONumberSearch).fill(this.purchaseOrderNo);
+        await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.rmoLink);
+    }
+    async searchByRMAInReturnInquirePage(): Promise<void> {
+        await this.page.locator(this.Elements.inquireRMASearch).fill(this.RMA);
+        await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.rmoLink);
+    }
+    async selectReturnDate(): Promise<void> {
+        await this.page.getByPlaceholder('--Select Date--').click();
+        await this.page.getByRole('cell', { name: 'Today' }).click();
+        await this.page.getByRole('cell', { name: 'Today' }).click();
+        await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.rmoLink);
+    }
+    async searchPOByVendorInquireRetrun(vendor: string): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialReturnMenu).click();
+        await this.page.locator(this.Elements.vendorSearchReturnSearch).click();
+        await this.page.locator(this.Elements.vendorCodeLookUpVendor).fill(vendor);
+        await this.page.locator(this.Elements.LookUpVendorSearchButton).click();
+        // await this.page.locator(this.Elements.LookUpVendorOkButton).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await await this.page.locator(this.Elements.searchButtonOnTransfer).click();
+
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=2]/div[position()=1]/span[position()=1]`)
+
+        const txt = await firstRow.textContent();
+        await expect(txt).toContain(vendor);
+
+    }
+    async searchReturnByStatus(status: string): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.inquireMaterialReturnMenu).click();
+        await this.page.locator(`//div[position()=1]/div[position()=1]/div[position()=1]/div[position()=1]/input[position()=1]`).click();
+        await this.page.getByRole('listitem').filter({ hasText: status }).locator('span').click();
+        await this.page.getByText('Returned').first().click();
+        await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.rmoLink);
     }
 }
 
