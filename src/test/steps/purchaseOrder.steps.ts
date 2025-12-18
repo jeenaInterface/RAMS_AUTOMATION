@@ -228,13 +228,28 @@ Then('track the receiving document number', async function (this: any) {
 });
 Then('verifies the value in the receive status field in Purchase Order', async function (this: any) {
 
-  let status = await purchasePage.receiveStatusValuepo() || '';
+    let status = await purchasePage.receiveStatusValuepo() || '';
 
-  if (this && typeof this.attach === 'function') {
-    await this.attach(`Receive Status: ${status}`);
-  } else {
-    fixture.logger?.info(`Receive Status: ${status}`);
-  }
+    if (this && typeof this.attach === 'function') {
+        await this.attach(`Receive Status: ${status}`);
+    } else {
+        fixture.logger?.info(`Receive Status: ${status}`);
+    }
 });
 
-
+Then('Go to unbillable order page and map the internal rebuild order', async () => {
+    // purchasePage = new purchaseOrderPage(fixture.page);
+    await purchasePage.createUnbillableOrderForInternalRO();
+});
+Then('the unbillable work order number is captured', async function (this: any) {
+    let uwo = purchasePage.workOrderNumber || '';
+    if (this && typeof this.attach === 'function') {
+        await this.attach(`Unbillable Work Order: ${uwo}`);
+    } else {
+        fixture.logger?.info(`Unbillable Work Order: ${uwo}`);
+    }
+});
+Then('verifies the retail price is updated in internal rebuild order', async () => {
+    // purchasePage = new purchaseOrderPage(fixture.page);
+    await purchasePage.verifyThePurchaseRate();
+});

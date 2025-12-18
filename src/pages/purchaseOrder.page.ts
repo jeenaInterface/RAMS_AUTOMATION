@@ -5,6 +5,7 @@ import { getRandomInt, randomtext, currentDate } from "../helper/util/test-data/
 import * as path from 'path';
 import { fixture } from "../hooks/pageFixture";
 import { table } from "console";
+import { ok } from "assert";
 
 setDefaultTimeout(100 * 1000);
 
@@ -18,6 +19,7 @@ export default class PurchaseOrderPage {
     public receiveStatus: string = '    ;'
     public orderQtyuantity: string = '';
     public outStandingQuantity: string = '';
+    public workOrderNumber: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -118,8 +120,34 @@ export default class PurchaseOrderPage {
         totalOutStandingQuantity: "//table[3]//tr[2]//td[2]//b[1]",
         inquireMaterialReceive: "//span[normalize-space(text())='- Inquire Material Receiving']",
         receivingDocumentSearchBox: "(//label[normalize-space(text())='Receiving Doc. No.']/following::input)[1]",
-        okButtonOncancelPopup:"//html/body/div[3]/div/div[3]/button[2]/span"
-
+        okButtonOncancelPopup: "//html/body/div[3]/div/div[3]/button[2]/span",
+        createUnbillableOrder: "//span[normalize-space(text())='- Create Un-billable Work Order']",
+        mechanicSearch: "//div[@class='select-lookup form-control']//i[1]",
+        userIDSearchBox: "(//span[normalize-space(text())='Lookup Mechanic']/following::input)[1]",
+        LOOKuPmechanicSearch: "//div[@class='el-dialog__wrapper']//span[contains(text(),'Search')]",
+        lookUpMechanicOkButton: "(//span[contains(text(),'OK')])[1]",
+        assetNumber: "(//input[@placeholder='-- Input Text --'])[1]",
+        rebuildStockNumberSearch: "//div[@placeholder='-- Input Text or Look up --']//i[@class='el-input__icon el-icon-search is-clickable']",
+        LookUpStockNumberSearchBox: "(//span[normalize-space(text())='Lookup Material']/following::input)[1]",
+        lookUpStockNumberSearchButton: "(//span[contains(text(),'Search')])[2]",
+        lookUpStockNumberOkButton: "(//span[contains(text(),'OK')])[2]",
+        internalRONumber: "(//input[@placeholder='--Select One--'])[5]",
+        componentCode: "//input[@placeholder='Component Code']",
+        damageCode: "//input[@placeholder='Damage Code']",
+        repairCode: "//input[@placeholder='Repair Code']",
+        repairLocation: "//tr[@class='activity-row']//input[@placeholder='--Select One--']",
+        actualHours: "//div[@class='el-input input-align']//input[@type='text']",
+        stockNumberSearchwo: "//div[@placeholder='--Input Text or Look up--']//i[@class='el-input__icon el-icon-search is-clickable']",
+        stockNumberSearchBoxwo: "(//label[normalize-space(text())='Stock No.']/following::input)[1]",
+        searchButtonLookUpwo: "//div[@class='el-dialog__wrapper inquiryPurchaseOrder']//span[contains(text(),'Search')]",
+        okButtonLookUpwo: "(//span[contains(text(),'OK')])[3]",
+        stockQuantitywo: "//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text']",
+        completeButton: "//span[normalize-space()='Complete']",
+        okButtonOnCompletePopup: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
+        closeButtonWO: "//span[normalize-space()='Close']",
+        OKButtonOnWOclosePopup: "(//span[contains(text(),'OK')])[5]",
+        WorkOrderMenu: "//span[normalize-space()='Work Order']",
+        WOOrderRate: "//tbody[position()=1]/tr[position()=1]/td[position()=7]/div[position()=1]/span[position()=1]",
 
 
     }
@@ -346,7 +374,7 @@ export default class PurchaseOrderPage {
         await this.page.getByRole('button', { name: 'OK' }).click();
 
     }
-        async cancelExternalRO(): Promise<void> {
+    async cancelExternalRO(): Promise<void> {
         await this.page.locator(this.Elements.cancelButton).click();
         await this.page.locator('form').filter({ hasText: 'Cancel Reason' }).getByPlaceholder('--Input Text--').click();
         await this.page.locator('form').filter({ hasText: 'Cancel Reason' }).getByPlaceholder('--Input Text--').fill('cancel');
@@ -946,6 +974,89 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.orderMenu).click();
         await this.page.locator(this.Elements.inquireMaterialReceive).click();
     }
+    async createUnbillableOrderForInternalRO(): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        // await this.page.locator(this.Elements.LOOKuPmechanicSearch).click();
+        // await this.page.locator(this.Elements.SearchButtonOnPurchaseOrderForm).click();
+        //   await this.page.locator('.el-input__icon').first().click();
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        // await this.page.locator('xpath=//*[@id="app"]/div[3]/div/div[3]/div/button[2]/span').click();
+        // Use the asset input and reliably select the autocomplete suggestion
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('ASCRB');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
 
 
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'ASCRB' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(1).type('1008');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByText('1008 - 1000X20RCP - tire flexi van recap 10.00x20').click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.internalRONumber).click();
+        await this.page.locator(this.Elements.internalRONumber).fill(this.purchaseOrderNo);
+        // await this.page.locator(this.Elements.internalRONumber).fill("325871");
+        await this.page.getByText(this.purchaseOrderNo).click();
+        // await this.page.getByText("325871").click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('2EL - Electrical').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BO - Burned out').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('CA - Calibration - ALL').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('EROM - Electrical Room').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        // await this.page.locator(this.Elements.stockNumberSearchwo).click();
+        // await this.page.locator(this.Elements.stockNumberSearchBoxwo).click();
+        // await this.page.locator(this.Elements.stockNumberSearchBoxwo).fill('1008');
+        // await this.page.locator(this.Elements.searchButtonLookUpwo).click();
+        // await this.page.locator(this.Elements.lookUpStockNumberOkButton).click();
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(3).type('1008');
+        await fixture.page.waitForTimeout(1000);
+         await this.page.getByRole('listitem').filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' }).locator('span').click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.closeButtonWO).click();
+        await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        const element = await fixture.page.locator(this.Elements.headertitle).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.workOrderNumber = match[1];
+                console.log(this.workOrderNumber);
+                // Use workOrderNumber as needed
+            }
+        }
+
+
+    }
+    async verifyThePurchaseRate(): Promise<void> {
+        const locator = this.page.locator(this.Elements.WOOrderRate);
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+        const text = (await locator.textContent())?.trim() || '';
+        if (!text) {
+            throw new Error('Purchase rate field is empty.');
+        }
+        fixture.logger?.info(`Purchase rate value: ${text}`);
+
+
+    }
 }

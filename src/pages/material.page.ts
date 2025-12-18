@@ -1369,9 +1369,8 @@ export default class MaterialPage {
     async searchReturnByStatus(status: string): Promise<void> {
         await this.base.waitAndClick(this.Elements.ordermenu);
         await this.page.locator(this.Elements.inquireMaterialReturnMenu).click();
-        await this.page.locator(`//div[position()=1]/div[position()=1]/div[position()=1]/div[position()=1]/input[position()=1]`).click();
-        await this.page.getByRole('listitem').filter({ hasText: status }).locator('span').click();
-        await this.page.getByText('Returned').first().click();
+        await this.page.getByRole('textbox', { name: '--Select One--' }).first().click();
+        await this.page.getByText('Returned', { exact: true }).click();
         await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
         await fixture.page.waitForTimeout(500);
         await this.base.waitAndClick(this.Elements.rmoLink);
