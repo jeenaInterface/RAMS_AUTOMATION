@@ -253,3 +253,39 @@ Then('verifies the retail price is updated in internal rebuild order', async () 
     // purchasePage = new purchaseOrderPage(fixture.page);
     await purchasePage.verifyThePurchaseRate();
 });
+Then('Do receive material for internal RO and review for the created order', async () => {
+    await purchasePage.createReceiveMaterial();
+
+});
+Then('verifies the receive status value is updated to Fully Received',
+    async function (this: any) {
+
+        const status = await purchasePage.receiveStatusValuepoInternalROFullyReceived() || '';
+
+        // Attach the status to the test report or fallback to logger
+        if (this && typeof this.attach === 'function') {
+            await this.attach(`Receive Status: ${status}`);
+        } else {
+            fixture.logger?.info(`Receive Status: ${status}`);
+        }
+    });
+Then('cancel the material receive for the internal rebuild order', async () => {
+    await purchasePage.canceltheMaterialReceive();
+});
+Then('go to material return page and do the material return for the internal rebuild order', async () => {
+    await materialPage.clickmaterialReturnMenu();
+    await purchasePage.returnOperation();
+
+});
+Then('verifies the receive status value is updated to Not Received',
+    async function (this: any) {
+
+        const status = await purchasePage.receiveStatusValuepoInternalRONotReceived() || '';
+
+        // Attach the status to the test report or fallback to logger
+        if (this && typeof this.attach === 'function') {
+            await this.attach(`Receive Status: ${status}`);
+        } else {
+            fixture.logger?.info(`Receive Status: ${status}`);
+        }
+    });

@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import test, { expect, Page } from "@playwright/test";
 import PlaywrightWrapper from "../helper/wrapper/PlaywrightWrappers";
 import { setDefaultTimeout } from "@cucumber/cucumber";
 import { getRandomInt, randomtext, currentDate } from "../helper/util/test-data/randomdata";
@@ -20,6 +20,9 @@ export default class PurchaseOrderPage {
     public orderQtyuantity: string = '';
     public outStandingQuantity: string = '';
     public workOrderNumber: string = '';
+    public receiveStatusInternalRO: string = '';
+    public payslipNumber: string = '';
+    public RMA: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -38,6 +41,7 @@ export default class PurchaseOrderPage {
         FOB: "(//input[@class='el-input__inner'])[3]",
         terms: "(//input[@placeholder='--Select One--'])[3]",
         shipvia: "(//input[@placeholder='--Select One--'])[4]",
+        payslipNumber: "(//label[normalize-space(text())='Pack Slip Number']/following::input)[1]",
         jobnumber: "(//input[@placeholder='--Input Text--'])[1]",
         instruction: "//textarea[@placeholder='--Input Text--']",
         vendorNo: "//div[@id='vendorPartNo']//input[@type='text']",
@@ -113,7 +117,7 @@ export default class PurchaseOrderPage {
         RetrieveButton: "//span[normalize-space()='Retrieve']",
         receivingDate: "//div[@class='el-date-editor el-input el-date-editor--date']//input[@placeholder='--Input Text--']",
         packSlipNumber: "(//input[@placeholder='--Input Text--'])[2]",
-        receiveQuantityInput: "(//input[@type='text'])[5]",
+        receiveQuantityInput: "//tbody/tr[1]/td[10]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
         masterCheckbox: "(//span[@class='el-radio__inner'])[1]",
         receivingDocumentNumber: "(//span[@class='header-title font-size-title'])[2]",
         totalOrderQuantoty: "//table[3]//tr[1]//td[2]//b[1]",
@@ -145,9 +149,26 @@ export default class PurchaseOrderPage {
         completeButton: "//span[normalize-space()='Complete']",
         okButtonOnCompletePopup: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
         closeButtonWO: "//span[normalize-space()='Close']",
-        OKButtonOnWOclosePopup: "(//span[contains(text(),'OK')])[5]",
+        OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
         WorkOrderMenu: "//span[normalize-space()='Work Order']",
         WOOrderRate: "//tbody[position()=1]/tr[position()=1]/td[position()=7]/div[position()=1]/span[position()=1]",
+        receiveStatusInternalRO: "(//label[normalize-space(text())='Receive Status:']/following::input)[1]",
+        inquireMaterialRecieve: "//span[normalize-space()='- Inquire Material Receiving']",
+        receivingDocumentNumberSearch: "(//label[normalize-space(text())='Receiving Doc. No.']/following::input)[1]",
+        cancelButtonMaterialReturn: "(//span[contains(text(),'Cancel')])[3]",
+        cancelResonMaterialReturn: "//textarea[@autosize='[object Object]']",
+        cancelOk: "(//span[contains(text(),'OK')])[1]",
+        cancelDSuccessMessage: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
+        retrunQuantity: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[8]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        RMANo: "(//label[normalize-space(text())='RMA No.']/following::input)[1]",
+        returnDate: "(//label[normalize-space(text())='Return Date']/following::input)[1]",
+        reasonForReturn: "//textarea[@placeholder='--Input Text Area--']",
+        courierName: "(//label[normalize-space(text())='Courier Name']/following::input)[1]",
+        courierNumber: "(//label[normalize-space(text())='Courier Number']/following::input)[1]",
+        contact: "(//label[normalize-space(text())='Contact']/following::input)[1]",
+        retreiveReceiveButton: "//span[normalize-space(text())='Retrieve Receive']",
+        stockNoTransfer: "(//input[@class='el-input__inner'])[1]",
+        saveButton: "//span[normalize-space(text())='Save']",
 
 
     }
@@ -980,13 +1001,10 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.createUnbillableOrder).click();
         await this.page.locator(this.Elements.mechanicSearch).click();
         await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
-        // await this.page.locator(this.Elements.LOOKuPmechanicSearch).click();
-        // await this.page.locator(this.Elements.SearchButtonOnPurchaseOrderForm).click();
-        //   await this.page.locator('.el-input__icon').first().click();
         await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
         await this.page.getByRole('button', { name: 'OK' }).click();
-        // await this.page.locator('xpath=//*[@id="app"]/div[3]/div/div[3]/div/button[2]/span').click();
-        // Use the asset input and reliably select the autocomplete suggestion
+        await fixture.page.waitForTimeout(500);
         const assetInput = this.page.locator(this.Elements.assetNumber);
         await assetInput.type('ASCRB');
         //await assetInput.press('Enter');
@@ -1017,14 +1035,9 @@ export default class PurchaseOrderPage {
         await this.page.getByText('EROM - Electrical Room').click();
         await this.page.locator(this.Elements.actualHours).click();
         await this.page.locator(this.Elements.actualHours).fill('8');
-        // await this.page.locator(this.Elements.stockNumberSearchwo).click();
-        // await this.page.locator(this.Elements.stockNumberSearchBoxwo).click();
-        // await this.page.locator(this.Elements.stockNumberSearchBoxwo).fill('1008');
-        // await this.page.locator(this.Elements.searchButtonLookUpwo).click();
-        // await this.page.locator(this.Elements.lookUpStockNumberOkButton).click();
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(3).type('1008');
         await fixture.page.waitForTimeout(1000);
-         await this.page.getByRole('listitem').filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' }).locator('span').click();
+        await this.page.getByRole('listitem').filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' }).locator('span').click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
@@ -1046,7 +1059,6 @@ export default class PurchaseOrderPage {
             }
         }
 
-
     }
     async verifyThePurchaseRate(): Promise<void> {
         const locator = this.page.locator(this.Elements.WOOrderRate);
@@ -1059,4 +1071,122 @@ export default class PurchaseOrderPage {
 
 
     }
+    async createReceiveMaterial(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.orderMenu).click();
+        await this.page.locator(this.Elements.receiveMaterial).click();
+        await this.page.locator(this.Elements.orderNoTextBox).fill(this.purchaseOrderNo);
+        // await this.page.locator(this.Elements.orderNoTextBox).fill('325772');
+        await this.base.waitAndClick(this.Elements.RetrieveButton);
+        await fixture.page.waitForTimeout(500);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        await this.page.locator(this.Elements.receivingDate).fill(formattedDate);
+        await this.page.locator(this.Elements.packSlipNumber).fill(`PSN-${getRandomInt(1000, 9999)}`);
+        await this.page.locator(this.Elements.receiveQuantityInput).fill('1');
+        await this.page.getByRole('button', { name: 'Save' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'Review' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(2000);
+        const headerText = await this.page.locator(this.Elements.receivingDocumentNumber).textContent();
+
+        if (headerText && headerText.includes('Receiving Doc. No.:')) {
+            // Extract the number after "Receiving Doc. No.:"
+            const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
+            if (match && match[1]) {
+                this.ReceivingDocumentNo = match[1];
+                fixture.logger.info(`Auto-generated stock number: ${this.ReceivingDocumentNo}`);
+            }
+        }
+        await fixture.page.waitForTimeout(1000);
+        const locator = this.page.locator(this.Elements.payslipNumber);
+
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        // Get the value of the input field (the text inside the input)
+        this.payslipNumber = await locator.inputValue();
+
+        console.log('Payslip Number:', this.payslipNumber);
+
+    }
+    async receiveStatusValuepoInternalROFullyReceived(): Promise<string | null> {
+        await this.page.locator(this.Elements.orderMenu).click();
+        await this.page.locator(this.Elements.inquireOrderMenu).click();
+        await this.page.locator(this.Elements.purchaseOrderNoSearch).fill(this.purchaseOrderNo);
+        await this.page.locator(this.Elements.searchButton).click();
+        await this.page.locator(this.Elements.orderNoSearchrESULT).click();
+        await this.page.waitForTimeout(5000);
+
+        const locator = this.page.locator(this.Elements.receiveStatusInternalRO);
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        this.receiveStatusInternalRO = await locator.inputValue();
+
+        // Assertion to verify the status is "Fully Received"
+        expect(this.receiveStatusInternalRO).toBe('Fully Received');
+        return this.receiveStatusInternalRO;
+    }
+    async receiveStatusValuepoInternalRONotReceived(): Promise<string | null> {
+        await this.page.locator(this.Elements.orderMenu).click();
+        await this.page.locator(this.Elements.inquireOrderMenu).click();
+        await this.page.locator(this.Elements.purchaseOrderNoSearch).fill(this.purchaseOrderNo);
+        await this.page.locator(this.Elements.searchButton).click();
+        await this.page.locator(this.Elements.orderNoSearchrESULT).click();
+        await this.page.waitForTimeout(5000);
+
+        const locator = this.page.locator(this.Elements.receiveStatusInternalRO);
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        this.receiveStatusInternalRO = await locator.inputValue();
+
+        // Assertion to verify the status is "Not Received"
+        expect(this.receiveStatusInternalRO).toBe('Not Received');
+        return this.receiveStatusInternalRO;
+    }
+    async canceltheMaterialReceive(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.orderMenu).click();
+        await this.page.locator(this.Elements.inquireMaterialRecieve).click();
+        await this.page.locator(this.Elements.receivingDocumentNumberSearch).fill(this.ReceivingDocumentNo);
+        // await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.locator("(//span[normalize-space()='Search'])[1]").click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator("//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/a[1]").click();
+        await this.page.locator(this.Elements.cancelButtonMaterialReturn).click();
+        await this.page.locator(this.Elements.cancelResonMaterialReturn).fill('Automation Testing');
+        await this.page.locator(this.Elements.cancelOk).click();
+        await this.page.locator(this.Elements.cancelDSuccessMessage).click();
+
+    }
+     async returnOperation(): Promise<void> {
+        const randomNumber = getRandomInt(1000, 9999);
+
+        await this.page.locator(this.Elements.stockNoTransfer).fill(this.payslipNumber);
+        await this.base.waitAndClick(this.Elements.retreiveReceiveButton);
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.retrunQuantity).fill("1");
+        const rmaNoLocator = this.page.locator(this.Elements.RMANo);
+        const rmaValue = `RMA-${getRandomInt(1000, 9999)}`;
+        await rmaNoLocator.fill(rmaValue);
+        this.RMA = rmaValue;
+        await fixture.page.waitForTimeout(1000);
+        const returnDateLocator = this.page.locator(this.Elements.returnDate);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        await returnDateLocator.fill(formattedDate);
+        const description = `Damaged ${randomNumber}`;
+
+        await this.page.locator(this.Elements.reasonForReturn).fill(description);
+        await this.page.locator(this.Elements.courierName).fill(`Courier ${randomNumber}`);
+        await this.page.locator(this.Elements.courierNumber).fill(`CN-${randomNumber}`);
+        await this.page.locator(this.Elements.contact).fill(`Contact ${randomNumber}`);
+        await this.page.locator(this.Elements.saveButton).click();
+        await this.page.locator(this.Elements.cancelDSuccessMessage).click();
+        await fixture.page.waitForTimeout(2000);
+
+
+    }
+
 }

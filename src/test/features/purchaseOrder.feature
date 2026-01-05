@@ -145,16 +145,16 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then select internal rebuild option
         Then the purchase order number is captured
         Then the user searches for the newly created order in the inquiry list page
-        Then verifies the value in the receive status field in internal RO
         Then Go to unbillable order page and map the internal rebuild order
         Then the unbillable work order number is captured
         Then the user searches for the newly created order in the inquiry list page
         Then verifies the retail price is updated in internal rebuild order
-        # Then go to material receive page and do the material receive for the internal rebuild order
-        # Then verifies the receive status is updated to 'Received' in internal rebuild order
-        # Then cancel the material receive for the internal rebuild order
-        # Then verifies the receive status is updated in internal rebuild order
-        #  Then go to material receive page and do the material receive for the internal rebuild order
-        #  Then go to material return page and do the material return for the internal rebuild order
+        Then Do receive material for internal RO and review for the created order
+        Then verifies the receive status value is updated to Fully Received
+        Then cancel the material receive for the internal rebuild order
+        Then verifies the receive status value is updated to Not Received
+        Then Do receive material for internal RO and review for the created order
+        Then verifies the receive status value is updated to Fully Received
+        Then go to material return page and do the material return for the internal rebuild order
 
 

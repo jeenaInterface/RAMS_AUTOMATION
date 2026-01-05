@@ -662,15 +662,12 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.inquireMaterialRecieve).click();
         await this.page.locator(this.Elements.receivingDocumentNumberSearch).fill(this.ReceivingDocumentNo);
         await this.base.waitAndClick(this.Elements.searchButton);
-        await fixture.page.waitForTimeout(500);
         await this.page.locator("//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/a[1]").click();
-
+        await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.cancelButton).click();
         await this.page.locator(this.Elements.cancelReson).fill('Automation Testing');
         await this.page.locator(this.Elements.cancelOk).click();
         await this.page.locator(this.Elements.cancelDSuccessMessage).click();
-
-
 
     }
     async verifyStockCountAfterCancel(): Promise<void> {
@@ -1375,5 +1372,6 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(500);
         await this.base.waitAndClick(this.Elements.rmoLink);
     }
+    
 }
 
