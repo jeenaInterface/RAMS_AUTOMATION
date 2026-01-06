@@ -19,6 +19,7 @@ export default class MaterialPage {
     public orderQtyuantity: string = '';
     public outStandingQuantity: string = '';
     public RMA: string = '';
+    public workOrderNumber: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -166,6 +167,23 @@ export default class MaterialPage {
         inquirePONumberSearch: "(//label[normalize-space(text())='Order No.']/following::input)[1]",
         inquireRMASearch: "(//label[normalize-space(text())='RMA No.']/following::input)[1]",
         vendorSearchReturnSearch: "//i[contains(@class,'el-input__icon el-icon-search')]",
+        WorkOrderMenu: "//span[normalize-space()='Work Order']",
+        createUnbillableOrder: "//span[normalize-space(text())='- Create Un-billable Work Order']",
+        mechanicSearch: "//div[@class='select-lookup form-control']//i[1]",
+        userIDSearchBox: "(//span[normalize-space(text())='Lookup Mechanic']/following::input)[1]",
+        LOOKuPmechanicSearch: "//div[@class='el-dialog__wrapper']//span[contains(text(),'Search')]",
+        lookUpMechanicOkButton: "(//span[contains(text(),'OK')])[1]",
+        assetNumber: "(//input[@placeholder='-- Input Text --'])[1]",
+        componentCode: "//input[@placeholder='Component Code']",
+        damageCode: "//input[@placeholder='Damage Code']",
+        repairCode: "//input[@placeholder='Repair Code']",
+        repairLocation: "//tr[@class='activity-row']//input[@placeholder='--Select One--']",
+        actualHours: "//div[@class='el-input input-align']//input[@type='text']",
+        stockQuantitywo: "//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text']",
+        completeButton: "//span[normalize-space()='Complete']",
+        okButtonOnCompletePopup: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
+        closeButtonWO: "//span[normalize-space()='Close']",
+        OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
 
 
 
@@ -1371,6 +1389,62 @@ export default class MaterialPage {
         await this.base.waitAndClick(this.Elements.searchButtonOnTransfer);
         await fixture.page.waitForTimeout(500);
         await this.base.waitAndClick(this.Elements.rmoLink);
+    }
+    async createUnbillableOrder(): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('UTR001');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'UTR001' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('4EZ - Electrical / Electronics').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BO - Burned out').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IN - Install or Replace').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('CABN - CABN - Cab').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(3).type(this.stockNo);
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByRole('listitem').filter({ hasText: this.stockNo }).locator('span').click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.closeButtonWO).click();
+        await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        const element = await fixture.page.locator(this.Elements.headertitle).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.workOrderNumber = match[1];
+                console.log(this.workOrderNumber);
+                // Use workOrderNumber as needed
+            }
+        }
+
     }
     
 }

@@ -82,12 +82,13 @@ export default class SupportDataPage {
     async verifyEditFunctionality(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
         await this.base.waitAndClick(this.Elements.supportDataMenu);
+        await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.codeList).fill(this.assetGroupCode);
+        fixture.logger.info("Waiting for 1 seconds")
+        await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.firstRowEdit).click();
         fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
-        fixture.logger.info("Waiting for 1 seconds")
-        await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.status).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Inactive' }).click();
         await this.page.locator(this.Elements.save).click();

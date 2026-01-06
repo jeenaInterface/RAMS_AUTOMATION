@@ -108,7 +108,7 @@ export default class ChangeAuthorityPage {
         await this.page.getByRole('button', { name: 'Search' }).click();
         await this.page.getByRole('row', { name: 'AARON.BARRIOS Aaron Barrios MECHANIC Active' }).locator('label span').nth(1).click();
         await this.page.getByRole('button', { name: 'OK' }).click();
-        await this.page.getByRole('button', { name: 'Reset' }).click();
+        await this.page.getByRole('button', { name: 'Reset' }).first().click();
         //verify fields are reset
         await expect(this.page.getByPlaceholder('--Select One--')).toHaveText('');
         const element = this.page.locator('input[placeholder="--Select One or More--"]').first();
