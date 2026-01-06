@@ -94,9 +94,9 @@ export default class BillableOrderPage {
         // await this.page.getByText('EROM - Electrical Room').click();
         await this.page.locator(this.Elements.actualHours).nth(0).click();
         await this.page.locator(this.Elements.actualHours).nth(0).fill('8');
-        await this.page.getByPlaceholder('--Input Text or Look up--').nth(3).type('1008');
-        await fixture.page.waitForTimeout(1000);
-        await this.page.getByRole('listitem').filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' }).locator('span').click();
+  await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).click();
+  await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).fill('1008');
+  await this.page.getByText('1008 - 1000X20RCP - tire flexi van recap 10.00x20').click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
