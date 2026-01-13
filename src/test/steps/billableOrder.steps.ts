@@ -2,6 +2,7 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import BillableOrderPage from "../../pages/billableOrder.page";
 import LoginPage from "../../pages/login.page";
 import { fixture } from "../../hooks/pageFixture";
+import { verify } from "crypto";
 
 let billableOrderPage: BillableOrderPage;
 
@@ -16,22 +17,10 @@ When('enters all the required fields for billable work order and clicks on the D
   await billableOrderPage.clickOnDraftButton();
 });
 
-Then('the billable work order number is captured', async function (this: any) {
+Then("verify the status of the billable work order is Drafted", async function (this: any) {
 
-   let po = billableOrderPage.billableOrderNumber || '';
-  
-  // Attach BWO number to Cucumber report
-  if (this && typeof this.attach === 'function') {
-    await this.attach(`Billable Work Order: ${po}`, 'text/plain');
-  } else {
-    fixture.logger?.info(`Billable Work Order: ${po}`);
-  }
-});
+  let status = billableOrderPage.billableOrderStatus || '';
 
-Then("verify the status of the billable work order is 'Drafted'", async function (this: any) {
-    
-   let status = billableOrderPage.billableOrderStatus || '';
-  
   // Attach BWO status to Cucumber report
   if (this && typeof this.attach === 'function') {
     await this.attach(`Billable Work Order status: ${status}`, 'text/plain');
@@ -40,28 +29,21 @@ Then("verify the status of the billable work order is 'Drafted'", async function
   }
 });
 
-// When('the admin click on complete button', async () => {
-//   await billableOrderPage.clickOnCompleteButton();
-// });
 
-// Then("verify the status of the billable work order is 'Completed'", async () => {
-//   await billableOrderPage.verifyBillableOrderStatus('Completed');
-// });
+When('the admin click on close button', async () => {
+  await billableOrderPage.clickOnCloseButton();
+});
+Then("verify the status of the billable work order is Closed", async function (this: any) {
+  let status = billableOrderPage.billableOrderStatus || '';
 
-// When('the admin click on close button', async () => {
-//   await billableOrderPage.clickOnCloseButton();
-// });
+  // Attach BWO status to Cucumber report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Billable Work Order status: ${status}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`Billable Work Order status: ${status}`);
+  }
+});
 
-// Then("verify the status of the billable work order is 'Closed'", async () => {
-//   await billableOrderPage.verifyBillableOrderStatus('Closed');
-// });
-
-// // Additional step definitions for enhanced testing
-
-// When('the admin navigates to the inquire billable work order page', async () => {
-//   billableOrderPage = new BillableOrderPage(fixture.page);
-//   await billableOrderPage.clickOnInquireBillableOrderMenu();
-// });
 
 // Then('the admin searches for a billable work order by BWO number {string}', async (bwoNumber: string) => {
 //   await billableOrderPage.searchBillableOrderByNumber(bwoNumber);
@@ -86,3 +68,74 @@ Then("verify the status of the billable work order is 'Drafted'", async function
 // Then('verifies that the action log records the performed actions accurately', async () => {
 //   await billableOrderPage.verifyActionLog();
 // });
+
+When('the admin navigates to the Inquire Billable Work Order menu', async () => {
+  billableOrderPage = new BillableOrderPage(fixture.page);
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+});
+
+When('Opens an existing billable work order {string}', async (bwoNumber: string) => {
+  await billableOrderPage.searchBillableOrderByNumber(bwoNumber);
+});
+
+When('Clicks on the Copy button to duplicate the billable work order', async () => {
+  await billableOrderPage.clickOnCopyButton();
+});
+When('enters all the required fields for billable work order after copy and clicks on the Draft button', async () => {
+  await billableOrderPage.EnterDetailsAfterCopy();
+  await billableOrderPage.clickOnDraftButton();
+});
+
+Then('the billable work order number is captured', async function (this: any) {
+
+  let bwoNumber = billableOrderPage.billableOrderNumber || '';
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Billable Work Order: ${bwoNumber}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`Billable Work Order: ${bwoNumber}`);
+  }
+});
+When('the admin click on complete button', async () => {
+  await billableOrderPage.clickOnCompleteButton();
+});
+Then("verify the status of the billable work order is Completed", async function (this: any) {
+  let status = billableOrderPage.billableOrderStatus || '';
+
+  // Attach BWO status to Cucumber report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Billable Work Order status: ${status}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`Billable Work Order status: ${status}`);
+  }
+});
+When('the admin click on review button', async () => {
+  await billableOrderPage.clickOnReviewButton();
+});
+Then("verify the status of the billable work order is Reviewed", async function (this: any) {
+  let status = billableOrderPage.billableOrderStatus || '';
+
+  // Attach BWO status to Cucumber report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Billable Work Order status: ${status}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`Billable Work Order status: ${status}`);
+  }
+});
+When('Click on Return to complete button', async () => {
+  await billableOrderPage.clickOnReturnToCompleteButton();
+});
+
+When('the admin click on cancel button', async () => {
+  await billableOrderPage.clickOnCancelButton();
+});
+Then("verify the status of the billable work order is Cancelled", async function (this: any) {
+  let status = billableOrderPage.billableOrderStatus || ''; 
+  // Attach BWO status to Cucumber report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Billable Work Order status: ${status}`, 'text/plain');  
+  } else {
+    fixture.logger?.info(`Billable Work Order status: ${status}`);
+  }
+}); 
+
+
