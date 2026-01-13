@@ -21,10 +21,9 @@ Feature: Verify functionalities under Billable Work Order
     And Opens an existing billable work order 'CH397015'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
-    Then the billable work order number is captured
-    And verify the status of the billable work order is Drafted
     When the admin click on complete button
     Then verify the status of the billable work order is Completed
+    Then the billable work order number is captured
     Then the admin click on review button
     Then verify the status of the billable work order is Reviewed
     Then Click on Return to complete button
@@ -33,10 +32,11 @@ Feature: Verify functionalities under Billable Work Order
     Then verify the status of the billable work order is Reviewed
     When the admin click on close button
     Then verify the status of the billable work order is Closed
+    # Then verify save button functionality
     Then the admin click on cancel button
     Then verify the status of the billable work order is Cancelled
-    # Then verify action logged
-    # Then verify print draft invoice functionality
-    # Then verify Email draft invoice functionality
-    # Then verify save button functionality
-    # Then Verify New button functionality
+    Then verify print draft invoice functionality
+    Then verify Email draft invoice functionality
+    Then verify action logged
+    Then Verify New button functionality
+    Then Go to inquire billable work order and verify the created billable work order is not present in the list

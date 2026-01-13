@@ -88,7 +88,7 @@ When('enters all the required fields for billable work order after copy and clic
 
 Then('the billable work order number is captured', async function (this: any) {
 
-  let bwoNumber = billableOrderPage.billableOrderNumber || '';
+  let bwoNumber = billableOrderPage.billableOrderNumber;
   if (this && typeof this.attach === 'function') {
     await this.attach(`Billable Work Order: ${bwoNumber}`, 'text/plain');
   } else {
@@ -99,7 +99,7 @@ When('the admin click on complete button', async () => {
   await billableOrderPage.clickOnCompleteButton();
 });
 Then("verify the status of the billable work order is Completed", async function (this: any) {
-  let status = billableOrderPage.billableOrderStatus || '';
+  let status = billableOrderPage.billableOrderStatus;
 
   // Attach BWO status to Cucumber report
   if (this && typeof this.attach === 'function') {
@@ -129,13 +129,29 @@ When('the admin click on cancel button', async () => {
   await billableOrderPage.clickOnCancelButton();
 });
 Then("verify the status of the billable work order is Cancelled", async function (this: any) {
-  let status = billableOrderPage.billableOrderStatus || ''; 
+  let status = billableOrderPage.billableOrderStatus || '';
   // Attach BWO status to Cucumber report
   if (this && typeof this.attach === 'function') {
-    await this.attach(`Billable Work Order status: ${status}`, 'text/plain');  
+    await this.attach(`Billable Work Order status: ${status}`, 'text/plain');
   } else {
     fixture.logger?.info(`Billable Work Order status: ${status}`);
   }
-}); 
+});
 
 
+When('verify save button functionality', async () => {
+  await billableOrderPage.clickSaveButton();
+});
+When('verify print draft invoice functionality', async () => {
+  await billableOrderPage.clickOnPrintDraftInvoiceButton();
+});
+When('verify Email draft invoice functionality', async () => {
+  await billableOrderPage.clickOnEmailInvoiceButton();
+});
+When('verify action logged', async () => {
+  await billableOrderPage.verifyActionLog();
+});
+
+When('Verify New button functionality', async () => {
+  await billableOrderPage.clickNewButton();
+});

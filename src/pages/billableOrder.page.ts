@@ -42,7 +42,8 @@ export default class BillableOrderPage {
         draftButton: "(//span[normalize-space()='Draft'])[1]",
         completeButton: "//span[normalize-space()='Complete']",
         closeButton: "(//span[normalize-space()='Close'])[1]",
-        okCloseButton: "(//span[contains(text(),'OK')])[7]",
+        closeButtonActionLog: "(//i[@class='el-dialog__close el-icon el-icon-close'])[2]",
+        okCloseButton: "(//span[contains(text(),'OK')])[8]",
         reviewButton: "//span[normalize-space()='Review']",
         okButtonReview: "(//span[contains(text(),'OK')])[6]",
         headerTitle: "//span[@class='header-title font-size-title']",
@@ -50,14 +51,23 @@ export default class BillableOrderPage {
         WONumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
         copyButton: "//span[normalize-space(text())='Copy']",
         YesButton: "//span[normalize-space(text())='Yes']",
-        okButton: "/(//span[contains(text(),'OK')])[10]",
+        okButton: "(//span[contains(text(),'OK')])[10]",
         reviewOkButton: "(//button[contains(@class,'el-button el-button--default el-button--primary')])[1]",
         returnToCompleteButton: "(//span[contains(text(),'Return to Complete')])[1]",
-        returnToCCompleteOKButton:"(//span[contains(text(),'OK')])[20]",
+        returnToCCompleteOKButton: "(//span[contains(text(),'OK')])[8]",
         cancelButton: "(//span[normalize-space()='Cancel'])[1]",
-        cancelOkButton:"(//span[contains(text(),'OK')])[23]",
-
-
+        cancelOkButton: "(//span[contains(text(),'OK')])[8]",
+        okCompleteButton: "(//span[contains(text(),'OK')])[8]",
+        printDraftInvoiceButton: "//span[normalize-space()='Print Draft Invoice']",
+        emailDraftInvoiceButton: "(//span[contains(text(),'Email Draft Invoice')])[2]",
+        ToField: "(//label[normalize-space(text())='To:']/following::input)[1]",
+        emailButton: "//span[normalize-space(text())='Email']",
+        actionLog: "(//span[contains(text(),'Action Log')])[1]",
+        headerTitleActionLog: "//span[@class='el-dialog__title'][normalize-space()='Action Log']",
+        operationSearch: "(//input[@placeholder='--Input Text--'])[3]",
+        operationSearchResult: "//div[@class='cell']//span[contains(text(),'Email Draft Invoice')]",
+        saveButtonOkButton: "(//span[contains(text(),'OK')])[25]",
+        newButton:"//span[normalize-space()='New']"
 
     };
 
@@ -178,12 +188,19 @@ export default class BillableOrderPage {
         await this.base.waitAndClick(this.Elements.completeButton);
         await this.page.waitForTimeout(1000);
         // await this.page.locator(this.Elements.YesButton).click();
-        await this.base.waitAndClick(this.Elements.okButton);
+        await this.base.waitAndClick(this.Elements.okCompleteButton);
         await fixture.page.waitForTimeout(3000);
         const element = await fixture.page.locator(this.Elements.headerTitle).textContent();
         const text = element ? element.toString() : '';
         if (text) {
+
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.billableOrderNumber = match[1];
+                console.log(this.billableOrderNumber);
+                // Use billableOrderNumber as needed
+            }
+
             // Extract status from parentheses: "(Draft)", "(Complete)", etc.
             const statusMatch = text.match(/\(([^)]+)\)$/);
             if (statusMatch && statusMatch[1]) {
@@ -193,7 +210,7 @@ export default class BillableOrderPage {
         }
         //verify the status is completed
         await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('(Completed)');
-        
+
         await fixture.page.waitForTimeout(3000);
     }
     async clickOnReviewButton(): Promise<void> {
@@ -256,7 +273,7 @@ export default class BillableOrderPage {
         await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('(Closed)');
         await fixture.page.waitForTimeout(3000);
     }
-        async clickOnCancelButton(): Promise<void> {
+    async clickOnCancelButton(): Promise<void> {
         await this.base.waitAndClick(this.Elements.cancelButton);
         await this.page.waitForTimeout(1000);
         await this.base.waitAndClick(this.Elements.cancelOkButton);
@@ -275,5 +292,62 @@ export default class BillableOrderPage {
         //verify the status is cancelled
         await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('(Cancelled)');
     }
+    async clickOnPrintDraftInvoiceButton(): Promise<void> {
 
+        await this.page.locator(this.Elements.printDraftInvoiceButton).click();
+
+        // Wait for the new page (tab) to open upon clicking the print button on popup
+        const [newPage] = await Promise.all([
+            this.page.context().waitForEvent('page'),
+        ]);
+
+        await newPage.waitForLoadState();
+
+        // Verify URL contains 'pdf/view'
+        if (!newPage.url().includes('pdf/view')) {
+            throw new Error(`Unexpected URL opened: ${newPage.url()}`);
+        }
+
+        // Optionally: Close the new tab or keep it open for further checks
+        await newPage.close();
+
+    }
+    async clickOnEmailInvoiceButton(): Promise<void> {
+
+        await this.page.locator(this.Elements.emailDraftInvoiceButton).click();
+
+        const toField = this.page.locator(this.Elements.ToField);
+        await toField.fill('jeena.manuel@milestone.tech');
+        await this.page.locator(this.Elements.emailButton).click();
+
+        // Optionally, you can add a wait or verification step to ensure the email was sent
+        await this.page.waitForTimeout(2000);
+        await this.base.waitAndClick(this.Elements.cancelOkButton);
+
+    }
+    async verifyActionLog(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLog);
+        await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.operationSearch).fill('Email Draft Invoice');
+        await fixture.page.waitForTimeout(500);
+        const errorText = await this.page.locator(this.Elements.operationSearchResult).textContent();
+        expect(errorText).toContain('Email Draft Invoice');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.closeButtonActionLog).click();
+    }
+    async clickSaveButton(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.saveButton);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.saveButtonOkButton);
+        await fixture.page.waitForTimeout(3000);
+    }
+
+    async clickNewButton(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.newButton);
+//verify the header title is  Create Billable Work Order  
+        await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('Create Billable Work Order');
+        await fixture.page.waitForTimeout(3000);
+
+    }
 }
