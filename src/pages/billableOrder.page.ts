@@ -12,6 +12,7 @@ export default class BillableOrderPage {
     private page: Page;
     public billableOrderNumber: string = '';
     public billableOrderStatus: string = '';
+    public mnrInvoiceNumber: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -28,16 +29,18 @@ export default class BillableOrderPage {
         LOOKuPmechanicSearch: "//div[@class='el-dialog__wrapper']//span[contains(text(),'Search')]",
         lookUpMechanicOkButton: "(//span[contains(text(),'OK')])[1]",
         notes: "(//label[normalize-space(text())='Notes']/following::textarea)[1]",
-        componentCode: "//input[@placeholder='Component Code']",
-        damageCode: "//input[@placeholder='Damage Code']",
-        repairCode: "//input[@placeholder='Repair Code']",
-        repairLocation: "//tr[@class='activity-row']//input[@placeholder='--Select One--']",
-        actualHours: "//div[@class='el-input input-align']//input[@type='text']",
+        componentCode: "(//input[@placeholder='Component Code'])[1]",
+        componentCode2: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/table[1]/tbody[1]/tr[4]/td[1]/div[1]/div[1]/div[1]/input[1]",
+        damageCode: "(//input[@placeholder='Damage Code'])[1]",
+        damageCode2: "(//input[@placeholder='Damage Code'])[2]",
+        repairCode: "(//input[@placeholder='Repair Code'])[1]",
+        repairCode2: "(//input[@placeholder='Repair Code'])[2]",
+        actualHours: "(//input[@type='text'])[23]",
         stockNumberSearchwo: "//div[@placeholder='--Input Text or Look up--']//i[@class='el-input__icon el-icon-search is-clickable']",
         stockNumberSearchBoxwo: "(//label[normalize-space(text())='Stock No.']/following::input)[1]",
         searchButtonLookUpwo: "//span[normalize-space(text())='Search']",
         okButtonLookUpwo: "(//span[contains(text(),'OK')])[2]",
-        stockQuantitywo: "//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text']",
+        stockQuantitywo: "(//input[@type='text'])[27]",
         saveButton: "(//span[normalize-space()='Save'])[1]",
         draftButton: "(//span[normalize-space()='Draft'])[1]",
         completeButton: "//span[normalize-space()='Complete']",
@@ -67,10 +70,46 @@ export default class BillableOrderPage {
         operationSearch: "(//input[@placeholder='--Input Text--'])[3]",
         operationSearchResult: "//div[@class='cell']//span[contains(text(),'Email Draft Invoice')]",
         saveButtonOkButton: "(//span[contains(text(),'OK')])[25]",
-        newButton:"//span[normalize-space()='New']"
+        newButton: "//span[normalize-space()='New']",
+        batchReviewBillableWorkOrderMenu: "//span[normalize-space(text())='- Batch Review Billable Work Order']",
+        batchWONumberSearch: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        batchWONumberCheckbox: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/label[1]/span[1]/span[1]",
+        batchReviewButton: "//span[normalize-space(text())='Batch Review']",
+        batchReviewOkButton: "(//span[contains(text(),'OK')])[8]",
+        searchButton: "(//span[normalize-space()='Search'])[1]",
+        woNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
+        batchCloseBillableWOMenu: "//span[normalize-space()='- Batch Close Billable Work Order']",
+        batchCloseBillableWOSearch: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        batchCloseWONumberCheckbox: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/label[1]/span[1]/span[1]",
+        batchCloseButton: "//span[normalize-space(text())='Batch Close']",
+        batchCloseOkButton: "(//span[contains(text(),'OK')])[11]",
+        damageLength: "(//input[@placeholder='--Input Number--'])[1]",
+        damageLength2: "(//input[@placeholder='--Input Number--'])[3]",
+        damageWidth: "(//input[@placeholder='--Input Number--'])[2]",
+        damageWidth2: "(//input[@placeholder='--Input Number--'])[4]",
+        repairLocation: "(//input[@placeholder='--Select One--'])[6]",
+        repairLocation2: "(//input[@placeholder='--Select One--'])[8]",
+        completeOkButton: "(//span[contains(text(),'OK')])[15]",
+        actualHours2: "(//input[@type='text'])[36]",
+        stockQuantitywo2: "(//input[@type='text'])[40]",
+        mnrInvoiceLabel: "//span[normalize-space()='MNR Invoice']",
+        draftInvoiceNumber: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]",
+        // Search filter locators
+        assetSearchField: "(//label[normalize-space(text())='Asset No.']/following::input)[1]",
+        billableAssetDescriptionField: "(//label[normalize-space(text())='Asset Description']/following::input)[1]",
+        assetGroupField: "(//label[normalize-space(text())='Asset Group']/following::input)[2]",
+        billingPartyField: "(//label[normalize-space(text())='Billing Party']/following::input)[2]",
+        workOrderStatusField: "(//label[normalize-space(text())='Work Order Status']/following::input)[2]",
+        shopField: "(//label[normalize-space(text())='Shop']/following::input)[2]",
+        shiftField: "(//label[normalize-space(text())='Shift']/following::input)[2]",
+        repairStartDateField: "(//label[normalize-space(text())='Repair Date']/following::input)[1]",
+        assetNosearchResultRow: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[3]/div[1]/span[1]",
+        assetDescriptionResult: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[4]/div[1]/span[1]",
+        assetGroupResult: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[5]/div[1]/span[1]",
+        searchBillingPartyResultRow: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[6]/div[1]/span[1]",
+        StatussearchResultRow: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[2]/div[1]/span[1]"
 
     };
-
     async clickOnCreateBillableOrderMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.billableOrderMenu);
         await this.page.waitForTimeout(500);
@@ -134,23 +173,58 @@ export default class BillableOrderPage {
         await fixture.page.waitForTimeout(500);
         //enter labor details
         await this.page.locator(this.Elements.componentCode).click();
-        await this.page.getByText('KAA - Gladhand seal').click();
+        await this.page.getByText('KAA - Gladhand seal').first().click();
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.damageCode).click();
-        await this.page.getByText('BR - Broken').click();
+        await this.page.getByText('BR - Broken').first().click();
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.repairCode).click();
-        await this.page.getByText('RE - Resecure').click();
-        // await this.page.locator(this.Elements.repairLocation).click();
-        // await this.page.getByText('EROM - Electrical Room').click();
+        await this.page.getByText('RP - Replace').first().click();
         await this.page.locator(this.Elements.actualHours).nth(0).click();
         await this.page.locator(this.Elements.actualHours).nth(0).fill('8');
-        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).click();
-        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).fill('3452');
-        await this.page.getByText('3452 - M190FR - lamp 2" red flange LED').click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.damageLength).fill('2');
+        await this.page.locator(this.Elements.damageWidth).fill('3');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('CF9N - FRONT').first().click();
+        //enter parts details
+        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).click();
+        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).fill('1004');
+        await this.page.getByText('1004 - 12-010 - gladhand').first().click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+        // ---- IGNORE ---
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(`//tr[@class='activity-row']//i[@class='ivu-icon ivu-icon-plus']`).click();
+        await fixture.page.waitForTimeout(500)
+        await this.page.locator(this.Elements.componentCode2).click();
+        await this.page.getByText('KAA - Gladhand seal').nth(1).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.damageCode2).click();
+        await this.page.getByText('CU - Cut').nth(1).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.repairCode2).click();
+        await this.page.getByText('RP - Replace').nth(1).click();
+        await this.page.locator(this.Elements.actualHours2).click();
+        await this.page.locator(this.Elements.actualHours2).fill('8');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.damageLength2).fill('2');
+        await this.page.locator(this.Elements.damageWidth2).fill('3');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.repairLocation2).click();
+        await this.page.getByText('CF9N - FRONT').nth(1).click();
+        //enter parts details
+        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).nth(1).click();
+        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).nth(1).fill('1020');
+        await this.page.getByText('1020 - GT-2600 - grommet gladhand seal').nth(1).click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo2).click();
+        await this.page.locator(this.Elements.stockQuantitywo2).fill('1');
+
+
 
     }
 
@@ -189,6 +263,38 @@ export default class BillableOrderPage {
         await this.page.waitForTimeout(1000);
         // await this.page.locator(this.Elements.YesButton).click();
         await this.base.waitAndClick(this.Elements.okCompleteButton);
+        await fixture.page.waitForTimeout(3000);
+        const element = await fixture.page.locator(this.Elements.headerTitle).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.billableOrderNumber = match[1];
+                console.log(this.billableOrderNumber);
+                // Use billableOrderNumber as needed
+            }
+
+            // Extract status from parentheses: "(Draft)", "(Complete)", etc.
+            const statusMatch = text.match(/\(([^)]+)\)$/);
+            if (statusMatch && statusMatch[1]) {
+                this.billableOrderStatus = statusMatch[1];
+                console.log('Status:', this.billableOrderStatus);
+            }
+        }
+        //verify the status is completed
+        await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('(Completed)');
+
+        await fixture.page.waitForTimeout(3000);
+    } 
+    async clickOnCompleteButtonAfterDraft(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.completeButton);
+        await this.page.waitForTimeout(1000);
+        // await this.page.locator(this.Elements.YesButton).click();
+        // await this.base.waitAndClick(this.Elements.completeOkButton);
+
+
+        await this.page.locator(`//div[3]/button[2]/span`).click();
         await fixture.page.waitForTimeout(3000);
         const element = await fixture.page.locator(this.Elements.headerTitle).textContent();
         const text = element ? element.toString() : '';
@@ -345,9 +451,182 @@ export default class BillableOrderPage {
 
     async clickNewButton(): Promise<void> {
         await this.base.waitAndClick(this.Elements.newButton);
-//verify the header title is  Create Billable Work Order  
+        //verify the header title is  Create Billable Work Order  
         await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('Create Billable Work Order');
         await fixture.page.waitForTimeout(3000);
 
+    }
+    async doBatchReview(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.billableOrderMenu);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.batchReviewBillableWorkOrderMenu);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchWONumberSearch).fill(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchWONumberCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchReviewButton).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchReviewOkButton).click();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async searchWO(): Promise<void> {
+        await this.page.locator(this.Elements.WONumberSearch).fill(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.searchButton).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.woNumberLink).click();
+        await fixture.page.waitForTimeout(500);
+        //verify the status is reviewed
+        await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('(Reviewed)');
+        await fixture.page.waitForTimeout(3000);
+
+    }
+    async doBatchClose(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.billableOrderMenu);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.batchCloseBillableWOMenu);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchCloseBillableWOSearch).fill(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchCloseWONumberCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchCloseButton).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchCloseOkButton).click();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async searchWOAfterClose(): Promise<void> {
+        await this.page.locator(this.Elements.WONumberSearch).fill(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.searchButton).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.woNumberLink).click();
+        await fixture.page.waitForTimeout(500);
+        //verify the status is reviewed
+        await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('(Closed)');
+        await fixture.page.waitForTimeout(3000);
+
+    }
+    async doBatchReviewAfterCompletion(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.billableOrderMenu);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.batchReviewBillableWorkOrderMenu);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchWONumberSearch).fill(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchWONumberCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchReviewButton).click();
+        await fixture.page.waitForTimeout(500);
+        // await this.page.locator(this.Elements.batchReviewOkButtonAfterCompletion).click();
+        await this.page.locator(`//div[position()=3]/div[position()=1]/div[position()=3]/button[position()=2]`).click()
+
+        await fixture.page.waitForTimeout(1000);
+    }
+    async doBatchCloseAfterEwview(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.billableOrderMenu);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.batchCloseBillableWOMenu);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchCloseBillableWOSearch).fill(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchCloseWONumberCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchCloseButton).click();
+        await fixture.page.waitForTimeout(500);
+        // await this.page.locator(this.Elements.batchCloseOkButton).click();
+        await this.page.locator(`//div[position()=3]/div[position()=1]/div[position()=3]/button[position()=2]/span[position()=1]`).click();
+        await fixture.page.waitForTimeout(1000);
+    }
+
+    async mnrInvoice(): Promise<void> {
+        //verify MNR Invoice label is present
+        await expect.soft(this.page.locator(this.Elements.mnrInvoiceLabel)).toBeVisible();
+        this.mnrInvoiceNumber = await this.page.locator(this.Elements.draftInvoiceNumber).textContent();
+        ok(this.mnrInvoiceNumber && this.mnrInvoiceNumber.trim() !== '', 'Draft Invoice Number is empty');
+        console.log('Draft Invoice Number:', this.mnrInvoiceNumber?.trim());
+
+    }
+
+    // Search methods for inquiry page
+    async searchByAsset(asset: string): Promise<void> {
+        const searchInput = this.page.locator(this.Elements.assetSearchField);
+        await searchInput.fill(asset);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await expect.soft(this.page.locator(this.Elements.assetNosearchResultRow)).toBeVisible();
+        //verify the asset number in search result
+        await expect.soft(this.page.locator(this.Elements.assetNosearchResultRow)).toContainText(asset);
+    }
+
+    async searchByBillableAssetDescription(description: string): Promise<void> {
+        const searchInput = this.page.locator(this.Elements.billableAssetDescriptionField);
+        await searchInput.fill(description);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await expect.soft(this.page.locator(this.Elements.assetDescriptionResult)).toBeVisible();
+        //verify the asset number in search result
+        await expect.soft(this.page.locator(this.Elements.assetDescriptionResult)).toContainText(description);
+
+    }
+
+    async searchByAssetGroup(assetGroup: string): Promise<void> {
+        await this.page.locator(this.Elements.assetGroupField).click();
+        await this.page.getByText(assetGroup).click();
+        //click outside to close any dropdown
+        await this.page.mouse.click(10, 10);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await expect.soft(this.page.locator(this.Elements.assetGroupResult)).toBeVisible();
+        //verify the asset number in search result
+        await expect.soft(this.page.locator(this.Elements.assetGroupResult)).toContainText(assetGroup);
+    }
+
+    async searchByBillingParty(billingParty: string): Promise<void> {
+        await this.page.locator(this.Elements.billingPartyField).click();
+        await this.page.getByText(billingParty).click();
+        //click outside to close any dropdown
+        await this.page.mouse.click(10, 10);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await expect.soft(this.page.locator(this.Elements.searchBillingPartyResultRow)).toBeVisible();
+        //verify the asset number in search result
+        await expect.soft(this.page.locator(this.Elements.searchBillingPartyResultRow)).toContainText(billingParty);
+    }
+
+    async searchByWorkOrderStatus(status: string): Promise<void> {
+        await this.page.locator(this.Elements.workOrderStatusField).click();
+        await this.page.getByText(status, { exact: true }).click();
+        await this.page.mouse.click(10, 10);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await expect.soft(this.page.locator(this.Elements.StatussearchResultRow)).toBeVisible();
+        //verify the asset number in search result
+        await expect.soft(this.page.locator(this.Elements.StatussearchResultRow)).toContainText(status);
+    }
+
+    async searchByShop(shop: string): Promise<void> {
+        const searchInput = this.page.locator(this.Elements.shopField);
+        await searchInput.fill(shop);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        // await expect.soft(this.page.locator(this.Elements.searchResultRow)).toBeVisible();
+    }
+
+    async searchByShift(shift: string): Promise<void> {
+        const searchInput = this.page.locator(this.Elements.shiftField);
+        await searchInput.fill(shift);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        // await expect.soft(this.page.locator(this.Elements.searchResultRow)).toBeVisible();
+    }
+
+    async searchByRepairDateRange(startDate: string, endDate: string): Promise<void> {
+        const startDateInput = this.page.locator(this.Elements.repairStartDateField);
+        await startDateInput.fill(startDate);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        // await expect.soft(this.page.locator(this.Elements.searchResultRow)).toBeVisible();
     }
 }

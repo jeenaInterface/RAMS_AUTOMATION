@@ -14,7 +14,7 @@ When('the admin navigates to the billable work order creation menu', async () =>
 
 When('enters all the required fields for billable work order and clicks on the Draft button', async () => {
   await billableOrderPage.createNewBillableOrder();
-  await billableOrderPage.clickOnDraftButton();
+  // await billableOrderPage.clickOnDraftButton();
 });
 
 Then("verify the status of the billable work order is Drafted", async function (this: any) {
@@ -45,30 +45,6 @@ Then("verify the status of the billable work order is Closed", async function (t
 });
 
 
-// Then('the admin searches for a billable work order by BWO number {string}', async (bwoNumber: string) => {
-//   await billableOrderPage.searchBillableOrderByNumber(bwoNumber);
-// });
-
-// Then('verifies that the search results display the correct billable work order', async () => {
-//   await billableOrderPage.verifySearchResultByBWONumber();
-// });
-
-// Then('the admin searches for a billable work order by status {string}', async (status: string) => {
-//   await billableOrderPage.searchBillableOrderByStatus(status);
-// });
-
-// Then('the admin clicks on the first billable work order in the search results', async () => {
-//   await billableOrderPage.clickOnFirstBillableOrder();
-// });
-
-// Then('the admin fills in the mandatory fields one by one and attempts to submit the form each time', async () => {
-//   await billableOrderPage.verifyMandatoryFieldValidations();
-// });
-
-// Then('verifies that the action log records the performed actions accurately', async () => {
-//   await billableOrderPage.verifyActionLog();
-// });
-
 When('the admin navigates to the Inquire Billable Work Order menu', async () => {
   billableOrderPage = new BillableOrderPage(fixture.page);
   await billableOrderPage.clickOnInquireBillableOrderMenu();
@@ -97,6 +73,9 @@ Then('the billable work order number is captured', async function (this: any) {
 });
 When('the admin click on complete button', async () => {
   await billableOrderPage.clickOnCompleteButton();
+});
+When('the admin click on complete button after draft', async () => {
+  await billableOrderPage.clickOnCompleteButtonAfterDraft();
 });
 Then("verify the status of the billable work order is Completed", async function (this: any) {
   let status = billableOrderPage.billableOrderStatus;
@@ -155,3 +134,85 @@ When('verify action logged', async () => {
 When('Verify New button functionality', async () => {
   await billableOrderPage.clickNewButton();
 });
+When('Go to Batch review billable work order and review the created billable work order', async () => {
+  await billableOrderPage.doBatchReview();
+});
+When('Go to Inquire billable work order and verify the status is Reviewed', async () => {
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchWO();
+});
+When('Go to Batch close billable work order and close the created billable work order', async () => {
+  await billableOrderPage.doBatchClose();
+});
+When('Go to Inquire billable work order and verify the status is Closed', async () => {
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchWOAfterClose();
+});
+When('Go to Batch review billable work order and review the created billable work order after completion', async () => {
+  await billableOrderPage.doBatchReviewAfterCompletion();
+});
+When('Go to Batch close billable work order and close the created billable work order after review', async () => {
+  await billableOrderPage.doBatchCloseAfterEwview();
+});
+Then('verify mnr invoice is generated from the closed billable work order', async function (this: any) {
+
+  await billableOrderPage.mnrInvoice();
+    let mnr = billableOrderPage.mnrInvoiceNumber || '';
+  // Attach BWO status to Cucumber report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`MNR INVOICE NUMBER: ${mnr}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`MNR INVOICE NUMBER: ${mnr}`);
+  }
+});
+Then('the admin click on complete, review and close the order', async () => {
+  await billableOrderPage.clickOnCompleteButton();
+  await billableOrderPage.clickOnReviewButton();
+  await billableOrderPage.clickOnCloseButton();
+});
+
+// Search step definitions for inquiry page
+Then('searches for a billable work order using the asset {string} and verifies the search results', async (asset: string) => {
+    billableOrderPage = new BillableOrderPage(fixture.page);
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchByAsset(asset);
+});
+
+Then('searches for a billable work order using the billable asset description {string} and verifies the search results', async (description: string) => {
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchByBillableAssetDescription(description);
+});
+
+Then('searches for a billable work order using the asset group {string} and verifies the search results', async (assetGroup: string) => {
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchByAssetGroup(assetGroup);
+});
+
+Then('searches for a billable work order using the billing party {string} and verifies the search results', async (billingParty: string) => {
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchByBillingParty(billingParty);
+});
+
+Then('searches for a billable work order using the work order status {string} and verifies the search results', async (status: string) => {
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchByWorkOrderStatus(status);
+});
+
+Then('searches for a billable work order using shop and verifies the search results', async () => {
+  // Note: You may need to replace with actual shop value or use a data table
+  await billableOrderPage.searchByShop('');
+});
+
+Then('searches for a billable work order using shift and verifies the search results', async () => {
+  // Note: You may need to replace with actual shift value or use a data table
+  await billableOrderPage.searchByShift('');
+});
+
+Then('searches for a billable work order using repair date range and verifies the search results', async () => {
+  // Note: You may need to use DataTable or predefined dates
+  const startDate = '2024-01-01';
+  const endDate = '2024-12-31';
+  await billableOrderPage.searchByRepairDateRange(startDate, endDate);
+});
+
+
