@@ -3,6 +3,7 @@ import BillableOrderPage from "../../pages/billableOrder.page";
 import LoginPage from "../../pages/login.page";
 import { fixture } from "../../hooks/pageFixture";
 import { verify } from "crypto";
+import { create } from "domain";
 
 let billableOrderPage: BillableOrderPage;
 
@@ -198,21 +199,54 @@ Then('searches for a billable work order using the work order status {string} an
   await billableOrderPage.searchByWorkOrderStatus(status);
 });
 
-Then('searches for a billable work order using shop and verifies the search results', async () => {
-  // Note: You may need to replace with actual shop value or use a data table
-  await billableOrderPage.searchByShop('');
+Then('searches for a billable work order using shop and verifies the search results {string}', async (shop: string) => {
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchByShop(shop);
 });
 
-Then('searches for a billable work order using shift and verifies the search results', async () => {
+Then('searches for a billable work order using shift and verifies the search results {string}', async (shift: string) => {
   // Note: You may need to replace with actual shift value or use a data table
-  await billableOrderPage.searchByShift('');
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchByShift(shift);
 });
 
 Then('searches for a billable work order using repair date range and verifies the search results', async () => {
   // Note: You may need to use DataTable or predefined dates
-  const startDate = '2024-01-01';
-  const endDate = '2024-12-31';
-  await billableOrderPage.searchByRepairDateRange(startDate, endDate);
+    await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.searchByRepairDateRange();
+});
+
+Then('go to inquire mnr invoice and verify the created mnr invoice from the closed billable work order', async () => {
+  await billableOrderPage.verifyMNRInvoice();
+});
+
+Then('create MNR credit for the closed billable work order', async () => {
+  await billableOrderPage.createMNRCredit();
+});
+
+Then('go to inquire billable work order and verify an entry is created for the created mnr credit', async () => {
+  await billableOrderPage.verifyCreditNumberINWO();
+});
+
+Then('capture the MNR credit number', async function (this: any) {
+
+  let mnrCreditNum = billableOrderPage.mnrCreditNumber;
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`MNR CREDIT NUMBER: ${mnrCreditNum}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`MNR CREDIT NUMBER: ${mnrCreditNum}`);
+  } 
 });
 
 
+Then('verify save functionality in MNR credit creation', async () => {
+  await billableOrderPage.verifySaveCredit();
+}
+);
+Then('verify cancel functionality in MNR credit creation', async () => {
+  await billableOrderPage.verifyCancelCredit();
+} );
+
+Then('verify action log is created for MNR credit creation', async () => {
+  await billableOrderPage.verifyActionLogCredit();
+} );

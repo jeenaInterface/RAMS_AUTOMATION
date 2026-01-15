@@ -56,14 +56,17 @@ Feature: Verify functionalities under Billable Work Order
     Then Go to Inquire billable work order and verify the status is Closed
 
   @mnr @sanity @bwo
-  Scenario: Verify mnr invoice generation from billable work order
+  Scenario: Verify MNR invoice is created from closed billable work order
+
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
     And Opens an existing billable work order 'CH397015'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete, review and close the order
+    Then the billable work order number is captured
     Then verify mnr invoice is generated from the closed billable work order
+    Then go to inquire mnr invoice and verify the created mnr invoice from the closed billable work order
 
   @searchInquireBO @sanity @bwo
   Scenario: Verify mnr invoice generation from billable work order
@@ -72,7 +75,37 @@ Feature: Verify functionalities under Billable Work Order
     Then searches for a billable work order using the billable asset description '40CZ - 40' and verifies the search results
     Then searches for a billable work order using the asset group 'CH - Chassis' and verifies the search results
     Then searches for a billable work order using the billing party 'DCL - Direct Chassis Link' and verifies the search results
-# Then searches for a billable work order using the work order status 'Draft' and verifies the search results
-# Then searches for a billable work order using shop and verifies the search results
-# Then searches for a billable work order using shift and verifies the search results
-# Then searches for a billable work order using repair date range and verifies the search results
+    Then searches for a billable work order using the work order status 'Draft' and verifies the search results
+    Then searches for a billable work order using shop and verifies the search results 'Power - Power Equipment Maintenance'
+    Then searches for a billable work order using shift and verifies the search results '1 - First Shift'
+    Then searches for a billable work order using repair date range and verifies the search results
+
+
+  @MNRCredit   @sanity @bwo
+  Scenario: Create mnr credit after close a billable work order
+
+    Given the admin user is logged into the application
+    When the admin navigates to the Inquire Billable Work Order menu
+    And Opens an existing billable work order 'CH397015'
+    Then Clicks on the Copy button to duplicate the billable work order
+    And enters all the required fields for billable work order after copy and clicks on the Draft button
+    When the admin click on complete, review and close the order
+    Then the billable work order number is captured
+    Then create MNR credit for the closed billable work order
+    Then capture the MNR credit number
+    Then go to inquire billable work order and verify an entry is created for the created mnr credit
+
+  @MNRCreditCancel   @sanity @bwo
+  Scenario: Verify save, cancel and action log functionalities in MNR credit creation
+
+    Given the admin user is logged into the application
+    When the admin navigates to the Inquire Billable Work Order menu
+    And Opens an existing billable work order 'CH397015'
+    Then Clicks on the Copy button to duplicate the billable work order
+    And enters all the required fields for billable work order after copy and clicks on the Draft button
+    When the admin click on complete, review and close the order
+    Then the billable work order number is captured
+    Then verify save functionality in MNR credit creation
+     Then capture the MNR credit number
+    Then verify cancel functionality in MNR credit creation
+    Then verify action log is created for MNR credit creation

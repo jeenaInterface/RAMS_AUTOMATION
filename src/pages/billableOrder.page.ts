@@ -13,6 +13,7 @@ export default class BillableOrderPage {
     public billableOrderNumber: string = '';
     public billableOrderStatus: string = '';
     public mnrInvoiceNumber: string = '';
+    public mnrCreditNumber: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -107,7 +108,37 @@ export default class BillableOrderPage {
         assetDescriptionResult: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[4]/div[1]/span[1]",
         assetGroupResult: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[5]/div[1]/span[1]",
         searchBillingPartyResultRow: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[6]/div[1]/span[1]",
-        StatussearchResultRow: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[2]/div[1]/span[1]"
+        StatussearchResultRow: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[2]/div[1]/span[1]",
+        shopSearchResult: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[8]/div[1]/span[1]",
+        shiftSearchResult: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[10]/div[1]/span[1]",
+        dateSearchResult: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[9]/div[1]/span[1]",
+        inquireInvoceCreditMenu: "//a[@href='#/desktop/ARAP/inquireInvoice']//div[@class='ivu-menu-item select-item']",
+        ARAPMenu: "(//div[@class='menu-icon']//img)[2]",
+        WONumberSearchInvoice: "(//label[normalize-space(text())='Work Order No.']/following::input)[1]",
+        draftInvoiceNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
+        wonumberLabel: "(//input[@class='el-input__inner'])[1]",
+        createMNRCreditMenu: "//span[normalize-space()='- Create MNR Invoice/Credit']",
+        woNumberMNRCreditSearch: "(//div[@class='el-input']//input)[1]",
+        RetrieveButton: "//span[normalize-space()='Retrieve']",
+        changedQuantityInput: "//tbody/tr[2]/td[4]/div[1]/div[1]/input[1]",
+        draftButtonmnrcredit: "(//span[normalize-space()='Draft'])[1]",
+        okButtonMNRCreditDraft: "(//span[contains(text(),'OK')])[8]",
+        closeButtonmnrcredit: "(//span[normalize-space()='Close'])[1]",
+        okCloseButtonmnrcredit: "(//span[contains(text(),'OK')])[8]",
+
+        headerTitleMNRCredit: "//span[@class='header-title font-size-title']",
+        credeitNumberWO: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[4]/div[1]/span[1]",
+        saveButtonmnrcredit: "//span[normalize-space()='Save']",
+        cancelCreditButton: "(//span[contains(text(),'Cancel')])[1]",
+        operationSearchCredit: "(//input[@placeholder='--Input Text--'])[3]",
+        draftInvoiceNumberSearch: "(//label[normalize-space(text())='Draft Invoice No.']/following::input)[1]"
+
+
+
+
+
+
+
 
     };
     async clickOnCreateBillableOrderMenu(): Promise<void> {
@@ -286,7 +317,7 @@ export default class BillableOrderPage {
         await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText('(Completed)');
 
         await fixture.page.waitForTimeout(3000);
-    } 
+    }
     async clickOnCompleteButtonAfterDraft(): Promise<void> {
         await this.base.waitAndClick(this.Elements.completeButton);
         await this.page.waitForTimeout(1000);
@@ -607,26 +638,164 @@ export default class BillableOrderPage {
     }
 
     async searchByShop(shop: string): Promise<void> {
-        const searchInput = this.page.locator(this.Elements.shopField);
-        await searchInput.fill(shop);
+        await this.page.locator(this.Elements.shopField).click();
+        await this.page.getByText(shop).click();
+        //click outside to close any dropdown
+        await this.page.mouse.click(10, 10);
         await this.base.waitAndClick(this.Elements.searchButton);
         await this.page.waitForLoadState('networkidle');
-        // await expect.soft(this.page.locator(this.Elements.searchResultRow)).toBeVisible();
+        await expect.soft(this.page.locator(this.Elements.shopSearchResult)).toBeVisible();
+        //verify the asset number in search result
+        await expect.soft(this.page.locator(this.Elements.shopSearchResult)).toContainText(shop);
     }
 
     async searchByShift(shift: string): Promise<void> {
-        const searchInput = this.page.locator(this.Elements.shiftField);
-        await searchInput.fill(shift);
+        await this.page.locator(this.Elements.shiftField).click();
+        await this.page.getByText(shift).click();
+        //click outside to close any dropdown
+        await this.page.mouse.click(10, 10);
         await this.base.waitAndClick(this.Elements.searchButton);
         await this.page.waitForLoadState('networkidle');
-        // await expect.soft(this.page.locator(this.Elements.searchResultRow)).toBeVisible();
+        await expect.soft(this.page.locator(this.Elements.shiftSearchResult)).toBeVisible();
+        //verify the asset number in search result
+        await expect.soft(this.page.locator(this.Elements.shiftSearchResult)).toContainText(shift);
     }
 
-    async searchByRepairDateRange(startDate: string, endDate: string): Promise<void> {
-        const startDateInput = this.page.locator(this.Elements.repairStartDateField);
-        await startDateInput.fill(startDate);
+    async searchByRepairDateRange(): Promise<void> {
+        await this.page.locator(this.Elements.repairStartDateField).click();
+        await this.page.getByRole('cell', { name: 'Today' }).click();
+        await this.page.getByRole('cell', { name: 'Today' }).click();
         await this.base.waitAndClick(this.Elements.searchButton);
         await this.page.waitForLoadState('networkidle');
+        await expect.soft(this.page.locator(this.Elements.dateSearchResult)).toBeVisible();
+        //verify the asset number in search result
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const monthShort = now.toLocaleString('en-US', { month: 'short' }); // Jan, Feb, etc.
+        const day = String(now.getDate()).padStart(2, '0'); // 2-digit day with leading zero
+
+        const date = `${year}-${monthShort}-${day}`; // e.g. "2026-Jan-14"
+
+        // Then verify:
+        await expect.soft(this.page.locator(this.Elements.dateSearchResult)).toContainText(date);
         // await expect.soft(this.page.locator(this.Elements.searchResultRow)).toBeVisible();
+    }
+    async verifyMNRInvoice(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.inquireInvoceCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.WONumberSearchInvoice).fill(this.billableOrderNumber);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.draftInvoiceNumberLink);
+        await this.page.waitForLoadState('networkidle');
+        //verify the wonumber label text is equal to this.billableOrderNumber  
+        await fixture.page.waitForTimeout(2000);
+        const eonumberValue = await this.page.locator(this.Elements.wonumberLabel).inputValue();
+        expect(eonumberValue).toContain(this.billableOrderNumber);
+    }
+    async createMNRCredit(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.createMNRCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.woNumberMNRCreditSearch).fill(this.billableOrderNumber);
+        await this.base.waitAndClick(this.Elements.RetrieveButton);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.changedQuantityInput).click();
+        await this.page.locator(this.Elements.changedQuantityInput).fill('1');
+        await this.base.waitAndClick(this.Elements.draftButtonmnrcredit);
+        await this.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.okButtonMNRCreditDraft);
+        await this.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.closeButtonmnrcredit);
+        await this.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.okCloseButtonmnrcredit);
+        await this.page.waitForTimeout(2000);
+
+        const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.mnrCreditNumber = match[1];
+                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                // Use billableOrderNumber as needed
+            }
+
+
+        }
+    }
+
+    async verifyCreditNumberINWO(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.billableOrderMenu);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.inquireBillableOrderMenu);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.WONumberSearch).fill(this.billableOrderNumber);
+        await this.base.waitAndClick(this.Elements.searchButtonLookUpwo);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.WONumberLink);
+        await this.page.waitForLoadState('networkidle');
+        //verify this.mnrCreditNumber is present in WO page
+        await expect.soft(this.page.locator(this.Elements.credeitNumberWO)).toContainText(this.mnrCreditNumber || '');
+
+    }
+    async verifySaveCredit(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.createMNRCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.woNumberMNRCreditSearch).fill(this.billableOrderNumber);
+        await this.base.waitAndClick(this.Elements.RetrieveButton);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.changedQuantityInput).click();
+        await this.page.locator(this.Elements.changedQuantityInput).fill('1');
+        await this.base.waitAndClick(this.Elements.draftButtonmnrcredit);
+        await this.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.okButtonMNRCreditDraft);
+        await this.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.saveButtonmnrcredit);
+        await this.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.okButtonMNRCreditDraft);
+
+        const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.mnrCreditNumber = match[1];
+                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                // Use billableOrderNumber as needed
+            }
+
+
+        }
+    }
+    async verifyCancelCredit(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.inquireInvoceCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.WONumberSearchInvoice).fill(this.mnrCreditNumber);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.draftInvoiceNumberLink);
+        await this.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.cancelCreditButton);
+        await this.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.okButtonMNRCreditDraft);
+        await this.page.waitForTimeout(1000);
+    }
+    async verifyActionLogCredit(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLog);
+        await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.operationSearchCredit).fill('Cancel MNR Invoice/Credit');
+        await fixture.page.waitForTimeout(500);
+        const errorText = await this.page.locator(this.Elements.operationSearchResult).textContent();
+        expect(errorText).toContain('Cancel MNR Invoice/Credit');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.closeButtonActionLog).click();
     }
 }
