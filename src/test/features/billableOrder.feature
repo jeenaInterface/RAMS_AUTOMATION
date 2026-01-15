@@ -109,3 +109,22 @@ Feature: Verify functionalities under Billable Work Order
      Then capture the MNR credit number
     Then verify cancel functionality in MNR credit creation
     Then verify action log is created for MNR credit creation
+
+
+  #   @batchCloseInvoiceCredit   @sanity @bwo
+  # Scenario: Verify batch close MNR invoice credit functionality
+
+  #   Given the admin user is logged into the application
+  #   When the admin navigates to the Inquire Billable Work Order menu
+  #   And Opens an existing billable work order 'CH397015'
+  #   Then Clicks on the Copy button to duplicate the billable work order
+  #   And enters all the required fields for billable work order after copy and clicks on the Draft button
+  #   When the admin click on complete, review and close the order
+  #   Then the billable work order number is captured
+  #   Then verify save functionality in MNR credit creation
+  #    Then capture the MNR credit number
+  #   Then Go to Batch close MNR invoice credit and close the created MNR credit
+  #   Then go to inquire MNR invoice credit and verify the status is Closed
+  
+
+  

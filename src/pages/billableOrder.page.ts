@@ -131,8 +131,8 @@ export default class BillableOrderPage {
         saveButtonmnrcredit: "//span[normalize-space()='Save']",
         cancelCreditButton: "(//span[contains(text(),'Cancel')])[1]",
         operationSearchCredit: "(//input[@placeholder='--Input Text--'])[3]",
-        draftInvoiceNumberSearch: "(//label[normalize-space(text())='Draft Invoice No.']/following::input)[1]"
-
+        draftInvoiceNumberSearch: "(//label[normalize-space(text())='Draft Invoice No.']/following::input)[1]",
+operaionSearchResultCredit: "//span[normalize-space()='Cancel MNR Invoice/Credit']",
 
 
 
@@ -777,7 +777,7 @@ export default class BillableOrderPage {
         await this.page.locator(this.Elements.ARAPMenu).click();
         await this.page.locator(this.Elements.inquireInvoceCreditMenu).click();
         await this.page.waitForLoadState('networkidle');
-        await this.page.locator(this.Elements.WONumberSearchInvoice).fill(this.mnrCreditNumber);
+        await this.page.locator(this.Elements.draftInvoiceNumberSearch).fill(this.mnrCreditNumber);
         await this.base.waitAndClick(this.Elements.searchButton);
         await this.page.waitForLoadState('networkidle');
         await this.base.waitAndClick(this.Elements.draftInvoiceNumberLink);
@@ -793,9 +793,8 @@ export default class BillableOrderPage {
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.operationSearchCredit).fill('Cancel MNR Invoice/Credit');
         await fixture.page.waitForTimeout(500);
-        const errorText = await this.page.locator(this.Elements.operationSearchResult).textContent();
+        const errorText = await this.page.locator(this.Elements.operaionSearchResultCredit).textContent();
         expect(errorText).toContain('Cancel MNR Invoice/Credit');
         await fixture.page.waitForTimeout(500);
-        await this.page.locator(this.Elements.closeButtonActionLog).click();
     }
 }
