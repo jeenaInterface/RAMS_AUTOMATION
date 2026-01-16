@@ -158,7 +158,7 @@ When('Go to Batch close billable work order and close the created billable work 
 Then('verify mnr invoice is generated from the closed billable work order', async function (this: any) {
 
   await billableOrderPage.mnrInvoice();
-    let mnr = billableOrderPage.mnrInvoiceNumber || '';
+  let mnr = billableOrderPage.mnrInvoiceNumber || '';
   // Attach BWO status to Cucumber report
   if (this && typeof this.attach === 'function') {
     await this.attach(`MNR INVOICE NUMBER: ${mnr}`, 'text/plain');
@@ -174,7 +174,7 @@ Then('the admin click on complete, review and close the order', async () => {
 
 // Search step definitions for inquiry page
 Then('searches for a billable work order using the asset {string} and verifies the search results', async (asset: string) => {
-    billableOrderPage = new BillableOrderPage(fixture.page);
+  billableOrderPage = new BillableOrderPage(fixture.page);
   await billableOrderPage.clickOnInquireBillableOrderMenu();
   await billableOrderPage.searchByAsset(asset);
 });
@@ -212,7 +212,7 @@ Then('searches for a billable work order using shift and verifies the search res
 
 Then('searches for a billable work order using repair date range and verifies the search results', async () => {
   // Note: You may need to use DataTable or predefined dates
-    await billableOrderPage.clickOnInquireBillableOrderMenu();
+  await billableOrderPage.clickOnInquireBillableOrderMenu();
   await billableOrderPage.searchByRepairDateRange();
 });
 
@@ -235,7 +235,7 @@ Then('capture the MNR credit number', async function (this: any) {
     await this.attach(`MNR CREDIT NUMBER: ${mnrCreditNum}`, 'text/plain');
   } else {
     fixture.logger?.info(`MNR CREDIT NUMBER: ${mnrCreditNum}`);
-  } 
+  }
 });
 
 
@@ -245,8 +245,58 @@ Then('verify save functionality in MNR credit creation', async () => {
 );
 Then('verify cancel functionality in MNR credit creation', async () => {
   await billableOrderPage.verifyCancelCredit();
-} );
+});
 
 Then('verify action log is created for MNR credit creation', async () => {
   await billableOrderPage.verifyActionLogCredit();
-} );
+});
+Then('Go to Batch close MNR invoice credit and close the created MNR credit', async () => {
+  await billableOrderPage.BatchCloseCredit();
+});
+
+Then('Go to Batch close from dashboard and close the created MNR credit', async () => {
+  await billableOrderPage.BatchCloseCreditAfterSelectBatchCloseFromDashBoard();
+});
+
+Then('go to inquire MNR invoice credit and verify the status is Closed', async function (this: any) {
+  await billableOrderPage.verifyBatchCloseStatus();
+  //attach credit status to report
+  let creditStatus = billableOrderPage.creditStatus || '';
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`MNR CREDIT STATUS: ${creditStatus}`, 'text/plain');
+  }
+  else {
+    fixture.logger?.info(`MNR CREDIT STATUS: ${creditStatus}`);
+  }
+});
+Then('Go to Batch review billable work order from dashboard and review the created billable work order', async () => {
+  await billableOrderPage.doBatchReviewAfterSelectFromDashboard();
+});
+
+Then('Go to Batch close billable work order from dashboard and close the created billable work order', async () => {
+  await billableOrderPage.doBatchCloseFromDashboard();
+});
+Then('go to batch post invoice credit and post the closed MNR credit', async () => {
+  await billableOrderPage.BatchPost();
+});
+
+Then('check post Result', async function (this: any) { 
+  await billableOrderPage.postStatus();
+  //attach credit status to report
+  let postStatus = billableOrderPage.postStatusOriginal || '';
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`MNR CREDIT POST STATUS: ${postStatus}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`MNR CREDIT POST STATUS: ${postStatus}`);
+  }     
+});
+
+Then('verify xml generation for the posted MNR credit', async function () {
+  const filePath = await billableOrderPage.downloadReport();    
+  // Attach a clickable text or path to the report for users to access manually
+  if (this.attach) {
+      // Attach as plain text or as HTML link if supported
+      const sharedFilePathText = `Report available at shared location: ${filePath}`;
+      await this.attach(sharedFilePathText, 'text/plain');
+  } 
+});

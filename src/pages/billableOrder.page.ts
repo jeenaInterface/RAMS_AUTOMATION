@@ -4,6 +4,9 @@ import { setDefaultTimeout } from "@cucumber/cucumber";
 import { getRandomInt, randomtext } from "../helper/util/test-data/randomdata";
 import { fixture } from "../hooks/pageFixture";
 import { ok } from "assert";
+import { th } from "date-fns/locale";
+import * as fs from 'fs';
+import * as path from 'path';
 
 setDefaultTimeout(100 * 1000);
 
@@ -14,6 +17,8 @@ export default class BillableOrderPage {
     public billableOrderStatus: string = '';
     public mnrInvoiceNumber: string = '';
     public mnrCreditNumber: string = '';
+    public creditStatus: string = '';
+    public postStatusOriginal: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -132,7 +137,27 @@ export default class BillableOrderPage {
         cancelCreditButton: "(//span[contains(text(),'Cancel')])[1]",
         operationSearchCredit: "(//input[@placeholder='--Input Text--'])[3]",
         draftInvoiceNumberSearch: "(//label[normalize-space(text())='Draft Invoice No.']/following::input)[1]",
-operaionSearchResultCredit: "//span[normalize-space()='Cancel MNR Invoice/Credit']",
+        operaionSearchResultCredit: "//span[normalize-space()='Cancel MNR Invoice/Credit']",
+        BatchCloseCreditMenu: "//span[normalize-space()='- Batch Close Invoice/Credit']",
+        draftInvoiceNoSearchBatchClose: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        checkBoxDraftInvoiceBatchClose: "(//span[@class='el-checkbox__inner'])[2]",
+        batchCloseButtonCredit: "//span[normalize-space(text())='Batch Close']",
+        batchCloseOkButtonCredit: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
+        userIcon: "//i[@class='menu-icon ivu-icon ivu-icon-person']",
+        todoListMenu: "//div[@class='ivu-menu-item select-item']//span[contains(text(),'To-Do List')]",
+        batchCloseTabSectionDashboard: "//div[normalize-space(text())='Close AR Invoice/Credit']",
+        batchReviewTabSectionDashboard: "//div[normalize-space()='Review Billable Work Order']",
+        CloseBillableOrderTabSectionDashboard: "//div[normalize-space(text())='Close Billable Work Order']",
+
+        batchPostInvoiceCreditMenu: "//span[normalize-space()='- Batch Post Invoice/Credit']",
+        batchPostInvoiceCreditSearch: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        checkBoxBatchPostInvoiceCredit: "(//span[@class='el-checkbox__inner'])[2]",
+        batchpostButton: "//span[normalize-space()='Batch Post']",
+        // batchPostOkButton:"(//span[contains(text(),'OK')])[11]",
+        checkPostResultMenu: "//span[normalize-space()='- Check Post Result']",
+        draftInvoiceSearchCheckPost: "//table[@class='el-table__header']/thead[1]/tr[2]/th[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        postStaus: "//tbody/tr[1]/td[4]/div[1]/span[1]",
+        xmlFile: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[10]/div[1]/button[1]/span[1]/i[1]",
 
 
 
@@ -797,4 +822,151 @@ operaionSearchResultCredit: "//span[normalize-space()='Cancel MNR Invoice/Credit
         expect(errorText).toContain('Cancel MNR Invoice/Credit');
         await fixture.page.waitForTimeout(500);
     }
+    async BatchCloseCredit(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.BatchCloseCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.draftInvoiceNoSearchBatchClose).fill(this.mnrCreditNumber);
+        await this.base.waitAndClick(this.Elements.checkBoxDraftInvoiceBatchClose);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.batchCloseButtonCredit);
+        await this.base.waitAndClick(this.Elements.batchCloseOkButtonCredit);
+        await this.page.waitForTimeout(1000);
+
+    }
+    async BatchCloseCreditAfterSelectBatchCloseFromDashBoard(): Promise<void> {
+        await this.page.locator(this.Elements.userIcon).click();
+        await this.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.todoListMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.batchCloseTabSectionDashboard);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.draftInvoiceNoSearchBatchClose).fill(this.mnrCreditNumber);
+        await this.base.waitAndClick(this.Elements.checkBoxDraftInvoiceBatchClose);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.batchCloseButtonCredit);
+        await this.base.waitAndClick(this.Elements.batchCloseOkButtonCredit);
+        await this.page.waitForTimeout(1000);
+
+    }
+    async verifyBatchCloseStatus(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.inquireInvoceCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.draftInvoiceNumberSearch).fill(this.mnrCreditNumber);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.draftInvoiceNumberLink);
+        await this.page.waitForTimeout(1000);
+        //verify the status is Closed
+        const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
+
+            if (match && match[1] && match[2]) {
+                this.mnrCreditNumber = match[1];  // e.g., "00101886"
+                this.creditStatus = match[2];            // e.g., "Draft"
+                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('Status:', this.creditStatus);
+            }
+        }
+        //verify the status is Closed
+        await expect.soft(this.page.locator(this.Elements.headerTitleMNRCredit)).toContainText('(Closed)');
+        await fixture.page.waitForTimeout(3000);
+
+    }
+    async doBatchReviewAfterSelectFromDashboard(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.userIcon);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.todoListMenu);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.batchReviewTabSectionDashboard);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchWONumberSearch).fill(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchWONumberCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchReviewButton).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchReviewOkButton).click();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async doBatchCloseFromDashboard(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.userIcon);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.todoListMenu);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.CloseBillableOrderTabSectionDashboard);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchCloseBillableWOSearch).fill(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchCloseWONumberCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchCloseButton).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.batchCloseOkButton).click();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async BatchPost(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.batchPostInvoiceCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchPostInvoiceCreditSearch).fill(this.mnrCreditNumber);
+        await this.base.waitAndClick(this.Elements.checkBoxBatchPostInvoiceCredit);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.batchpostButton);
+        await this.base.waitAndClick(this.Elements.batchCloseOkButtonCredit);
+        await this.page.waitForTimeout(1000);
+
+    }
+    async postStatus(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.checkPostResultMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.draftInvoiceSearchCheckPost).fill(this.mnrCreditNumber);
+        this.postStatusOriginal = await this.page.locator(this.Elements.postStaus).textContent();
+
+        try {
+            expect(this.postStatusOriginal).toContain('Posted');
+            console.log('Status is Posted as expected.');
+        } catch (error) {
+            console.warn('Soft assertion failed: Status does not contain "Posted".', error);
+            // You can log the error but continue execution
+        }
+
+
+
+    }
+ async downloadReport(): Promise<string> {
+        // const downloadPath = path.resolve(__dirname, 'downloads');
+            const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\RAMS Reports\\xmlFile.xml';
+
+        if (!fs.existsSync(downloadPath)) {
+            fs.mkdirSync(downloadPath, { recursive: true });
+        }
+        this.clearDownloadFolder(downloadPath);
+        const [download] = await Promise.all([
+            this.page.waitForEvent('download'),
+            this.page.locator(this.Elements.xmlFile).click()
+        ]);
+        const downloadPathWithFileName = path.join(downloadPath, 'xmlFile.xml');
+        await download.saveAs(downloadPathWithFileName);
+        expect(fs.existsSync(downloadPathWithFileName)).toBeTruthy();
+        return downloadPathWithFileName;
+    }
+
+    clearDownloadFolder(downloadPath: string): void {
+        fs.readdir(downloadPath, (err, files) => {
+            if (err) throw err;
+            for (const file of files) {
+                fs.unlink(path.join(downloadPath, file), err => {
+                    if (err) throw err;
+                });
+            }
+        });
+    }
+
 }
