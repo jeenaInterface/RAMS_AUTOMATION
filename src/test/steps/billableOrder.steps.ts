@@ -4,6 +4,7 @@ import LoginPage from "../../pages/login.page";
 import { fixture } from "../../hooks/pageFixture";
 import { verify } from "crypto";
 import { create } from "domain";
+import { link } from "fs/promises";
 
 let billableOrderPage: BillableOrderPage;
 
@@ -299,4 +300,12 @@ Then('verify xml generation for the posted MNR credit', async function () {
       const sharedFilePathText = `Report available at shared location: ${filePath}`;
       await this.attach(sharedFilePathText, 'text/plain');
   } 
+}); 
+Then('search for an existing MNR invoice credit and verify the draft invoice number link under Inquire invoice Credit menu', async () => {
+  billableOrderPage = new BillableOrderPage(fixture.page);
+  await billableOrderPage.verifyDraftInvoiceNumberLink();
+});
+
+Then('search for an existing MNR invoice credit and verify the WO number link under Inquire invoice Credit menu', async () => {
+  await billableOrderPage.verifyWONumberLink();
 });

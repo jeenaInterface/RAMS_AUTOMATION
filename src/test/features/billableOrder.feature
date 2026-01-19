@@ -159,18 +159,16 @@ Feature: Verify functionalities under Billable Work Order
     Then verify xml generation for the posted MNR credit
 
 
-  # @verifyTheLinksUnderInvoiceCredit   @sanity @bwo
-  # Scenario: Verify draft invoice number and WO number links under Inquire invoice/Credit menu
+  @verifyTheLinksUnderInvoiceCredit   @sanity @bwo
+  Scenario: Verify draft invoice number and WO number links under Inquire invoice/Credit menu
 
-  #   Given the admin user is logged into the application
-  #   When go to inquire MNR invoice credit menu
-  #   Then search for an existing MNR invoice credit and verify the draft invoice number link
-  #   Then search for an existing MNR invoice credit and verify the WO number link
+    Given the admin user is logged into the application
+    Then search for an existing MNR invoice credit and verify the draft invoice number link under Inquire invoice Credit menu
+    Then search for an existing MNR invoice credit and verify the WO number link under Inquire invoice Credit menu
 
-  # @verifyTheLinksUnderBatchCloseInvoiceCredit   @sanity @bwo
-  # Scenario: Verify draft invoice number and WO number links under Batch close invoice/Credit menu
+  @verifyTheLinksUnderBatchCloseInvoiceCredit   @sanity @bwo
+  Scenario: Verify draft invoice number and WO number links under Batch close invoice/Credit menu
 
-  #   Given the admin user is logged into the application
-  #   When go to inquire batch close MNR invoice credit menu
-  #   Then search for an existing MNR invoice credit and verify the draft invoice number link
-  #   Then search for an existing MNR invoice credit and verify the WO number link
+    Given the admin user is logged into the application
+    Then search for an existing MNR invoice credit and verify the draft invoice number link under Batch close invoice Credit menu
+    Then search for an existing MNR invoice credit and verify the WO number link under Batch close invoice Credit menu

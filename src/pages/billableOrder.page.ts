@@ -158,6 +158,7 @@ export default class BillableOrderPage {
         draftInvoiceSearchCheckPost: "//table[@class='el-table__header']/thead[1]/tr[2]/th[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
         postStaus: "//tbody/tr[1]/td[4]/div[1]/span[1]",
         xmlFile: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[10]/div[1]/button[1]/span[1]/i[1]",
+        woNumberLinkCreditList: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[6]/div[1]/span[1]/a[1]",
 
 
 
@@ -940,9 +941,9 @@ export default class BillableOrderPage {
 
 
     }
- async downloadReport(): Promise<string> {
+    async downloadReport(): Promise<string> {
         // const downloadPath = path.resolve(__dirname, 'downloads');
-            const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\RAMS Reports\\xmlFile.xml';
+        const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\RAMS Reports\\xmlFile.xml';
 
         if (!fs.existsSync(downloadPath)) {
             fs.mkdirSync(downloadPath, { recursive: true });
@@ -969,4 +970,74 @@ export default class BillableOrderPage {
         });
     }
 
+
+    async verifyDraftInvoiceNumberLink(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.inquireInvoceCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.searchButton).click();
+        await fixture.page.waitForTimeout(1000);
+        const Text = await this.page.locator(this.Elements.draftInvoiceNumberLink).textContent();
+        await this.page.locator(this.Elements.draftInvoiceNumberLink).click();
+        const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
+
+            if (match && match[1] && match[2]) {
+                this.mnrCreditNumber = match[1];  // e.g., "00101886"
+                this.creditStatus = match[2];            // e.g., "Draft"
+                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('Status:', this.creditStatus);
+            }
+        }
+        //verify the status is Closed
+        await expect.soft(this.page.locator(this.Elements.headerTitleMNRCredit)).toContainText(Text);
+        await fixture.page.waitForTimeout(3000);
+    }
+
+    async verifyWONumberLink(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.inquireInvoceCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.searchButton).click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.woNumberLinkCreditList).click();
+        const element = await fixture.page.locator(this.Elements.headerTitle).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.billableOrderNumber = match[1];
+                console.log(this.billableOrderNumber);
+                // Use billableOrderNumber as needed
+
+
+            }
+            // Extract status from parentheses: "(Draft)", "(Complete)", etc.
+            const statusMatch = text.match(/\(([^)]+)\)$/);
+            if (statusMatch && statusMatch[1]) {
+                this.billableOrderStatus = statusMatch[1];
+                console.log('Status:', this.billableOrderStatus);
+            }
+        }
+        //verify the status is drafted
+        await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText(this.billableOrderNumber);
+        await fixture.page.waitForTimeout(3000);
+    }
+     async BatchCloseCreditVerifyLinks(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.BatchCloseCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.draftInvoiceNoSearchBatchClose).fill(this.mnrCreditNumber);
+        await this.base.waitAndClick(this.Elements.checkBoxDraftInvoiceBatchClose);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.batchCloseButtonCredit);
+        await this.base.waitAndClick(this.Elements.batchCloseOkButtonCredit);
+        await this.page.waitForTimeout(1000);
+
+    }
 }
