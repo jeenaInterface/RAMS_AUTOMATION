@@ -145,26 +145,6 @@ Feature: Add, Update, and Search Functionalities in material Module
         And clicks on the adjust button without updating the quantity
         When the admin updates the OH quantity of multiple stocks and verifies the success message
 
-    # @materialUsage @sanity
-    # Scenario: Verify material usage recording and OH quantity update after creating unbillable order
-    #     Given the admin user is logged into the application
-    #     Then the admin navigates to the material creation page
-    #     When enters all required details to create a new material
-    #     Then the created Stock No is captured for further use
-    #     And submits the create order form after filling in the required order details
-    #     Then the Purchase Order number is captured for further use
-
-    #     Then partially receive the order and review
-    #     And track the receiving document number for further use
-    #     Then go to unbillable order page and create unbillable order by using the created material
-    #     Then the unbillable work order number is captured for further use
-    #     Then the admin searches for an existing material by Stock No.
-    #     Then click on the link
-    #     Then click on the record material usage button
-    #     And verifies that the material OH quantity is updated accordingly after recording the material usage
-    #     Then verifies that the material usage record is created successfully
-    #     Then go to asset page and open the asset linked to the unbillable order
-    #     Then Open repair asset and verify the material usage is recorded under the asset
 
     @ReceiveMaterialANDVerify @sanity
     Scenario: Verify create PO order and receive functionalities
@@ -317,3 +297,23 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the admin searches by vendor and verify results '1080217000'
         Then the admin searches by status and verify results 'Returned'
 
+    @materialUsage @sanity
+    Scenario: Verify material usage recording and OH quantity update after creating unbillable order
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        Then the created Stock No is captured for further use
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+
+        Then partially receive the order and review
+        And track the receiving document number for further use
+        # Then go to unbillable order page and create unbillable order by using the created material
+        # Then the unbillable work order number is captured for further use
+        # Then the admin searches for an existing material by Stock No.
+        # Then click on the link
+        # Then click on the record material usage button and verify the record for unbillable orer is present
+        # And verifies that the material OH quantity is updated accordingly after recording the material usage
+        # Then verifies that the material usage record is created successfully by click on the link on the inquire material
+        # Then go to asset page and open the asset linked to the unbillable order
+        # Then Open repair asset and verify the material usage is recorded under the asset

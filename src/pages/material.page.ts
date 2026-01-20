@@ -20,6 +20,8 @@ export default class MaterialPage {
     public outStandingQuantity: string = '';
     public RMA: string = '';
     public workOrderNumber: string = '';
+    public manufaturesPartNumber: string ='';
+    public materialDescription: string='';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -184,6 +186,12 @@ export default class MaterialPage {
         okButtonOnCompletePopup: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
         closeButtonWO: "//span[normalize-space()='Close']",
         OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
+        materialUsageButton: "//button[contains(.,'Material Usage')]",
+        woNumberSearch: "(//span[normalize-space(text())='Used By(Mechanic)']/following::input)[1]",
+        woNumberSearchResult: "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/span[1]",
+        materialUsageCloseButton: "(//i[@class='el-dialog__close el-icon el-icon-close'])[2]",
+        clickUsageLink: "//tbody/tr[1]/td[1]/div[1]/a[1]",
+
 
 
 
@@ -210,9 +218,10 @@ export default class MaterialPage {
             await fileInput.setInputFiles(imagePath);
         }
         await fixture.page.waitForTimeout(1000);
+        this.manufaturesPartNumber = `MPN-${randomNumber}`;
 
         // Fill stock no and description and manufacturer's part no
-        await this.page.locator(this.Elements.manufacturerPartNoInput).fill(`MPN-${randomNumber}`);
+        await this.page.locator(this.Elements.manufacturerPartNoInput).fill(this.manufaturesPartNumber);
         await this.page.locator(this.Elements.manufacturerInput).fill(`MAN-${randomNumber}`);
         await this.page.locator(this.Elements.descriptionInput).fill(this.description);
         await this.page.locator('form i').first().click();
@@ -1446,6 +1455,98 @@ export default class MaterialPage {
         }
 
     }
-    
+    async createUnbillableOrderToCheckOH(): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('IYAG6');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'IYAG6' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('2ME - Mechanical').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('GW - Straighten and weld').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type(this.stockNo);
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `${this.stockNo} - ${this.manufaturesPartNumber} - ${this.description}`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.closeButtonWO).click();
+        await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        const element = await fixture.page.locator(this.Elements.headertitle).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.workOrderNumber = match[1];
+                console.log(this.workOrderNumber);
+                // Use workOrderNumber as needed
+            }
+        }
+
+    }
+    async clickonMaterialUsageButton(): Promise<void> {
+
+        await this.base.waitAndClick(this.Elements.materialUsageButton);
+        await fixture.page.waitForTimeout(500);
+    }
+    async VerifyMaterialUsagefunctionlity(): Promise<void> {
+
+        await this.page.locator(this.Elements.woNumberSearch).fill(this.workOrderNumber);
+
+        // Get the text content from the search result element
+        const woNumberSearchText = await this.page.locator(this.Elements.woNumberSearchResult).textContent();
+
+        // Verify the values are equal
+        expect(woNumberSearchText?.trim()).toBe(this.workOrderNumber);
+        await this.base.waitAndClick(this.Elements.materialUsageCloseButton);
+
+    }
+    async verifyStockCountAfterReceive(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        const firstRow = this.page.locator("//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/div[1]/span[1]");
+        const txt = (await firstRow.textContent());
+        await expect(txt).toContain('24');
+
+    }
+
+    async clickMaterialUsageLink(): Promise<void> {
+
+        await this.base.waitAndClick(this.Elements.clickUsageLink);
+        await fixture.page.waitForTimeout(500);
+    }
+        async goToAsset(): Promise<void> {
+
+        await this.base.waitAndClick(this.Elements.clickUsageLink);
+        await fixture.page.waitForTimeout(500);
+    }
+
 }
 

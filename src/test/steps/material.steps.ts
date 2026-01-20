@@ -450,3 +450,35 @@ Then('the admin searches by vendor and verify results {string}', async (vendor: 
 Then('the admin searches by status and verify results {string}', async (status: string) => {
   await materialPage.searchReturnByStatus(status);
 });
+Then('go to unbillable order page and create unbillable order by using the created material', async () => {
+  await materialPage.createUnbillableOrderToCheckOH();
+});
+Then('the unbillable work order number is captured for further use', async function (this: any) {
+
+
+  // Prefer stored property if set during previous flow
+  let UnBillableWONumber = materialPage.workOrderNumber || '';
+
+
+  // Attach Receiving Doc number to Cucumber report
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Un billable WO number: ${UnBillableWONumber}`);
+  } else {
+    fixture.logger?.info(`Un billable WO number: ${UnBillableWONumber}`);
+  }
+
+});
+Then('click on the record material usage button and verify the record for unbillable orer is present', async () => {
+  await materialPage.clickonMaterialUsageButton();
+   await materialPage.VerifyMaterialUsagefunctionlity();
+});
+Then('verifies that the material OH quantity is updated accordingly after recording the material usage', async () => {
+  await materialPage.verifyStockCountAfterReceive();
+});
+Then('verifies that the material usage record is created successfully by click on the link on the inquire material', async () => {
+  await materialPage.clickOnInquireMaterialMenu();
+  await materialPage.searchMaterialByStockNo();
+   await materialPage.clickMaterialUsageLink();
+   await materialPage.VerifyMaterialUsagefunctionlity();
+
+});
