@@ -159,6 +159,34 @@ export default class BillableOrderPage {
         postStaus: "//tbody/tr[1]/td[4]/div[1]/span[1]",
         xmlFile: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[10]/div[1]/button[1]/span[1]/i[1]",
         woNumberLinkCreditList: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[6]/div[1]/span[1]/a[1]",
+        batchCloseInvoiceNumber: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]/a[1]",
+        batchCloseWONumber: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/span[1]/a[1]",
+        batchPostInvoiceNumber: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]/span[1]/a[1]",
+        batchPostWONumber: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/span[1]/a[1]",
+
+        openInvoiceCreditMenu: "//span[normalize-space(text())='- Create Open Invoice/Credit']",
+        billingPartyList: "(//label[normalize-space(text())='Billing Party']/following::input)[1]",
+        ARGLCode: "(//label[normalize-space(text())='AR GL Code / AR Profit Center / AR Product Code']/following::input)[1]",
+        note: "(//label[normalize-space(text())='Notes']/following::textarea)[1]",
+        plusButton: "(//button[@shape='circle']//i)[1]",
+        itemDescription1: "//tbody/tr[1]/td[1]/div[1]/input[1]",
+        itemDescription2: "//tbody/tr[2]/td[1]/div[1]/input[1]",
+        openInvoiceDraftButton: "//button[contains(.,'Draft')]",
+        rate1: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/table[1]/tbody[1]/tr[1]/td[4]/div[1]/div[1]/input[1]",
+        rate2: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/table[1]/tbody[1]/tr[2]/td[4]/div[1]/div[1]/input[1]",
+        openDraftOKButton: "(//span[normalize-space()='OK'])[1]",
+        operationSearchActionLog: "(//input[@placeholder='--Input Text--'])[6]",
+        opeartionSearchResultOPenCredit: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/div[1]",
+        actionLogCloseButton: "(//i[@class='el-dialog__close el-icon el-icon-close'])[1]",
+        openInvoice: "(//label[normalize-space(text())='Invoice Type']/following::input)[1]",
+
+
+
+
+
+
+
+
 
 
 
@@ -1028,16 +1056,192 @@ export default class BillableOrderPage {
         await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText(this.billableOrderNumber);
         await fixture.page.waitForTimeout(3000);
     }
-     async BatchCloseCreditVerifyLinks(): Promise<void> {
+    async BatchCloseCreditInvoiceNumberVerifyLinks(): Promise<void> {
         await this.page.locator(this.Elements.ARAPMenu).click();
         await this.page.locator(this.Elements.BatchCloseCreditMenu).click();
         await this.page.waitForLoadState('networkidle');
-        await this.page.locator(this.Elements.draftInvoiceNoSearchBatchClose).fill(this.mnrCreditNumber);
-        await this.base.waitAndClick(this.Elements.checkBoxDraftInvoiceBatchClose);
-        await this.page.waitForLoadState('networkidle');
-        await this.base.waitAndClick(this.Elements.batchCloseButtonCredit);
-        await this.base.waitAndClick(this.Elements.batchCloseOkButtonCredit);
+        await this.page.locator(this.Elements.batchCloseInvoiceNumber).click();
+        const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
+            if (match && match[1] && match[2]) {
+                this.mnrCreditNumber = match[1];
+                this.creditStatus = match[2];
+                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('Status:', this.creditStatus);
+            }
+        }
+        //verify the status is Closed
+        await expect.soft(this.page.locator(this.Elements.headerTitleMNRCredit)).toContainText(this.mnrCreditNumber);
         await this.page.waitForTimeout(1000);
+
+    }
+    async BatchCloseWONumberLink(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.BatchCloseCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchCloseWONumber).click();
+        const element = await fixture.page.locator(this.Elements.headerTitle).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+
+            if (match && match[1]) {
+                this.billableOrderNumber = match[1];
+                console.log(this.billableOrderNumber);
+            }
+        }
+        //verify the status is drafted
+        await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText(this.billableOrderNumber);
+        await this.page.waitForTimeout(1000);
+    }
+    async BatchPostInvoiceVerifyLinks(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.batchPostInvoiceCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchPostInvoiceNumber).click();
+        const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
+            if (match && match[1] && match[2]) {
+                this.mnrCreditNumber = match[1];
+                this.creditStatus = match[2];
+                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('Status:', this.creditStatus);
+            }
+        }
+        //verify the status is Closed
+        await expect.soft(this.page.locator(this.Elements.headerTitleMNRCredit)).toContainText(this.mnrCreditNumber);
+        await this.page.waitForTimeout(1000);
+    }
+    async BatchPostWorkOrderVerifyLinks(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.batchPostInvoiceCreditMenu).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.batchPostWONumber).click();
+        const element = await fixture.page.locator(this.Elements.headerTitle).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.billableOrderNumber = match[1];
+                console.log(this.billableOrderNumber);
+            }
+        }
+        //verify the status is drafted
+        await expect.soft(this.page.locator(this.Elements.headerTitle)).toContainText(this.billableOrderNumber);
+        await this.page.waitForTimeout(1000);
+    }
+
+    async OpenCreditMenu(): Promise<void> {
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.openInvoiceCreditMenu).click();
+    }
+
+    async createOpenCredit(): Promise<void> {
+        await this, this.page.locator(this.Elements.billingPartyList).click();
+        await this.page.getByText('CMA - CMA CGM').click();
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await fixture.page.waitForTimeout(500);
+        await this, this.page.locator(this.Elements.ARGLCode).click();
+        await this.page.getByText('400300 / 1215 / MNR_CONTAINER_REPAIR').click();
+        const item1 = this.page.locator(this.Elements.itemDescription1);
+        await item1.fill('Item 1' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.rate1).fill(getRandomInt(10, 100).toString());
+        const item2 = this.page.locator(this.Elements.itemDescription2);
+        await this, this.page.locator(this.Elements.plusButton).click();
+        await item2.fill('Item 2' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.rate2).fill(getRandomInt(10, 100).toString());
+        await this, this.page.locator(this.Elements.openInvoiceDraftButton).click();
+        await this, this.page.locator(this.Elements.openDraftOKButton).click();
+        await fixture.page.waitForTimeout(2000);
+        const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
+            if (match && match[1] && match[2]) {
+                this.mnrCreditNumber = match[1];
+                this.creditStatus = match[2];
+                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('Status:', this.creditStatus);
+            }
+        }
+
+
+    }
+    async VerifyOpenCreditInInquirePage(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.ARAPMenu).click();
+        await this.page.locator(this.Elements.inquireInvoceCreditMenu).click();
+        await this.page.locator(this.Elements.draftInvoiceNumberSearch).fill(this.mnrCreditNumber);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await this.base.waitAndClick(this.Elements.draftInvoiceNumberLink);
+        await this.page.waitForTimeout(1000);
+
+    }
+    async OpenCreditSaveButtonFunctionality(): Promise<void> {
+        await this.page.locator(this.Elements.saveButton).click();
+        await this.page.locator(this.Elements.openDraftOKButton).click();
+    }
+    async OpenCreditCloseButtonFunctionality(): Promise<void> {
+        await this.page.locator(this.Elements.closeButton).click();
+        await this.page.locator(this.Elements.reviewOkButton).click();
+    }
+    async OpenCreditCancelButtonFunctionality(): Promise<void> {
+        await this.page.locator(this.Elements.cancelCreditButton).click();
+        await this.page.locator(this.Elements.openDraftOKButton).click();
+    }
+    async verifyActionLogOpenCredit(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLog);
+        await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.operationSearchActionLog).fill('Cancel Open Invoice/Credit');
+        await fixture.page.waitForTimeout(500);
+        const errorText = await this.page.locator(this.Elements.opeartionSearchResultOPenCredit).textContent();
+        expect(errorText).toContain('Cancel Open Invoice/Credit');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.actionLogCloseButton).click();
+    }
+    async createOpenInvoice(): Promise<void> {
+        await this, this.page.locator(this.Elements.billingPartyList).click();
+        await this.page.getByText('CMA - CMA CGM').click();
+        await this, this.page.locator(this.Elements.openInvoice).click();
+        await this.page.getByText('Open Invoice').nth(1).click();
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await fixture.page.waitForTimeout(500);
+        await this, this.page.locator(this.Elements.ARGLCode).click();
+        await this.page.getByText('400300 / 1215 / MNR_CONTAINER_REPAIR').click();
+        const item1 = this.page.locator(this.Elements.itemDescription1);
+        await item1.fill('Item 1' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.rate1).fill(getRandomInt(10, 100).toString());
+        const item2 = this.page.locator(this.Elements.itemDescription2);
+        await this, this.page.locator(this.Elements.plusButton).click();
+        await item2.fill('Item 2' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.rate2).fill(getRandomInt(10, 100).toString());
+        await this, this.page.locator(this.Elements.openInvoiceDraftButton).click();
+        await this, this.page.locator(this.Elements.openDraftOKButton).click();
+        await fixture.page.waitForTimeout(2000);
+        const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
+        const text = element ? element.toString() : '';
+        if (text) {
+            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
+            if (match && match[1] && match[2]) {
+                this.mnrCreditNumber = match[1];
+                this.creditStatus = match[2];
+                console.log('Open Invoice Number:', this.mnrCreditNumber);
+                console.log('Status:', this.creditStatus);
+            }
+        }
+
 
     }
 }

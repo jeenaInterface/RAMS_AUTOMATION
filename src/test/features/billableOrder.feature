@@ -172,3 +172,10 @@ Feature: Verify functionalities under Billable Work Order
     Given the admin user is logged into the application
     Then search for an existing MNR invoice credit and verify the draft invoice number link under Batch close invoice Credit menu
     Then search for an existing MNR invoice credit and verify the WO number link under Batch close invoice Credit menu
+
+      @verifyTheLinksUnderBatchPost  @sanity @bwo
+  Scenario: Verify draft invoice number and WO number links under Batch Post menu
+
+    Given the admin user is logged into the application
+    Then search for an existing MNR invoice credit and verify the draft invoice number link under Batch post menu
+    Then search for an existing MNR invoice credit and verify the WO number link under Batch post menu

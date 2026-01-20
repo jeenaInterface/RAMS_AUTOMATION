@@ -281,7 +281,7 @@ Then('go to batch post invoice credit and post the closed MNR credit', async () 
   await billableOrderPage.BatchPost();
 });
 
-Then('check post Result', async function (this: any) { 
+Then('check post Result', async function (this: any) {
   await billableOrderPage.postStatus();
   //attach credit status to report
   let postStatus = billableOrderPage.postStatusOriginal || '';
@@ -289,18 +289,19 @@ Then('check post Result', async function (this: any) {
     await this.attach(`MNR CREDIT POST STATUS: ${postStatus}`, 'text/plain');
   } else {
     fixture.logger?.info(`MNR CREDIT POST STATUS: ${postStatus}`);
-  }     
+  }
 });
 
 Then('verify xml generation for the posted MNR credit', async function () {
-  const filePath = await billableOrderPage.downloadReport();    
+  const filePath = await billableOrderPage.downloadReport();
   // Attach a clickable text or path to the report for users to access manually
   if (this.attach) {
-      // Attach as plain text or as HTML link if supported
-      const sharedFilePathText = `Report available at shared location: ${filePath}`;
-      await this.attach(sharedFilePathText, 'text/plain');
-  } 
-}); 
+    // Attach as plain text or as HTML link if supported
+    const sharedFilePathText = `Report available at shared location: ${filePath}`;
+    await this.attach(sharedFilePathText, 'text/plain');
+
+  }
+});
 Then('search for an existing MNR invoice credit and verify the draft invoice number link under Inquire invoice Credit menu', async () => {
   billableOrderPage = new BillableOrderPage(fixture.page);
   await billableOrderPage.verifyDraftInvoiceNumberLink();
@@ -308,4 +309,107 @@ Then('search for an existing MNR invoice credit and verify the draft invoice num
 
 Then('search for an existing MNR invoice credit and verify the WO number link under Inquire invoice Credit menu', async () => {
   await billableOrderPage.verifyWONumberLink();
+});
+Then('search for an existing MNR invoice credit and verify the draft invoice number link under Batch close invoice Credit menu', async () => {
+  billableOrderPage = new BillableOrderPage(fixture.page);
+  await billableOrderPage.BatchCloseCreditInvoiceNumberVerifyLinks();
+});
+
+Then('search for an existing MNR invoice credit and verify the WO number link under Batch close invoice Credit menu', async () => {
+  await billableOrderPage.BatchCloseWONumberLink();
+});
+Then('search for an existing MNR invoice credit and verify the draft invoice number link under Batch post menu', async () => {
+  billableOrderPage = new BillableOrderPage(fixture.page);
+  await billableOrderPage.BatchPostInvoiceVerifyLinks();
+});
+
+Then('search for an existing MNR invoice credit and verify the WO number link under Batch post menu', async () => {
+  await billableOrderPage.BatchPostWorkOrderVerifyLinks();
+});
+
+Then('Go to Create open Invoice Credit menu', async () => {
+  billableOrderPage = new BillableOrderPage(fixture.page);
+  await billableOrderPage.OpenCreditMenu();
+});
+Then('Create a new open credit by entering all the required fields and save it as draft', async () => {
+  await billableOrderPage.createOpenCredit();
+});
+Then('Create a new open invoice by entering all the required fields and save it as draft', async () => {
+  await billableOrderPage.createOpenInvoice();
+});
+
+
+Then('Go to Inquire open Invoice Credit menu and Search for the created open credit', async () => {
+  await billableOrderPage.VerifyOpenCreditInInquirePage();
+});
+Then('Go to Inquire open Invoice Credit menu and Search for the created open invoice', async () => {
+  await billableOrderPage.VerifyOpenCreditInInquirePage();
+});
+Then('verify save functionality for open credit', async () => {
+  await billableOrderPage.OpenCreditSaveButtonFunctionality();
+});
+Then('verify save functionality for open invoice', async () => {
+  await billableOrderPage.OpenCreditSaveButtonFunctionality();
+});
+Then('Capture the open credit number', async function (this: any) {
+
+  let mnrCreditNum = billableOrderPage.mnrCreditNumber;
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Open CREDIT NUMBER: ${mnrCreditNum}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`Open CREDIT NUMBER: ${mnrCreditNum}`);
+  }
+});
+Then('Capture the open invoice number', async function (this: any) {
+
+  let mnrCreditNum = billableOrderPage.mnrCreditNumber;
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`Open INVOICE NUMBER: ${mnrCreditNum}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`Open INVOICE NUMBER: ${mnrCreditNum}`);
+  }
+});
+Then('verify close functionality for open credit', async () => {
+  await billableOrderPage.OpenCreditCloseButtonFunctionality();
+});
+Then('verify close functionality for open invoice', async () => {
+  await billableOrderPage.OpenCreditCloseButtonFunctionality();
+});
+Then('verify cancel functionality for open credit', async () => {
+  await billableOrderPage.OpenCreditCancelButtonFunctionality();
+});
+Then('verify cancel functionality for open invoice', async () => {
+  await billableOrderPage.OpenCreditCancelButtonFunctionality();
+});
+Then('verify action log functionality for open credit', async () => {
+  await billableOrderPage.verifyActionLogOpenCredit();
+});
+
+Then('go to batch post and do batch post for above open credit', async () => {
+  await billableOrderPage.BatchPost();
+});
+Then('go to batch post and do batch post for above open invoice', async () => {
+  await billableOrderPage.BatchPost();
+});
+
+Then('check post result of open credit', async function (this: any) {
+  await billableOrderPage.postStatus();
+  //attach credit status to report
+  let postStatus = billableOrderPage.postStatusOriginal || '';
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`MNR CREDIT POST STATUS: ${postStatus}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`MNR CREDIT POST STATUS: ${postStatus}`);
+  }
+});
+
+Then('check post result of open invoice', async function (this: any) {
+  await billableOrderPage.postStatus();
+  //attach credit status to report
+  let postStatus = billableOrderPage.postStatusOriginal || '';
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`MNR INVOICE POST STATUS: ${postStatus}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`MNR INVOICE POST STATUS: ${postStatus}`);
+  }
 });
