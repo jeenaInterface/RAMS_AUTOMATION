@@ -275,8 +275,8 @@ export default class BillableOrderPage {
         await this.page.getByText('CF9N - FRONT').first().click();
         //enter parts details
         await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).click();
-        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).fill('1004');
-        await this.page.getByText('1004 - 12-010 - gladhand').first().click();
+        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).fill('1020');
+        await this.page.getByText('1020 - GT-2600 - grommet gladhand seal').first().click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');

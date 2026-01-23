@@ -308,12 +308,11 @@ Feature: Add, Update, and Search Functionalities in material Module
 
         Then partially receive the order and review
         And track the receiving document number for further use
-        # Then go to unbillable order page and create unbillable order by using the created material
-        # Then the unbillable work order number is captured for further use
-        # Then the admin searches for an existing material by Stock No.
-        # Then click on the link
-        # Then click on the record material usage button and verify the record for unbillable orer is present
-        # And verifies that the material OH quantity is updated accordingly after recording the material usage
-        # Then verifies that the material usage record is created successfully by click on the link on the inquire material
-        # Then go to asset page and open the asset linked to the unbillable order
-        # Then Open repair asset and verify the material usage is recorded under the asset
+        Then go to unbillable order page and create unbillable order by using the created material
+        Then the unbillable work order number is captured for further use
+        Then the admin searches for the material by Stock No.
+        Then click on the link
+        Then click on the record material usage button and verify the record for unbillable orer is present
+        Then verifies that the material usage record is created successfully by click on the link on the inquire material
+        Then go to asset page and open the asset linked to the unbillable order
+        Then Open repair asset and verify the material usage is recorded under the asset

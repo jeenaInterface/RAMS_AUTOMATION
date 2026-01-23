@@ -20,8 +20,8 @@ export default class MaterialPage {
     public outStandingQuantity: string = '';
     public RMA: string = '';
     public workOrderNumber: string = '';
-    public manufaturesPartNumber: string ='';
-    public materialDescription: string='';
+    public manufaturesPartNumber: string = '';
+    public materialDescription: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -188,14 +188,41 @@ export default class MaterialPage {
         OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
         materialUsageButton: "//button[contains(.,'Material Usage')]",
         woNumberSearch: "(//span[normalize-space(text())='Used By(Mechanic)']/following::input)[1]",
-        woNumberSearchResult: "/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/span[1]",
+        woNumberSearchResult: "xpath=/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/span[1]",
         materialUsageCloseButton: "(//i[@class='el-dialog__close el-icon el-icon-close'])[2]",
+        materialUsageCloseButton2: "(//button[@aria-label='Close']//i)[1]",
         clickUsageLink: "//tbody/tr[1]/td[1]/div[1]/a[1]",
-
-
-
+        systemSettingsMenu: "//span[normalize-space(text())='System Setting']",
+        assetMenu: "//span[normalize-space(text())='- Asset']",
+        firstRowEdit: "//i[@class='ivu-icon ivu-icon-edit']",
+        inquireSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        repairRecords: "//span[normalize-space()='Repair Records']",
+        wonumberSearchRepairAsset: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        woResultRepairOrder: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]",
+        RepairOrderCloseButton: "(//button[@aria-label='Close']//i)[1]",
+        wosearchResult2:"xpath=/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/span[1]"
 
     };
+    async clickOnAssetMenu(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.systemSettingsMenu);
+        await this.base.waitAndClick(this.Elements.assetMenu);
+        await this.page.locator(this.Elements.inquireSearchBox).fill('IYAG6');
+        await this.page.locator(this.Elements.firstRowEdit).click();
+        await fixture.page.waitForTimeout(1000);
+
+    }
+    async clickOnReapirAsset(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.repairRecords);
+        await this.page.locator(this.Elements.wonumberSearchRepairAsset).fill(this.workOrderNumber);
+        const woNumberSearchText = await this.page.locator(this.Elements.woResultRepairOrder).textContent();
+
+        // Verify the values are equal
+        expect(woNumberSearchText?.trim()).toBe(this.workOrderNumber);
+        await this.base.waitAndClick(this.Elements.RepairOrderCloseButton);
+
+
+
+    }
 
     async clickOnCreateMaterialMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.materialMenu);
@@ -205,6 +232,9 @@ export default class MaterialPage {
     async clickOnInquireMaterialMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.materialMenu);
         await this.base.waitAndClick(this.Elements.inquireMaterialMenu);
+    }
+    async clickOnMaterialMenu(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.materialMenu);
     }
 
     async createNewMaterial(): Promise<void> {
@@ -277,20 +307,21 @@ export default class MaterialPage {
         await this.clickOnInquireMaterialMenu();
         await fixture.page.waitForTimeout(1000);
         console.log("Captured Stock No for verification:", this.stockNo);
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stocknumbersearch).fill(this.stockNo);
         // await this.page.locator(this.Elements.stocknumbersearch).fill("7805");
+        await fixture.page.waitForTimeout(500);
         await this.base.waitAndClick(this.Elements.searchButton);
         await fixture.page.waitForTimeout(500);
     }
-    // async searchMaterialByStockNo(): Promise<void> {
-    //     await fixture.page.waitForTimeout(500);
-    //     await this.clickOnInquireMaterialMenu();
-    //     await fixture.page.waitForTimeout(500);
-    //     await this.page.locator(this.Elements.stocknumbersearch).fill('7781');
-    //     await this.base.waitAndClick(this.Elements.searchButton);
-    //     await fixture.page.waitForTimeout(500);
-    // }
+    async searchMaterialByStockNo1(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.clickOnInquireMaterialMenu();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.stocknumbersearch).fill(this.stockNo);
+        await this.page.locator(this.Elements.searchButton).first().click();
+        await fixture.page.waitForTimeout(500);
+    }
     async clickonLink(): Promise<void> {
 
         await this.base.waitAndClick(this.Elements.link);
@@ -1513,7 +1544,7 @@ export default class MaterialPage {
 
     }
     async clickonMaterialUsageButton(): Promise<void> {
-
+        await fixture.page.waitForTimeout(500);
         await this.base.waitAndClick(this.Elements.materialUsageButton);
         await fixture.page.waitForTimeout(500);
     }
@@ -1529,6 +1560,18 @@ export default class MaterialPage {
         await this.base.waitAndClick(this.Elements.materialUsageCloseButton);
 
     }
+    async VerifyMaterialUsagefunctionlityLink(): Promise<void> {
+
+        await this.page.locator(this.Elements.woNumberSearch).fill(this.workOrderNumber);
+
+        // Get the text content from the search result element
+        const woNumberSearchText = await this.page.locator(this.Elements.wosearchResult2).textContent();
+
+        // Verify the values are equal
+        expect(woNumberSearchText?.trim()).toBe(this.workOrderNumber);
+        await this.base.waitAndClick(this.Elements.materialUsageCloseButton2);
+
+    }
     async verifyStockCountAfterReceive(): Promise<void> {
         await fixture.page.waitForTimeout(500);
         const firstRow = this.page.locator("//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/div[1]/span[1]");
@@ -1538,11 +1581,11 @@ export default class MaterialPage {
     }
 
     async clickMaterialUsageLink(): Promise<void> {
-
+        await fixture.page.waitForTimeout(500);
         await this.base.waitAndClick(this.Elements.clickUsageLink);
         await fixture.page.waitForTimeout(500);
     }
-        async goToAsset(): Promise<void> {
+    async goToAsset(): Promise<void> {
 
         await this.base.waitAndClick(this.Elements.clickUsageLink);
         await fixture.page.waitForTimeout(500);

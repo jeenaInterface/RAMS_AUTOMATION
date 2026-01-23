@@ -85,7 +85,7 @@ Feature: Verify functionalities under Billable Work Order
     Then go to inquire mnr invoice and verify the created mnr invoice from the closed billable work order
 
   @searchInquireBO @sanity @bwo
-  Scenario: Verify mnr invoice generation from billable work order
+  Scenario: Verify search functionality in inquire billiable order
     Given the admin user is logged into the application
     And searches for a billable work order using the asset 'GACZ401537' and verifies the search results
     Then searches for a billable work order using the billable asset description '40CZ - 40' and verifies the search results

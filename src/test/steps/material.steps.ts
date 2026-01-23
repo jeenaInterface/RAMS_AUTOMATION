@@ -45,7 +45,9 @@ When('the admin navigates to the inquire material page', async () => {
 Then('the admin searches for an existing material by Stock No.', async () => {
   await materialPage.searchMaterialByStockNo();
 });
-
+Then('the admin searches for the material by Stock No.', async () => {
+  await materialPage.searchMaterialByStockNo1();
+});
 Then('verifies that the search results display the correct Stock No.', async () => {
   await materialPage.verifySearchResultByStockNo();
 });
@@ -476,9 +478,17 @@ Then('verifies that the material OH quantity is updated accordingly after record
   await materialPage.verifyStockCountAfterReceive();
 });
 Then('verifies that the material usage record is created successfully by click on the link on the inquire material', async () => {
-  await materialPage.clickOnInquireMaterialMenu();
-  await materialPage.searchMaterialByStockNo();
+  await materialPage.clickOnMaterialMenu();
+  await materialPage.searchMaterialByStockNo1();
    await materialPage.clickMaterialUsageLink();
-   await materialPage.VerifyMaterialUsagefunctionlity();
+   await materialPage.VerifyMaterialUsagefunctionlityLink();
 
 });
+Then('go to asset page and open the asset linked to the unbillable order', async () => {
+  await materialPage.clickOnAssetMenu();
+});
+Then('Open repair asset and verify the material usage is recorded under the asset', async () => {
+  await materialPage.clickOnReapirAsset();
+});
+
+

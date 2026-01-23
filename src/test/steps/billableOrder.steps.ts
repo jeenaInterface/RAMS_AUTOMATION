@@ -16,7 +16,7 @@ When('the admin navigates to the billable work order creation menu', async () =>
 
 When('enters all the required fields for billable work order and clicks on the Draft button', async () => {
   await billableOrderPage.createNewBillableOrder();
-  // await billableOrderPage.clickOnDraftButton();
+  await billableOrderPage.clickOnDraftButton();
 });
 
 Then("verify the status of the billable work order is Drafted", async function (this: any) {
