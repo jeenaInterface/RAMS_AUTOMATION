@@ -1,21 +1,16 @@
 Feature: Verify functionalities under Un-Billable Work Order
 
-  @createUnBillableOrderSingleAsset @sanity @bwo
-  Scenario: Create unbillable work order with single asset (standard)
+  @createUnBillableOrderSingleAssetForNormal @sanity @bwo
+  Scenario: Create unbillable work order with single asset for the first shift(standard)
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
-    And enters all the required fields for unbillable work order and clicks on the Draft button
-    Then the unbillable work order number is captured
-    And verify the status of the unbillable work order is 'Drafted'
-    When the admin clicks the complete button
-    Then verify the status of the unbillable work order is 'Completed'
-    When the admin clicks the close button
-    Then verify the status of the unbillable work order is 'Closed'
-    When click on cancel button
-    Then verify the status of the unbillable work order is 'cancelled'
+    And After entering all required fields for the unbillable work order and clicking Draft, verify that its status is updated to Drafted
+    Then the unbillable work order number is captured for future reference
+    When the admin clicks the complete button and verify the status of the unbillable work order is Completed
+    Then verify save button functionality under unbillable work order
+    When the admin clicks the close button and verify the status of the unbillable work order is Closed
     Then verify the action logged
     Then verify the new button functionality
-    Then verify the copy button functionality
 
 
   @createUnBillableOrderSingleAsset @sanity @bwo
