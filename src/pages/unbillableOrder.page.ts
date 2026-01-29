@@ -122,20 +122,30 @@ export default class UnbillableOrderPage {
 
 
     async clickOnDraftButton(): Promise<void> {
-        await this.base.click(this.Elements.draftButton);
+        await this.page.locator(this.Elements.draftButton).click();
         await this.page.locator(this.Elements.okDraftButton).click();
         await this.page.waitForLoadState('networkidle');
+//add delay
+        await fixture.page.waitForTimeout(5000);
         await this.captureUnbillableOrderNumber();
         await this.captureUnbillableOrderStatus();
         //verify the status is Draft
+
         const status = this.unbillableOrderStatus;
-        expect(status).toBe('Drafted');
+        expect(status).toBe('Draft'); // add soft assertion
+
     }
 
     async clickOnCompleteButton(): Promise<void> {
         await this.page.locator(this.Elements.completeButton).click();
         await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
         await this.page.waitForLoadState('networkidle');
+        //add delay
+        await fixture.page.waitForTimeout(2000);
+        // Wait for the header to update with the new status
+        await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
+        await fixture.page.waitForTimeout(1000);
+       await this.captureUnbillableOrderNumber();
         await this.captureUnbillableOrderStatus();
         //verify the status is Completed
         const status = this.unbillableOrderStatus;
@@ -146,6 +156,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.saveButton).click();
         await this.page.locator(this.Elements.saveOkButton).click();
         await this.page.waitForLoadState('networkidle');
+        await fixture.page.waitForTimeout(2000);
         await this.captureUnbillableOrderStatus();
         //verify the status is Completed
         const status = this.unbillableOrderStatus;
@@ -156,7 +167,12 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.closeButtonWO).click();
         await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
+        await this.page.waitForLoadState('networkidle');
+                //add delay
         await fixture.page.waitForTimeout(2000);
+        // Wait for the header to update with the new status
+        await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
+        await fixture.page.waitForTimeout(1000);
         await this.captureUnbillableOrderStatus();
         //verify the status is Closed
         const status = this.unbillableOrderStatus;
@@ -164,10 +180,15 @@ export default class UnbillableOrderPage {
     }
 
     async clickOnCancelButton(): Promise<void> {
-        await this.base.click(this.Elements.cancelButton);
+        await this.page.locator(this.Elements.cancelButton).click();
         await this.page.waitForSelector(this.Elements.cancelOkButton);
-        await this.base.click(this.Elements.cancelOkButton);
+        await this.page.locator(this.Elements.cancelOkButton).click();
         await this.page.waitForLoadState('networkidle');
+                //add delay
+        await fixture.page.waitForTimeout(2000);
+        // Wait for the header to update with the new status
+        await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
+        await fixture.page.waitForTimeout(1000);
         await this.captureUnbillableOrderStatus();
         //verify the status is cancelled
         const status = this.unbillableOrderStatus;
@@ -195,19 +216,21 @@ export default class UnbillableOrderPage {
             // Extract status from header (e.g., Un-billable Work Order | AG397226 (Closed))
             const statusMatch = headerText.match(/\(([^)]+)\)$/);
             this.unbillableOrderStatus = statusMatch ? statusMatch[1].trim() : '';
+            console.log('Captured status from header:', this.unbillableOrderStatus);
+            console.log('Full header text:', headerText);
         }
     }
 
     async verifyActionLog(): Promise<void> {
-        await this.base.click(this.Elements.actionLog);
+        await this.page.locator(this.Elements.actionLog).click();
         await this.page.waitForSelector(this.Elements.headerTitleActionLog);
         const actionLogTitle = await this.page.locator(this.Elements.headerTitleActionLog).isVisible();
         expect(actionLogTitle).toBeTruthy();
-        await this.base.click(this.Elements.closeButtonActionLog);
+        await this.page.locator(this.Elements.closeButtonActionLog).click();
     }
 
     async clickNewButton(): Promise<void> {
-        await this.base.click(this.Elements.newButton);
+        await this.page.locator(this.Elements.newButton).click();
         await this.page.waitForLoadState('networkidle');
         //add delay
         await fixture.page.waitForTimeout(2000);

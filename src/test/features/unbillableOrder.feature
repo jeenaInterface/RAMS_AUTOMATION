@@ -5,8 +5,8 @@ Feature: Verify functionalities under Un-Billable Work Order
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And After entering all required fields for the unbillable work order and clicking Draft, verify that its status is updated to Drafted
-    Then the unbillable work order number is captured for future reference
     When the admin clicks the complete button and verify the status of the unbillable work order is Completed
+    Then the unbillable work order number is captured for future reference
     Then verify save button functionality under unbillable work order
     When the admin clicks the close button and verify the status of the unbillable work order is Closed
     Then verify the action logged
