@@ -228,12 +228,12 @@ export default class BillableOrderPage {
         const notesInput = this.page.locator(this.Elements.notes);
         await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
         await fixture.page.waitForTimeout(500);
-        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).click();
-        await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).fill('3452');
-        await this.page.getByText('3452 - M190FR - lamp 2" red flange LED').click();
-        await fixture.page.waitForTimeout(2000);
-        await this.page.locator(this.Elements.stockQuantitywo).click();
-        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+        // await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).click();
+        // await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).fill('3452');
+        // await this.page.getByText('3452 - M190FR - lamp 2" red flange LED').click();
+        // await fixture.page.waitForTimeout(2000);
+        // await this.page.locator(this.Elements.stockQuantitywo).click();
+        // await this.page.locator(this.Elements.stockQuantitywo).fill('1');
 
     }
 
@@ -304,8 +304,9 @@ export default class BillableOrderPage {
         //enter parts details
         await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).nth(1).click();
         await this.page.getByRole('cell', { name: 'Stock No. --Input Text or Look up-- ' }).getByRole('textbox', { name: '--Input Text or Look up--' }).nth(1).fill('1020');
-        await this.page.getByText('1020 - GT-2600 - grommet gladhand seal').nth(1).click();
         await fixture.page.waitForTimeout(2000);
+        await this.page.getByText('1020 - GT-2600 - grommet gladhand seal').nth(1).click();
+        await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.stockQuantitywo2).click();
         await this.page.locator(this.Elements.stockQuantitywo2).fill('1');
 

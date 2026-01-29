@@ -17,7 +17,7 @@ Feature: Verify functionalities under Billable Work Order
   Scenario: Verify billable work order copy, cancel, new, print, email and save functionalities
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
-    And Opens an existing billable work order 'CH397015'
+    And Opens an existing billable work order 'CH412307'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete button
@@ -43,7 +43,7 @@ Feature: Verify functionalities under Billable Work Order
   Scenario: Verify billable work order batch review and batch close functionalities
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
-    And Opens an existing billable work order 'CH397015'
+    And Opens an existing billable work order 'CH412307'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete button
@@ -59,7 +59,7 @@ Feature: Verify functionalities under Billable Work Order
   Scenario: Verify billable work order batch review and batch close access from dashboard tab section
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
-    And Opens an existing billable work order 'CH397015'
+    And Opens an existing billable work order 'CH412307'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete button
@@ -76,7 +76,7 @@ Feature: Verify functionalities under Billable Work Order
 
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
-    And Opens an existing billable work order 'CH397015'
+    And Opens an existing billable work order 'CH412307'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete, review and close the order
@@ -102,7 +102,7 @@ Feature: Verify functionalities under Billable Work Order
 
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
-    And Opens an existing billable work order 'CH397015'
+    And Opens an existing billable work order 'CH412307'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete, review and close the order
@@ -116,7 +116,7 @@ Feature: Verify functionalities under Billable Work Order
 
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
-    And Opens an existing billable work order 'CH397015'
+    And Opens an existing billable work order 'CH412307'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete, review and close the order
@@ -132,7 +132,7 @@ Feature: Verify functionalities under Billable Work Order
 
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
-    And Opens an existing billable work order 'CH397015'
+    And Opens an existing billable work order 'CH412307'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete, review and close the order
@@ -147,7 +147,7 @@ Feature: Verify functionalities under Billable Work Order
   Scenario: From the dashboard tab, navigate to the Batch Open/Close Invoice/Credit menu, close the MNR credit, and perform the post operation.
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
-    And Opens an existing billable work order 'CH397015'
+    And Opens an existing billable work order 'CH412307'
     Then Clicks on the Copy button to duplicate the billable work order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete, review and close the order

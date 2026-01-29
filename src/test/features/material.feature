@@ -146,7 +146,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         When the admin updates the OH quantity of multiple stocks and verifies the success message
 
 
-    @ReceiveMaterialANDVerify @sanity
+    @ReceiveMaterialANDVerify @sanity @material
     Scenario: Verify create PO order and receive functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -167,7 +167,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies the value in the receive status field in PO
         And verifies total order quantity and total outstanding quantity after full receive
 
-    @cancelReceiveMaterial @sanity
+    @cancelReceiveMaterial @sanity @material
     Scenario: Verify cancel and action log functionalities in receiving material page
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -186,7 +186,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
 
-    @VerifySearchInquireMaterialReceive @sanity @po
+    @VerifySearchInquireMaterialReceive @sanity  @material
 
     Scenario: Verify search functionalities in inquire material receive page
         Given the admin user is logged into the application
@@ -206,7 +206,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then go to inquire material receive screen and search by Status
         Then go to inquire material receive screen and search by Order Type
 
-    @ReceiveMaterialANDVerifyExternalRo @sanity
+    @ReceiveMaterialANDVerifyExternalRo @sanity @material
     Scenario: Verify create External RO order and receive functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -220,7 +220,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
 
-@BatchReviewReceiving   @sanity
+@BatchReviewReceiving   @sanity @material
    Scenario: Verify Batch Review Receiving Module functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -239,7 +239,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies the value in the receive status field in PO
 
 
-    @BatchReviewReceivingLinks   @sanity
+    @BatchReviewReceivingLinks   @sanity @material
    Scenario: Verify Packslip number and PO number links are redirecting to correct pages in batch review receiving module
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -257,7 +257,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then go to batch review receiving screen
         Then search by PO No. and click on the link and verifies the redirection to correct page
 
-    @ReturnMaterials   @sanity
+    @ReturnMaterials   @sanity @material
    Scenario: Verify Return Material functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -297,7 +297,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the admin searches by vendor and verify results '1080217000'
         Then the admin searches by status and verify results 'Returned'
 
-    @materialUsage @sanity
+    @materialUsage @sanity @material
     Scenario: Verify material usage recording and OH quantity update after creating unbillable order
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
