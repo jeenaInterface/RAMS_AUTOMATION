@@ -21,7 +21,7 @@ export default class UnbillableOrderPage {
     private Elements = {
         WorkOrderMenu: "//span[normalize-space()='Work Order']",
         createUnbillableOrderMenu: "//span[normalize-space()='- Create Un-billable Work Order']",
-        inquireUnbillableOrderMenu: "//span[normalize-space()='- Inquire Unbillable Work Order']",
+        inquireUnbillableOrderMenu: "//span[normalize-space(text())='- Inquire Un-billable Work Order']",
         assetNo: "(//label[normalize-space(text())='Asset No.']/following::input)[1]",
         assetSearchIcon: "//div[@class='select-lookup form-control']//i[1]",
         assetSearchBox: "(//span[normalize-space(text())='Lookup Asset']/following::input)[1]",
@@ -32,7 +32,7 @@ export default class UnbillableOrderPage {
         draftButton: "(//span[normalize-space()='Draft'])[1]",
         okDraftButton: "(//span[contains(text(),'OK')])[3]",
         closeButton: "(//span[normalize-space()='Close'])[1]",
-        closeButtonActionLog: "(//i[@class='el-dialog__close el-icon el-icon-close'])[2]",
+        closeButtonActionLog: "(//i[@class='el-dialog__close el-icon el-icon-close'])[1]",
         okCompleteButton: "(//span[contains(text(),'OK')])[8]",
         okCloseButton: "(//span[contains(text(),'OK')])[8]",
         cancelButton: "(//span[normalize-space()='Cancel'])[1]",
@@ -67,7 +67,74 @@ export default class UnbillableOrderPage {
         closeButtonWO: "//span[normalize-space()='Close']",
         OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
         headertitle: "(//span[@class='header-title font-size-title'])[1]",
-        saveOkButton:"(//span[contains(text(),'OK')])[4]"
+        saveOkButton: "(//span[contains(text(),'OK')])[4]",
+        specialShiftOption: "(//label[normalize-space(text())='Special Shift']/following::input)[1]",
+        WOLINKE: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
+        agvHours: "(//label[normalize-space(text())='AGV Hours']/following::input)[1]",
+        note: "(//label[normalize-space(text())='Notes']/following::textarea)[1]",
+        lbctLeadCheckBox: "(//span[@class='el-checkbox__inner'])[1]",
+
+        PlusButtonAddAsset1: "(//i[@class='ivu-icon ivu-icon-plus'])[3]",
+        assetNumber2: "(//input[@placeholder='-- Input Text --'])[2]",
+        componentCode2: "(//input[@placeholder='Component Code'])[2]",
+        damageCode2: "(//input[@placeholder='Damage Code'])[2]",
+        repairCode2: "(//input[@placeholder='Repair Code'])[2]",
+        repairLocation2: "(//tr[@class='activity-row'])[2]//input[@placeholder='--Select One--']",
+        actualHours2: "(//div[@class='el-input input-align']//input[@type='text'])[2]",
+        stockQuantitywo2: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[2]",
+
+        plusButtonAddAsset2: "(//i[@class='ivu-icon ivu-icon-plus'])[5]",
+        assetNumber3: "(//input[@placeholder='-- Input Text --'])[3]",
+        componentCode3: "(//input[@placeholder='Component Code'])[3]",
+        damageCode3: "(//input[@placeholder='Damage Code'])[3]",
+        repairCode3: "(//input[@placeholder='Repair Code'])[3]",
+        repairLocation3: "(//tr[@class='activity-row'])[3]//input[@placeholder='--Select One--']",
+        actualHours3: "(//div[@class='el-input input-align']//input[@type='text'])[3]",
+        stockQuantitywo3: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[3]",
+
+        plusButtonAddAsset3: "(//i[@class='ivu-icon ivu-icon-plus'])[7]",
+        assetNumber4: "(//input[@placeholder='-- Input Text --'])[4]",
+        componentCode4: "(//input[@placeholder='Component Code'])[4]",
+        damageCode4: "(//input[@placeholder='Damage Code'])[4]",
+        repairCode4: "(//input[@placeholder='Repair Code'])[4]",
+        repairLocation4: "(//tr[@class='activity-row'])[4]//input[@placeholder='--Select One--']",
+        actualHours4: "(//div[@class='el-input input-align']//input[@type='text'])[4]",
+        stockQuantitywo4: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[4]",
+
+        plusButtonAddAsset4: "(//i[@class='ivu-icon ivu-icon-plus'])[9]",
+        assetNumber5: "(//input[@placeholder='-- Input Text --'])[5]",
+        componentCode5: "(//input[@placeholder='Component Code'])[5]",
+        damageCode5: "(//input[@placeholder='Damage Code'])[5]",
+        repairCode5: "(//input[@placeholder='Repair Code'])[5]",
+        repairLocation5: "(//tr[@class='activity-row'])[5]//input[@placeholder='--Select One--']",
+        actualHours5: "(//div[@class='el-input input-align']//input[@type='text'])[5]",
+        stockQuantitywo5: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[5]",
+
+        plusButtonAddAsset5: "(//i[@class='ivu-icon ivu-icon-plus'])[11]",
+        assetNumber6: "(//input[@placeholder='-- Input Text --'])[6]",
+        componentCode6: "(//input[@placeholder='Component Code'])[6]",
+        damageCode6: "(//input[@placeholder='Damage Code'])[6]",
+        repairCode6: "(//input[@placeholder='Repair Code'])[6]",
+        repairLocation6: "(//tr[@class='activity-row'])[6]//input[@placeholder='--Select One--']",
+        actualHours6: "(//div[@class='el-input input-align']//input[@type='text'])[6]",
+        stockQuantitywo6: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[6]",
+
+        plusButtonAddAsset6:"(//i[@class='ivu-icon ivu-icon-plus'])[13]",
+        assetNumber7: "(//input[@placeholder='-- Input Text --'])[7]",
+        componentCode7: "(//input[@placeholder='Component Code'])[7]",
+        damageCode7: "(//input[@placeholder='Damage Code'])[7]",
+        repairCode7: "(//input[@placeholder='Repair Code'])[7]",
+        repairLocation7: "(//tr[@class='activity-row'])[7]//input[@placeholder='--Select One--']",
+        actualHours7: "(//div[@class='el-input input-align']//input[@type='text'])[7]",
+        stockQuantitywo7: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[7]",
+
+
+
+
+
+
+
+
     };
 
     async clickOnCreateUnbillableOrderMenu(): Promise<void> {
@@ -76,7 +143,21 @@ export default class UnbillableOrderPage {
     }
 
     async clickOnInquireUnbillableOrderMenu(): Promise<void> {
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
         await this.page.locator(this.Elements.inquireUnbillableOrderMenu).click();
+    }
+    async searchbyWONumber(): Promise<void> {
+        await this.page.locator(this.Elements.WONumberSearch).fill(this.unbillableOrderNumber);
+        await this.page.locator(this.Elements.searchButton).click();
+        await this.page.locator(this.Elements.WOLINKE).click();
+
+    }
+    async verifytheWONumber(): Promise<void> {
+        //get the work order number from the header
+        await fixture.page.waitForTimeout(3000);
+        const headerText = await this.page.locator(this.Elements.headertitle).textContent();
+        expect(headerText).toContain(this.unbillableOrderNumber);
+
     }
 
     async createNewUnbillableOrder(): Promise<void> {
@@ -125,7 +206,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.draftButton).click();
         await this.page.locator(this.Elements.okDraftButton).click();
         await this.page.waitForLoadState('networkidle');
-//add delay
+        //add delay
         await fixture.page.waitForTimeout(5000);
         await this.captureUnbillableOrderNumber();
         await this.captureUnbillableOrderStatus();
@@ -145,14 +226,14 @@ export default class UnbillableOrderPage {
         // Wait for the header to update with the new status
         await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
         await fixture.page.waitForTimeout(1000);
-       await this.captureUnbillableOrderNumber();
+        await this.captureUnbillableOrderNumber();
         await this.captureUnbillableOrderStatus();
         //verify the status is Completed
         const status = this.unbillableOrderStatus;
         expect(status).toBe('Completed');
     }
 
-        async clickOnSaveButton(): Promise<void> {
+    async clickOnSaveButton(): Promise<void> {
         await this.page.locator(this.Elements.saveButton).click();
         await this.page.locator(this.Elements.saveOkButton).click();
         await this.page.waitForLoadState('networkidle');
@@ -168,7 +249,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.closeButtonWO).click();
         await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
         await this.page.waitForLoadState('networkidle');
-                //add delay
+        //add delay
         await fixture.page.waitForTimeout(2000);
         // Wait for the header to update with the new status
         await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
@@ -184,7 +265,7 @@ export default class UnbillableOrderPage {
         await this.page.waitForSelector(this.Elements.cancelOkButton);
         await this.page.locator(this.Elements.cancelOkButton).click();
         await this.page.waitForLoadState('networkidle');
-                //add delay
+        //add delay
         await fixture.page.waitForTimeout(2000);
         // Wait for the header to update with the new status
         await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
@@ -236,7 +317,7 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(2000);
         // Verify that we are back on the Create Unbillable Work Order page
         const headerTitle = await this.page.locator(this.Elements.headerTitle).textContent();
-        expect(headerTitle).toContain(' Create Un-billable Work Order');
+        expect(headerTitle).toContain('Create Un-billable Work Order');
     }
 
     async searchUnbillableOrderByNumber(woNumber: string): Promise<void> {
@@ -245,5 +326,247 @@ export default class UnbillableOrderPage {
         await this.page.waitForLoadState('networkidle');
         await this.base.click(this.Elements.WONumberLink);
         await this.page.waitForLoadState('networkidle');
+    }
+
+    async createNewUnbillableOrderWithSpecialShift(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ADRIAN.LOPEZ');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('AGV001');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'AGV001' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.agvHours).click();
+        await this.page.locator(this.Elements.agvHours).fill('19578');
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('3BA - Battery').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IP - Inspect and report').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('4');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+
+    }
+    async CreateNewOrderWithFiveAssets(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('CHARLES.BRADFORD');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async asst1Details(): Promise<void> {
+        //Asset 1
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('AGV005');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'AGV005' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.agvHours).click();
+        await this.page.locator(this.Elements.agvHours).fill('21436');
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('3BA - Battery').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IP - Inspect and report').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('.5');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+    }
+
+    //Asset 2
+    async asst2Details(): Promise<void> {
+        await this.page.locator(this.Elements.PlusButtonAddAsset1).click();
+        await fixture.page.waitForTimeout(2000);
+        const assetInput2 = this.page.locator(this.Elements.assetNumber2);
+        await assetInput2.type('AGVOVR');
+        await fixture.page.waitForTimeout(1000);
+        const suggestion2 = this.page.getByRole('listitem').filter({ hasText: 'AGVOVR' }).first();
+        await suggestion2.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion2.click();
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.componentCode2).click();
+        await this.page.getByText('3BA - Battery').nth(1).click();
+        await this.page.locator(this.Elements.damageCode2).click();
+        await this.page.getByText('BR - Broken').nth(1).click();
+        await this.page.locator(this.Elements.repairCode2).click();
+        await this.page.getByText('IP - Inspect and report').nth(1).click();
+        await this.page.locator(this.Elements.repairLocation2).click();
+        await this.page.getByText('BATT - Battery Rack').nth(1).click();
+        await this.page.locator(this.Elements.actualHours2).click();
+        await this.page.locator(this.Elements.actualHours2).fill('.5');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[3]").type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText1 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText1 }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo2).click();
+        await this.page.locator(this.Elements.stockQuantitywo2).fill('1');
+    }
+    //Asset 3
+    async asst3Details(): Promise<void> {
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.plusButtonAddAsset2).click();
+        await fixture.page.waitForTimeout(2000);
+        const assetInput3 = this.page.locator(this.Elements.assetNumber3);
+        await assetInput3.type('ASC34W');
+        await fixture.page.waitForTimeout(1000);
+        const suggestion3 = this.page.getByRole('listitem').filter({ hasText: 'ASC34W' }).first();
+        await suggestion3.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion3.click();
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.componentCode3).click();
+        await this.page.getByText('2EL - Electrical').click();
+        await this.page.locator(this.Elements.damageCode3).click();
+        await this.page.getByText('DZ - Damaged (other)').click();
+        await this.page.locator(this.Elements.repairCode3).click();
+        await this.page.getByText('CT - Calibration - TPS').click();
+        await this.page.locator(this.Elements.repairLocation3).click();
+        await this.page.getByText('HBLK - HEADBLOCK').click();
+        await this.page.locator(this.Elements.actualHours3).click();
+        await this.page.locator(this.Elements.actualHours3).fill('.5');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[4]").type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo3).click();
+        await this.page.locator(this.Elements.stockQuantitywo3).fill('1');
+    }
+    //Asset 4
+    async asst4Details(): Promise<void> {
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.plusButtonAddAsset3).click();
+        await fixture.page.waitForTimeout(2000);
+        const assetInput3 = this.page.locator(this.Elements.assetNumber4);
+        await assetInput3.type('ASC01L');
+        await fixture.page.waitForTimeout(1000);
+        const suggestion3 = this.page.getByRole('listitem').filter({ hasText: 'ASC01L' }).first();
+        await suggestion3.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion3.click();
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.componentCode4).click();
+        await this.page.getByText('2TR - Tracker Repairs').nth(1).click();
+        await this.page.locator(this.Elements.damageCode4).click();
+        await this.page.getByText('MA - Misaligned').nth(1).click();
+        await this.page.locator(this.Elements.repairCode4).click();
+        await this.page.getByText('MD - Modifications, miscellaneous').nth(1).click();
+        await this.page.locator(this.Elements.repairLocation4).click();
+        await this.page.getByText('ZZZZ - ZZZZ - Entire Vehicle').nth(1).click();
+        await this.page.locator(this.Elements.actualHours4).click();
+        await this.page.locator(this.Elements.actualHours4).fill('.5');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[5]").type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo4).click();
+        await this.page.locator(this.Elements.stockQuantitywo4).fill('1');
+    }
+    async asst5Details(): Promise<void> {
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.plusButtonAddAsset4).click();
+        await fixture.page.waitForTimeout(2000);
+        const assetInput3 = this.page.locator(this.Elements.assetNumber5);
+        await assetInput3.type('BC001');
+        await fixture.page.waitForTimeout(1000);
+        const suggestion3 = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        await suggestion3.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion3.click();
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.componentCode5).click();
+        await this.page.getByText('4MZ - Mechanical Misc').click();
+        await this.page.locator(this.Elements.damageCode5).click();
+        await this.page.getByText('LK - Leak').click();
+        await this.page.locator(this.Elements.repairCode5).click();
+        await this.page.getByText('GS - Straighten').nth(1).click();
+        await this.page.locator(this.Elements.repairLocation5).click();
+        await this.page.getByText('FRRT - FRRT - Front Right').click();
+        await this.page.locator(this.Elements.actualHours5).click();
+        await this.page.locator(this.Elements.actualHours5).fill('1');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[6]").type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo5).click();
+        await this.page.locator(this.Elements.stockQuantitywo5).fill('1');
+    }
+   
+
+    async clickOnSaveButtonAfterDraft(): Promise<void> {
+        await this.page.locator(this.Elements.saveButton).click();
+        await this.page.locator(this.Elements.saveOkButton).click();
+        await this.page.waitForLoadState('networkidle');
+        await fixture.page.waitForTimeout(2000);
+        await this.captureUnbillableOrderStatus();
+        await this.captureUnbillableOrderNumber();
+    }
+
+    async clickOnDraftButton1(): Promise<void> {
+        await this.page.locator(this.Elements.draftButton).click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.okDraftButton).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.captureUnbillableOrderNumber();
+        await this.captureUnbillableOrderStatus();
     }
 }

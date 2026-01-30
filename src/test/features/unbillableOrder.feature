@@ -10,11 +10,12 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then verify save button functionality under unbillable work order
     When the admin clicks the close button and verify the status of the unbillable work order is Closed
     Then verify the action logged
+    Then Search for the recently created unbillable work order using the captured work order number
     Then verify the new button functionality
 
 
   @createUnBillableOrderSingleAssetVesselSail @sanity @bwo
-  Scenario: Create unbillable work order with single asset (special shift: Vessel Sail)
+  Scenario: Create unbillable work order with single asset for the first shift(Vessel Sail)
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and selects special shift as vessel sail and clicks on the Draft button
@@ -22,9 +23,12 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then the unbillable work order number is captured for future reference
     Then verify save button functionality under unbillable work order
     When the admin clicks the close button and verify the status of the unbillable work order is Closed
+    Then verify the action logged
+    Then Search for the recently created unbillable work order using the captured work order number
+    Then verify the new button functionality
 
-  @createUnBillableOrderSingleAsset @sanity @bwo
-  Scenario: Create unbillable work order with single asset (special shift: 4 and Go)
+  @createUnBillableOrderSingleAsset4AndGo @sanity @bwo
+  Scenario: Create unbillable work order with single asset for the speciat shift 4 and Go(First shift)
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and selects special shift as 4 and Go and clicks on the Draft button
@@ -32,38 +36,29 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then the unbillable work order number is captured for future reference
     Then verify save button functionality under unbillable work order
     When the admin clicks the close button and verify the status of the unbillable work order is Closed
+        Then Search for the recently created unbillable work order using the captured work order number
 
-  @createUnBillableOrderSingleAsset @sanity @bwo
-  Scenario: Create unbillable work order with single asset (special shift: PMA Training)
+  @createUnBillableOrderSingleAssetPMATraining @sanity @bwo
+  Scenario: Create unbillable work order with single asset for the special shift PMA Training(First shift)
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and selects special shift as PMA Training and clicks on the Draft button
     When the admin clicks the complete button and verify the status of the unbillable work order is Completed
     Then the unbillable work order number is captured for future reference
     Then verify save button functionality under unbillable work order
-    When the admin clicks the close button and verify the status of the unbillable work order is Closed
 
-  @createUnBillableOrderTwoAsset @sanity @bwo
-  Scenario: Create unbillable work order with two assets (standard)
+
+  @createUnBillableOrderFiveAsset @sanity @bwo
+  Scenario: Create an unbillable work order containing ten assets- add five assets during the creation phase and include an additional five assets while the work order is in draft mode (second shift)
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
-    And enters all the required fields for unbillable work order and adds two assets then clicks on the Draft button
+    And enters all the required fields for unbillable work order and adds three assets then clicks on the Draft button
+    Then add another two assets in draft mode
     Then the unbillable work order number is captured
-    And verify the status of the unbillable work order is 'Drafted'
-    When the admin clicks the complete button
-    Then verify the status of the unbillable work order is 'Completed'
-    When the admin clicks the close button
-    Then verify the status of the unbillable work order is 'Closed'
-
-  @createUnBillableOrderTwoAsset @sanity @bwo
-  Scenario: Create unbillable work order with two assets (AGVOVR)
-    Given the admin user is logged into the application
-    When the admin navigates to the unbillable work order creation menu
-    And enters all the required fields for unbillable work order and adds the AGVOVR asset then clicks on the Draft button
     When the admin clicks the complete button and verify the status of the unbillable work order is Completed
-    Then the unbillable work order number is captured for future reference
-    Then verify save button functionality under unbillable work order
     When the admin clicks the close button and verify the status of the unbillable work order is Closed
+    Then Search for the recently created unbillable work order using the captured work order number
+
 
   @firstShiftValidation @sanity @bwo
   Scenario: Verify hour validation for first shift having two assets

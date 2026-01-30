@@ -2,6 +2,7 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import UnbillableOrderPage from "../../pages/unbillableOrder.page";
 import LoginPage from "../../pages/login.page";
 import { fixture } from "../../hooks/pageFixture";
+import { add } from "winston";
 
 let unbillableOrderPage: UnbillableOrderPage;
 
@@ -15,20 +16,20 @@ When('After entering all required fields for the unbillable work order and click
   await unbillableOrderPage.clickOnDraftButton();
 });
 
-// When('enters all the required fields for unbillable work order and selects special shift as vessel sail and clicks on the Draft button', async () => {
-//   await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('Vessel Sail');
-//   await unbillableOrderPage.clickOnDraftButton();
-// });
+When('enters all the required fields for unbillable work order and selects special shift as vessel sail and clicks on the Draft button', async () => {
+  await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('2 - Vessel Sail');
+  await unbillableOrderPage.clickOnDraftButton();
+});
 
-// When('enters all the required fields for unbillable work order and selects special shift as 4 and Go and clicks on the Draft button', async () => {
-//   await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('4 and Go');
-//   await unbillableOrderPage.clickOnDraftButton();
-// });
+When('enters all the required fields for unbillable work order and selects special shift as 4 and Go and clicks on the Draft button', async () => {
+  await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('3 - 4 and Go');
+  await unbillableOrderPage.clickOnDraftButton();
+});
 
-// When('enters all the required fields for unbillable work order and selects special shift as PMA Training and clicks on the Draft button', async () => {
-//   await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('PMA Training');
-//   await unbillableOrderPage.clickOnDraftButton();
-// });
+When('enters all the required fields for unbillable work order and selects special shift as PMA Training and clicks on the Draft button', async () => {
+  await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('4 - PMA Training');
+  await unbillableOrderPage.clickOnDraftButton();
+});
 
 // When('enters all the required fields for unbillable work order and adds two assets then clicks on the Draft button', async () => {
 //   await unbillableOrderPage.createNewUnbillableOrderWithTwoAssets();
@@ -95,4 +96,23 @@ When('the admin navigates to the Inquire Unbillable Work Order menu', async () =
 
 When('Opens an existing unbillable work order {string}', async (uwoNumber: string) => {
   await unbillableOrderPage.searchUnbillableOrderByNumber(uwoNumber);
+});
+Then('Search for the recently created unbillable work order using the captured work order number', async () => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.searchbyWONumber();
+  await unbillableOrderPage.verifytheWONumber();
+});
+
+Then('enters all the required fields for unbillable work order and adds three assets then clicks on the Draft button', async () => {
+  await unbillableOrderPage.CreateNewOrderWithFiveAssets('1 - No');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.asst4Details();
+  await unbillableOrderPage.clickOnDraftButton1();
+});
+
+Then('add another two assets in draft mode', async () => {
+  await unbillableOrderPage.asst5Details();
+  await unbillableOrderPage.clickOnSaveButtonAfterDraft();
 });
