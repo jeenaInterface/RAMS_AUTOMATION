@@ -108,45 +108,42 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then Verify hour validation messages are displayed as expected for the first shift  for special shift as four and Go
 
   @secondShiftValidationSpecialShiftAs4AndGo @sanity @bwo
-  Scenario: Verify hour validation for second shift (4 and Go) with two assets
+  Scenario: Verify hour validation for second shift (4 and Go) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as 4 and Go
     Then Verify hour validation messages are displayed as expected for the second shift  for special shift as four and Go
 
   @thirdShiftValidationSpecialShiftAs4AndGo @sanity @bwo
-  Scenario: Verify hour validation for third shift (4 and Go) with two assets
+  Scenario: Verify hour validation for third shift (4 and Go) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
-    And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as 4 and Go
+    And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift and selects special shift as 4 and Go
     Then Verify hour validation messages are displayed as expected for the third shift  for special shift as four and Go
 
   @FirstShiftValidationSpecialShiftAsPMATraining @sanity @bwo
-  Scenario: Verify hour validation for first shift (PMA Training) with two assets
+  Scenario: Verify hour validation for first shift (PMA Training) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
-    And enters all the required fields for unbillable work order and adds two assets then clicks on the Draft button
+    And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift and selects special shift as PMA Training
+    Then Verify hour validation messages are displayed as expected for the first shift  for special shift as PMA Training
 
   @secondShiftValidationSpecialShiftAsPMATraining @sanity @bwo
-  Scenario: Verify hour validation for second shift (PMA Training) with two assets
+  Scenario: Verify hour validation for second shift (PMA Training) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
-    And enters all the required fields for unbillable work order and adds two assets then clicks on the Draft button
+    And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as PMA Training
+    Then Verify hour validation messages are displayed as expected for the second shift  for special shift as PMA Training
 
   @thirdShiftValidationSpecialShiftAsPMATraining @sanity @bwo
-  Scenario: Verify hour validation for third shift (PMA Training) with two assets
+  Scenario: Verify hour validation for third shift (PMA Training) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift and selects special shift as PMA Training
     Then Verify hour validation messages are displayed as expected for the third shift  for special shift as PMA Training
 
 
-    @thirdShiftValidationSpecialShiftAsPMATraining @sanity @bwo
-  Scenario: Verify internal RO validation for third shift
-    Given the admin user is logged into the application
-    When the admin navigates to the unbillable work order creation menu
-    And enters all the required fields for unbillable work order and adds two assets then clicks on the Draft button
-
+    # Scenario: Create unbillable work order PM details verification
     # Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift 
     # Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for Vessel Sail
     # Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for 4 and Go
@@ -174,4 +171,6 @@ Feature: Verify functionalities under Un-Billable Work Order
     # Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for PMA Training
     # Scenario: Search functionality in inquirey screen for unbillable work order
     # Scenario: Verify Batch close screen functionalities for unbillable work order
+
+
 

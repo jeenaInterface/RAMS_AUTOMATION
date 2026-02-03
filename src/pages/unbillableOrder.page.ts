@@ -133,7 +133,7 @@ export default class UnbillableOrderPage {
         hourValidation: "//p[normalize-space()='Total work order hours must add up to 8']",
         hourValidation5: "//p[normalize-space()='Total work order hours must add up to 5']",
         hourValidation4: "//p[normalize-space()='Total work order hours must add up to 1 or 4.']",
-        hourValidation4pmaTraining: "//p[normalize-space()='Total work order hours must add up to 4']"
+        hourValidation4pmaTraining: "//p[normalize-space()='Total work order hours must add up to 4.']"
 
 
 
@@ -635,7 +635,7 @@ export default class UnbillableOrderPage {
     async verifyHourValidationMessageFor4(): Promise<void> {
         const validationMessage = await this.page.locator(this.Elements.hourValidation4pmaTraining).textContent();
         //Total work order hours must add up to 4 . verify this message is present
-        expect(validationMessage).toContain('Total work order hours must add up to 4');
+        expect(validationMessage).toContain('Total work order hours must add up to 4.');
     }
 
 

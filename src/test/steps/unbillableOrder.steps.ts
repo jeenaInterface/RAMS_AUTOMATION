@@ -146,25 +146,25 @@ When('enters all the required fields for unbillable work order and adds two asse
 
 Then('Verify hour validation messages are displayed as expected for the third shift', async () => {
   await unbillableOrderPage.verifyHourValidationMessageFor5hour();
-}); 
+});
 When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift and selects special shift as vessel sail', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShift('2 - Vessel Sail');
   await unbillableOrderPage.asst1Details();
   await unbillableOrderPage.asst2Details();
   await unbillableOrderPage.asst3Details();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
-} );
+});
 
 Then('Verify hour validation messages are displayed as expected for the first shift  for special shift as vessel sail', async () => {
   await unbillableOrderPage.verifyHourValidationMessageFor4hour();
 });
 When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as vessel sail', async () => {
   await unbillableOrderPage.CreateNewOrderWithFiveAssets('2 - Vessel Sail');
-  await unbillableOrderPage.asst1Details(); 
+  await unbillableOrderPage.asst1Details();
   await unbillableOrderPage.asst2Details();
   await unbillableOrderPage.asst3Details();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
-} );
+});
 
 Then('Verify hour validation messages are displayed as expected for the second shift  for special shift as vessel sail', async () => {
   await unbillableOrderPage.verifyHourValidationMessageFor4hour();
@@ -175,7 +175,7 @@ When('enters all the required fields for unbillable work order and adds two asse
   await unbillableOrderPage.asst2Details();
   await unbillableOrderPage.asst3Details();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
-} );
+});
 
 Then('Verify hour validation messages are displayed as expected for the third shift  for special shift as vessel sail', async () => {
   await unbillableOrderPage.verifyHourValidationMessageFor4hour();
@@ -187,20 +187,64 @@ When('enters all the required fields for unbillable work order and adds two asse
   await unbillableOrderPage.asst2Details();
   await unbillableOrderPage.asst3Details();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
-} );
+});
 
 Then('Verify hour validation messages are displayed as expected for the first shift  for special shift as four and Go', async () => {
   await unbillableOrderPage.verifyHourValidationMessageFor4();
 
-}); 
+});
 When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as 4 and Go', async () => {
-  await unbillableOrderPage.CreateNewOrderWithFiveAssets('3 - 4 and Go');   
+  await unbillableOrderPage.CreateNewOrderWithFiveAssets('3 - 4 and Go');
   await unbillableOrderPage.asst1Details();
   await unbillableOrderPage.asst2Details();
   await unbillableOrderPage.asst3Details();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
-} );
+});
 
 Then('Verify hour validation messages are displayed as expected for the second shift  for special shift as four and Go', async () => {
   await unbillableOrderPage.verifyHourValidationMessageFor4();
 });
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift and selects special shift as 4 and Go', async () => {
+  await unbillableOrderPage.CreateNewOrderForThirdShift('3 - 4 and Go');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+});
+
+Then('Verify hour validation messages are displayed as expected for the third shift  for special shift as four and Go', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4();
+});
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift and selects special shift as PMA Training', async () => {
+  await unbillableOrderPage.CreateNewOrderForFirstShift('4 - PMA Training');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+});
+
+Then('Verify hour validation messages are displayed as expected for the first shift  for special shift as PMA Training', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4();
+});
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as PMA Training', async () => {
+  await unbillableOrderPage.CreateNewOrderWithFiveAssets('4 - PMA Training');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+});
+Then('Verify hour validation messages are displayed as expected for the second shift  for special shift as PMA Training', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4();
+});
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift and selects special shift as PMA Training', async () => {
+  await unbillableOrderPage.CreateNewOrderForThirdShift('4 - PMA Training');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+});
+
+Then('Verify hour validation messages are displayed as expected for the third shift  for special shift as PMA Training', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4();
+}); 
