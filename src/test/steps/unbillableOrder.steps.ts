@@ -53,11 +53,11 @@ Then('the unbillable work order number is captured for future reference', async 
 
 Then("verify the status of the unbillable work order is '{string}'", async function (this: any, expectedStatus: string) {
   let status = unbillableOrderPage.unbillableOrderStatus || '';
-  
+
   // Normalize status comparison (case-insensitive, handle 'cancelled' vs 'Cancelled')
   const normalizedStatus = status.toLowerCase();
   const normalizedExpected = expectedStatus.toLowerCase();
-  
+
   if (this && typeof this.attach === 'function') {
     await this.attach(`Unbillable Work Order status: ${status}`, 'text/plain');
   } else {
@@ -115,4 +115,92 @@ Then('enters all the required fields for unbillable work order and adds three as
 Then('add another two assets in draft mode', async () => {
   await unbillableOrderPage.asst5Details();
   await unbillableOrderPage.clickOnSaveButtonAfterDraft();
+});
+
+When('the admin clicks the complete and then close button', async () => {
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+  // await unbillableOrderPage.clickOnCloseButtonNoStatus();
+});
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift', async () => {
+  await unbillableOrderPage.CreateNewOrderWithFiveAssets('1 - No');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+});
+
+Then('Verify hour validation messages are displayed as expected', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor8hour();
+});
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift', async () => {
+  await unbillableOrderPage.CreateNewOrderForFirstShift('1 - No');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+});
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift', async () => {
+  await unbillableOrderPage.CreateNewOrderForThirdShift('1 - No');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+});
+
+Then('Verify hour validation messages are displayed as expected for the third shift', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor5hour();
+}); 
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift and selects special shift as vessel sail', async () => {
+  await unbillableOrderPage.CreateNewOrderForFirstShift('2 - Vessel Sail');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+} );
+
+Then('Verify hour validation messages are displayed as expected for the first shift  for special shift as vessel sail', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4hour();
+});
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as vessel sail', async () => {
+  await unbillableOrderPage.CreateNewOrderWithFiveAssets('2 - Vessel Sail');
+  await unbillableOrderPage.asst1Details(); 
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+} );
+
+Then('Verify hour validation messages are displayed as expected for the second shift  for special shift as vessel sail', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4hour();
+});
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift and selects special shift as vessel sail', async () => {
+  await unbillableOrderPage.CreateNewOrderForThirdShift('2 - Vessel Sail');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+} );
+
+Then('Verify hour validation messages are displayed as expected for the third shift  for special shift as vessel sail', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4hour();
+});
+
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift and selects special shift as 4 and Go', async () => {
+  await unbillableOrderPage.CreateNewOrderForFirstShift('3 - 4 and Go');
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+} );
+
+Then('Verify hour validation messages are displayed as expected for the first shift  for special shift as four and Go', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4();
+
+}); 
+When('enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as 4 and Go', async () => {
+  await unbillableOrderPage.CreateNewOrderWithFiveAssets('3 - 4 and Go');   
+  await unbillableOrderPage.asst1Details();
+  await unbillableOrderPage.asst2Details();
+  await unbillableOrderPage.asst3Details();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+} );
+
+Then('Verify hour validation messages are displayed as expected for the second shift  for special shift as four and Go', async () => {
+  await unbillableOrderPage.verifyHourValidationMessageFor4();
 });

@@ -66,6 +66,7 @@ export default class UnbillableOrderPage {
         okButtonOnCompletePopup: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
         closeButtonWO: "//span[normalize-space()='Close']",
         OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
+        okPopupButton1: "//div[position()=8]/div[position()=1]/div[position()=3]/button[position()=2]",
         headertitle: "(//span[@class='header-title font-size-title'])[1]",
         saveOkButton: "(//span[contains(text(),'OK')])[4]",
         specialShiftOption: "(//label[normalize-space(text())='Special Shift']/following::input)[1]",
@@ -119,7 +120,7 @@ export default class UnbillableOrderPage {
         actualHours6: "(//div[@class='el-input input-align']//input[@type='text'])[6]",
         stockQuantitywo6: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[6]",
 
-        plusButtonAddAsset6:"(//i[@class='ivu-icon ivu-icon-plus'])[13]",
+        plusButtonAddAsset6: "(//i[@class='ivu-icon ivu-icon-plus'])[13]",
         assetNumber7: "(//input[@placeholder='-- Input Text --'])[7]",
         componentCode7: "(//input[@placeholder='Component Code'])[7]",
         damageCode7: "(//input[@placeholder='Damage Code'])[7]",
@@ -129,6 +130,10 @@ export default class UnbillableOrderPage {
         stockQuantitywo7: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[7]",
 
 
+        hourValidation: "//p[normalize-space()='Total work order hours must add up to 8']",
+        hourValidation5: "//p[normalize-space()='Total work order hours must add up to 5']",
+        hourValidation4: "//p[normalize-space()='Total work order hours must add up to 1 or 4.']",
+        hourValidation4pmaTraining: "//p[normalize-space()='Total work order hours must add up to 4']"
 
 
 
@@ -154,7 +159,7 @@ export default class UnbillableOrderPage {
     }
     async verifytheWONumber(): Promise<void> {
         //get the work order number from the header
-        await fixture.page.waitForTimeout(3000);
+        await fixture.page.waitForTimeout(5000);
         const headerText = await this.page.locator(this.Elements.headertitle).textContent();
         expect(headerText).toContain(this.unbillableOrderNumber);
 
@@ -222,7 +227,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
         await this.page.waitForLoadState('networkidle');
         //add delay
-        await fixture.page.waitForTimeout(2000);
+        await fixture.page.waitForTimeout(4000);
         // Wait for the header to update with the new status
         await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
         await fixture.page.waitForTimeout(1000);
@@ -231,6 +236,11 @@ export default class UnbillableOrderPage {
         //verify the status is Completed
         const status = this.unbillableOrderStatus;
         expect(status).toBe('Completed');
+    }
+    async clickOnCompleteButtonNoStatus(): Promise<void> {
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+        await this.page.waitForLoadState('networkidle');
     }
 
     async clickOnSaveButton(): Promise<void> {
@@ -250,7 +260,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
         await this.page.waitForLoadState('networkidle');
         //add delay
-        await fixture.page.waitForTimeout(2000);
+        await fixture.page.waitForTimeout(4000);
         // Wait for the header to update with the new status
         await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
         await fixture.page.waitForTimeout(1000);
@@ -258,6 +268,14 @@ export default class UnbillableOrderPage {
         //verify the status is Closed
         const status = this.unbillableOrderStatus;
         expect(status).toBe('Closed');
+    }
+
+    async clickOnCloseButtonNoStatus(): Promise<void> {
+        await fixture.page.waitForTimeout(4000);
+        await this.page.locator(this.Elements.closeButtonWO).click();
+        await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
+        await this.page.waitForLoadState('networkidle');
+
     }
 
     async clickOnCancelButton(): Promise<void> {
@@ -414,7 +432,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.repairLocation).click();
         await this.page.getByText('BATT - Battery Rack').click();
         await this.page.locator(this.Elements.actualHours).click();
-        await this.page.locator(this.Elements.actualHours).fill('.5');
+        await this.page.locator(this.Elements.actualHours).fill('2');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
         const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
@@ -445,7 +463,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.repairLocation2).click();
         await this.page.getByText('BATT - Battery Rack').nth(1).click();
         await this.page.locator(this.Elements.actualHours2).click();
-        await this.page.locator(this.Elements.actualHours2).fill('.5');
+        await this.page.locator(this.Elements.actualHours2).fill('2');
         await fixture.page.waitForTimeout(1000);
         await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[3]").type('1000');
         await fixture.page.waitForTimeout(1000);
@@ -477,7 +495,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.repairLocation3).click();
         await this.page.getByText('HBLK - HEADBLOCK').click();
         await this.page.locator(this.Elements.actualHours3).click();
-        await this.page.locator(this.Elements.actualHours3).fill('.5');
+        await this.page.locator(this.Elements.actualHours3).fill('1');
         await fixture.page.waitForTimeout(1000);
         await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[4]").type('1000');
         await fixture.page.waitForTimeout(1000);
@@ -509,7 +527,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.repairLocation4).click();
         await this.page.getByText('ZZZZ - ZZZZ - Entire Vehicle').nth(1).click();
         await this.page.locator(this.Elements.actualHours4).click();
-        await this.page.locator(this.Elements.actualHours4).fill('.5');
+        await this.page.locator(this.Elements.actualHours4).fill('1');
         await fixture.page.waitForTimeout(1000);
         await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[5]").type('1000');
         await fixture.page.waitForTimeout(1000);
@@ -540,7 +558,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.repairLocation5).click();
         await this.page.getByText('FRRT - FRRT - Front Right').click();
         await this.page.locator(this.Elements.actualHours5).click();
-        await this.page.locator(this.Elements.actualHours5).fill('1');
+        await this.page.locator(this.Elements.actualHours5).fill('2');
         await fixture.page.waitForTimeout(1000);
         await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[6]").type('1000');
         await fixture.page.waitForTimeout(1000);
@@ -550,7 +568,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.stockQuantitywo5).click();
         await this.page.locator(this.Elements.stockQuantitywo5).fill('1');
     }
-   
+
 
     async clickOnSaveButtonAfterDraft(): Promise<void> {
         await this.page.locator(this.Elements.saveButton).click();
@@ -569,4 +587,56 @@ export default class UnbillableOrderPage {
         await this.captureUnbillableOrderNumber();
         await this.captureUnbillableOrderStatus();
     }
+    async verifyHourValidationMessageFor8hour(): Promise<void> {
+        const validationMessage = await this.page.locator(this.Elements.hourValidation).textContent();
+        //Total work order hours must add up to 8 . verify this message is present
+        expect(validationMessage).toContain('Total work order hours must add up to 8');
+    }
+    async CreateNewOrderForFirstShift(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ADRIAN.LOPEZ');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async CreateNewOrderForThirdShift(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ARNULFO.LOPEZ');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async verifyHourValidationMessageFor5hour(): Promise<void> {
+        const validationMessage = await this.page.locator(this.Elements.hourValidation5).textContent();
+        //Total work order hours must add up to 5 . verify this message is present
+        expect(validationMessage).toContain('Total work order hours must add up to 5');
+    }
+    async verifyHourValidationMessageFor4hour(): Promise<void> {
+        const validationMessage = await this.page.locator(this.Elements.hourValidation4).textContent();
+        //Total work order hours must add up to 4 . verify this message is present
+        expect(validationMessage).toContain('Total work order hours must add up to 1 or 4.');
+    }
+    async verifyHourValidationMessageFor4(): Promise<void> {
+        const validationMessage = await this.page.locator(this.Elements.hourValidation4pmaTraining).textContent();
+        //Total work order hours must add up to 4 . verify this message is present
+        expect(validationMessage).toContain('Total work order hours must add up to 4');
+    }
+
+
 }
