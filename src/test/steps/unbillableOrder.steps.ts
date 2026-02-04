@@ -248,3 +248,94 @@ When('enters all the required fields for unbillable work order and adds two asse
 Then('Verify hour validation messages are displayed as expected for the third shift  for special shift as PMA Training', async () => {
   await unbillableOrderPage.verifyHourValidationMessageFor4();
 }); 
+When('enters all the required fields for unbillable work order and and select Is PM work order checkbox then clicks on the Draft button', async () => {
+  await unbillableOrderPage.CreateNewOrderForFirstShift('1 - No');
+  await unbillableOrderPage.asst6Details();
+  await unbillableOrderPage.clickOnDraftButton();
+});
+When('the admin navigates to the Batch close menu and perform batch close operation for the recently created unbillable work order', async () => {
+  await unbillableOrderPage.batchCloseMenuClick();
+});
+Then('verify the status of the unbillable work order is Closed', async () => {
+  await unbillableOrderPage.verifyUnbillableOrderClosedStatus();
+});
+When('the admin navigates to the Batch close menu from to do list and perform batch close operation for the recently created unbillable work order', async () => {
+  await unbillableOrderPage.doBatchReviewAfterSelectFromDashboard();
+});
+When('verify the search functionality using asset and verify the results are displayed as expected {string}', async (assetNumber: string) => {
+  await unbillableOrderPage.assetSearchAndSelect(assetNumber);
+});
+Then('the admin navigates to the unbillable work order inquiry menu', async () => {
+  unbillableOrderPage = new UnbillableOrderPage(fixture.page);
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+})  ;  
+When('verify the search functionality using asset description number and verify the results are displayed as expected {string}', async (assetDescription: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.assetDescriptionSearchAndSelect(assetDescription);
+});
+When('verify the search functionality using asset group and verify the results are displayed as expected {string}', async (assetGroup: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.assetGroupSearchAndSelect(assetGroup);
+});
+When('verify the search functionality using work Order status and verify the results are displayed as expected {string}', async (woStatus: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.wostatusSearchAndSelect(woStatus);
+});
+When('verify the search functionality using Mechanic and verify the results are displayed as expected {string}', async (mechanicID: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.mechanicSearchAndSelect(mechanicID);
+});
+When('verify the search functionality using repair date and verify the results are displayed as expected', async () => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.searchByRepairDateRange();
+});
+When('verify the search functionality using shop and verify the results are displayed as expected {string}', async (shop: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.shopSearchAndSelect(shop);
+});
+When('verify the search functionality using shift and verify the results are displayed as expected {string}', async (shift: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.shiftSearchAndSelect(shift);
+});
+When('verify the search functionality using stock number and verify the results are displayed as expected {string}', async (stock: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.stockSearchAndSelect(stock);
+});
+When('verify the search functionality using asset manufacturer and verify the results are displayed as expected {string}', async (AssetManufacture: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.AssetManufactureSearchAndSelect(AssetManufacture);
+});
+When('verify the search functionality using asset manufacturer claime type and verify the results are displayed as expected {string}', async (ClaimeTypeSearchAndSelect: string) => {
+  await unbillableOrderPage.clickOnInquireUnbillableOrderMenu();
+  await unbillableOrderPage.ClaimeTypeSearchAndSelect(ClaimeTypeSearchAndSelect);
+});
+
+When('Create a WO for weekday and select straight time in hour type for first shift and close the WO', async () => {
+  await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayroll('1 - No');
+  await unbillableOrderPage.asst8Details();
+  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+  await unbillableOrderPage.clickOnCloseButtonNoStatus();
+});
+Then('the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift', async () => {
+  await unbillableOrderPage.navigateToPayrollReviewScreen();
+  await unbillableOrderPage.verifyShopInPayrollScreen();
+  await unbillableOrderPage.verifyShiftInPayrollScreen();
+  await unbillableOrderPage.STandOT();
+  await unbillableOrderPage.clickonWObUttonInPayrollScreen();
+}); 
+Then('capture the ST and OT hours', async function (this: any) {
+  let st = unbillableOrderPage.ST;
+  let ot = unbillableOrderPage.OT;
+  if (this && typeof this.attach === 'function') {
+    await this.attach(`ST: ${st}, OT: ${ot}`, 'text/plain');
+  } else {
+    fixture.logger?.info(`Unbillable Work Order: ST: ${st}, OT: ${ot}`);
+  }
+});
+
+
+Then('cancel the created unbillable work order', async () => {
+  await unbillableOrderPage.clickonWObUttonInPayrollScreen();
+  await unbillableOrderPage.clickOnCancelButton();  
+  });

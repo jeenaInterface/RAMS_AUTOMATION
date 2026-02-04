@@ -11,6 +11,8 @@ export default class UnbillableOrderPage {
     private page: Page;
     public unbillableOrderNumber: string = '';
     public unbillableOrderStatus: string = '';
+    public ST: string | null = '';
+    public OT: string | null = '';
 
 
     constructor(page: Page) {
@@ -133,12 +135,58 @@ export default class UnbillableOrderPage {
         hourValidation: "//p[normalize-space()='Total work order hours must add up to 8']",
         hourValidation5: "//p[normalize-space()='Total work order hours must add up to 5']",
         hourValidation4: "//p[normalize-space()='Total work order hours must add up to 1 or 4.']",
-        hourValidation4pmaTraining: "//p[normalize-space()='Total work order hours must add up to 4.']"
+        hourValidation4pmaTraining: "//p[normalize-space()='Total work order hours must add up to 4.']",
 
+        IsPMCheckBox: "(//span[@class='el-checkbox__inner'])[2]",
+        PMGroupList: "(//span[normalize-space(text())='Is Final Repair for PM']/following::input)[1]",
+        PMName: "(//label[normalize-space(text())='PM Name']/following::input)[1]",
+        PMHours: "(//label[normalize-space(text())='Hours']/following::input)[1]",
 
+        batchCloseMenu: "//span[normalize-space()='- Batch Close Un-billable Work Order']",
+        WONumberSearchBatchClose: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        BatchCloseCheckBox: "//tr[@class='el-table__row current-row']//span[@class='el-checkbox__inner']",
+        BatchCloseButton: "//span[normalize-space()='Batch Close']",
+        BatchCloseOkButton: "(//span[contains(text(),'OK')])[4]",
 
+        userIcon: "//i[@class='menu-icon ivu-icon ivu-icon-person']",
+        todoListMenu: "//div[@class='ivu-menu-item select-item']//span[contains(text(),'To-Do List')]",
+        batchCloseTabSectionDashboard: "//div[normalize-space()='Close Un-billable Work order']",
 
+        assetNumberSearch: "(//label[normalize-space(text())='Asset No.']/following::input)[1]",
+        assetSearchResult: "//tbody/tr[1]/td[3]/div[1]/span[1]",
+        assetDescriptionSearch: "(//label[normalize-space(text())='Asset Description']/following::input)[1]",
+        assetDescriptionSearchResult: "//tbody/tr[1]/td[4]/div[1]/span[1]",
+        assetGroupSearch: "(//label[normalize-space(text())='Asset Group']/following::input)[1]",
+        assetGroupSearchResult: "//tbody/tr[1]/td[5]/div[1]/span[1]",
+        workOrderStatusSearch: "(//label[normalize-space(text())='Work Order Status']/following::input)[2]",
+        workOrderStatusSearchResult: "//tbody/tr[1]/td[2]/div[1]/span[1]",
+        mechanicSearchField: "(//label[normalize-space(text())='Mechanic']/following::input)[1]",
+        mechanicSearchResult: "//tbody/tr[1]/td[7]/div[1]/span[1]",
+        repairStartDateField: "(//label[normalize-space(text())='Repair Date']/following::input)[1]",
+        repairDateSearchResult: "//tbody/tr[1]/td[9]/div[1]/span[1]",
+        shopsearch: "(//label[normalize-space(text())='Shop']/following::input)[2]",
+        shopSearchResult: "//tbody/tr[1]/td[8]/div[1]/span[1]",
+        shiftSearch: "(//label[normalize-space(text())='Shift']/following::input)[1]",
+        shiftSearchResult: "//tbody/tr[1]/td[10]/div[1]/span[1]",
+        stockNumberSearch: "(//label[normalize-space(text())='Stock No.']/following::input)[1]",
+        stockNumberSearchResult: "//tbody/tr[1]/td[12]/div[1]/span[1]",
+        assetManufacture: "(//label[normalize-space(text())='Asset Manufacturer']/following::input)[1]",
+        assetManufactureSearchResult: "//tbody/tr[1]/td[16]/div[1]/span[1]",
+        assetManufactureClaimType: "(//label[normalize-space(text())='Asset Manufacturer Claim Type']/following::input)[2]",
+        assetManufactureClaimTypeSearchResult: "//tbody/tr[1]/td[17]/div[1]/span[1]",
 
+        payrollMenu: "//span[normalize-space()='Payroll']",
+        reviewPayrollMenu: "//span[normalize-space()='- Review Payroll Records']",
+        shopPayrollScreenHeader: "(//label[normalize-space(text())='Shop:']/following::input)[1]",
+        ShiftListPayrollScreen: "(//label[normalize-space(text())='Shift:']/following::input)[1]",
+
+        xpathofMechanic: "//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']",
+        st: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]",
+        ot: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]",
+        IsConsistantWithWO: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[7]",
+        showWODetails: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[8]/div/div/div/div/button/span/i",
+        WOLinkOnPopUp: "(//div[@class='cell']//a)[1]",
+        refreshButton: "//span[normalize-space()='Refresh']",
 
     };
 
@@ -241,6 +289,10 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.completeButton).click();
         await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
         await this.page.waitForLoadState('networkidle');
+        this.captureUnbillableOrderNumber();
+        this.captureUnbillableOrderStatus();
+        //add delay
+        await fixture.page.waitForTimeout(4000);
     }
 
     async clickOnSaveButton(): Promise<void> {
@@ -637,6 +689,315 @@ export default class UnbillableOrderPage {
         //Total work order hours must add up to 4 . verify this message is present
         expect(validationMessage).toContain('Total work order hours must add up to 4.');
     }
+    async asst6Details(): Promise<void> {
+        //Asset 1
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('UTR001');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
 
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'UTR001' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.IsPMCheckBox).check();
+        await this.page.locator(this.Elements.PMGroupList).click();
+        await this.page.getByText('Hourly PMs').click();
+        await this.page.locator(this.Elements.PMName).click();
+        await this.page.getByText('1500 Hour').click();
+        await this.page.locator(this.Elements.PMHours).click();
+        await this.page.locator(this.Elements.PMHours).fill('2');
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('4EZ - Electrical / Electronics').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IP - Inspect and report').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('CABN - CABN - Cab').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+    }
+    async batchCloseMenuClick(): Promise<void> {
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.batchCloseMenu).click();
+        await this.page.locator(this.Elements.WONumberSearchBatchClose).fill(this.unbillableOrderNumber);
+        await this.page.locator(this.Elements.BatchCloseCheckBox).click();
+        await this.page.locator(this.Elements.BatchCloseButton).click();
+        //add delay
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.BatchCloseOkButton).click();
+    }
+    async verifyUnbillableOrderClosedStatus(): Promise<void> {
+        await this.captureUnbillableOrderStatus();
+        //verify the status is Closed
+        const status = this.unbillableOrderStatus;
+        expect(status).toBe('Closed');
+    }
+    async doBatchReviewAfterSelectFromDashboard(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.userIcon);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.todoListMenu);
+        await this.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.batchCloseTabSectionDashboard);
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.WONumberSearchBatchClose).fill(this.unbillableOrderNumber);
+        await this.page.locator(this.Elements.BatchCloseCheckBox).click();
+        await this.page.locator(this.Elements.BatchCloseButton).click();
+        //add delay
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.BatchCloseOkButton).click();
+    }
+    async assetSearchAndSelect(assetNumber: string): Promise<void> {
+        const assetInput = this.page.locator(this.Elements.assetNumberSearch);
+        await assetInput.type(assetNumber);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains asset number
+        const searchResultText = await this.page.locator(this.Elements.assetSearchResult).textContent();
+        expect(searchResultText).toContain(assetNumber);
+
+
+    }
+    async assetDescriptionSearchAndSelect(assetDescription: string): Promise<void> {
+        const assetInput = this.page.locator(this.Elements.assetDescriptionSearch);
+        await assetInput.type(assetDescription);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains asset description
+        const searchResultText = await this.page.locator(this.Elements.assetDescriptionSearchResult).textContent();
+        expect(searchResultText).toContain(assetDescription);
+    }
+    async assetGroupSearchAndSelect(assetGroup: string): Promise<void> {
+
+        await this.page.locator(this.Elements.assetGroupSearch).click();
+        await this.page.getByText(assetGroup, { exact: true }).click();
+        await this.page.mouse.click(10, 10);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains asset group
+        const searchResultText = await this.page.locator(this.Elements.assetGroupSearchResult).textContent();
+        expect(searchResultText).toContain(assetGroup);
+    }
+    async wostatusSearchAndSelect(woStatus: string): Promise<void> {
+
+        await this.page.locator(this.Elements.workOrderStatusSearch).click();
+        await this.page.getByText(woStatus, { exact: true }).click();
+        await this.page.mouse.click(10, 10);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains work order status
+        const searchResultText = await this.page.locator(this.Elements.workOrderStatusSearchResult).textContent();
+        expect(searchResultText).toContain(woStatus);
+    }
+    async mechanicSearchAndSelect(mechanicID: string): Promise<void> {
+        const mechanicSearchField = this.page.locator(this.Elements.mechanicSearchField);
+        await mechanicSearchField.type(mechanicID);
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: mechanicID }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains mechanic ID
+        const searchResultText = await this.page.locator(this.Elements.mechanicSearchResult).textContent();
+        expect(searchResultText).toContain(mechanicID);
+
+    }
+    async searchByRepairDateRange(): Promise<void> {
+        await this.page.locator(this.Elements.repairStartDateField).click();
+        await this.page.getByRole('cell', { name: 'Today' }).click();
+        await this.page.getByRole('cell', { name: 'Today' }).click();
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await this.page.waitForLoadState('networkidle');
+        await expect.soft(this.page.locator(this.Elements.repairDateSearchResult)).toBeVisible();
+        //verify the asset number in search result
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const monthShort = now.toLocaleString('en-US', { month: 'short' }); // Jan, Feb, etc.
+        const day = String(now.getDate()).padStart(2, '0'); // 2-digit day with leading zero
+
+        const date = `${year}-${monthShort}-${day}`; // e.g. "2026-Jan-14"
+
+        // Then verify:
+        await expect.soft(this.page.locator(this.Elements.repairDateSearchResult)).toContainText(date);
+        // await expect.soft(this.page.locator(this.Elements.searchResultRow)).toBeVisible();
+    }
+    async shopSearchAndSelect(shop: string): Promise<void> {
+
+        await this.page.locator(this.Elements.shopsearch).click();
+        await this.page.getByText(shop, { exact: true }).click();
+        await this.page.mouse.click(10, 10);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains shop
+        const searchResultText = await this.page.locator(this.Elements.shopSearchResult).textContent();
+        expect(searchResultText).toContain(shop);
+    }
+    async shiftSearchAndSelect(shift: string): Promise<void> {
+        await this.page.locator(this.Elements.shiftSearch).click();
+        await this.page.getByText(shift, { exact: true }).click();
+        await this.page.mouse.click(10, 10);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains shift
+        const searchResultText = await this.page.locator(this.Elements.shiftSearchResult).textContent();
+        expect(searchResultText).toContain(shift);
+    }
+    async stockSearchAndSelect(stock: string): Promise<void> {
+        const stockInput = this.page.locator(this.Elements.stockNumberSearch);
+        await stockInput.type(stock);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains stock number
+        const searchResultText = await this.page.locator(this.Elements.stockNumberSearchResult).textContent();
+        expect(searchResultText).toContain(stock);
+
+
+    }
+    async AssetManufactureSearchAndSelect(AssetManufacture: string): Promise<void> {
+        const AssetManufactureSearchField = this.page.locator(this.Elements.assetManufacture);
+        await AssetManufactureSearchField.type(AssetManufacture);
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: AssetManufacture }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains Asset Manufacture
+        const searchResultText = await this.page.locator(this.Elements.assetManufactureSearchResult).textContent();
+        expect(searchResultText).toContain(AssetManufacture);
+
+    }
+    async ClaimeTypeSearchAndSelect(ClaimeTypeSearchAndSelect: string): Promise<void> {
+        await this.page.locator(this.Elements.assetManufactureClaimType).click();
+        await this.page.getByText(ClaimeTypeSearchAndSelect, { exact: true }).click();
+        await this.page.mouse.click(10, 10);
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(1000);
+        //verify search result contains claim type
+        const searchResultText = await this.page.locator(this.Elements.assetManufactureClaimTypeSearchResult).textContent();
+        expect(searchResultText).toContain(ClaimeTypeSearchAndSelect);
+    }
+    async CreateNewOrderForFirstShiftToVerifyPayroll(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ANDY.REYES');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async asst8Details(): Promise<void> {
+        //Asset 1
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('AGV005');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'AGV005' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.agvHours).click();
+        await this.page.locator(this.Elements.agvHours).fill('21436');
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('3BA - Battery').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IP - Inspect and report').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+    }
+    async navigateToPayrollReviewScreen(): Promise<void> {
+        await this.page.locator(this.Elements.payrollMenu).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.reviewPayrollMenu).click();
+        await this.page.waitForLoadState('networkidle');
+    }
+
+    async verifyShopInPayrollScreen(): Promise<void> {
+        await this.page.locator(this.Elements.shopPayrollScreenHeader).click();
+        await this.page.getByText('Container - Container Maintenance').click();
+        await this.page.locator(this.Elements.shopPayrollScreenHeader).click();
+        await this.page.getByText('Crane - Crane Maintenance').click();
+        await fixture.page.waitForTimeout(1000);
+    }
+
+    async verifyShiftInPayrollScreen(): Promise<void> {
+        await this.page.locator(this.Elements.ShiftListPayrollScreen).click();
+        await this.page.getByText('1 - First Shift').click();
+        await this.page.locator(this.Elements.refreshButton).click();
+        await fixture.page.waitForTimeout(3000);
+
+
+    }
+    async STandOT(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+  "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
+).inputValue();
+        this.OT = await this.page.locator(
+  "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
+).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('8.00');
+        expect(this.OT).toBe('2.00');
+        await fixture.page.waitForTimeout(3000);
+    }
+    async clickonWObUttonInPayrollScreen(): Promise<void> {
+        await this.page.locator(this.Elements.showWODetails).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.WOLinkOnPopUp).click();
+        //add delay
+        await fixture.page.waitForTimeout(3000);
+
+    }
 
 }
