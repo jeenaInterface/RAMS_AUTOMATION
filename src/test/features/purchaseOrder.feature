@@ -158,30 +158,28 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then go to material return page and do the material return for the internal rebuild order
 
 
-    # @verifyInternalRebuildOrderUnbillableOrderValidations @sanity @po
-    # Scenario: Verify internalRebuild order validations in unbillable order
-    #     Given the admin user is logged into the application
-    #     Then the admin navigates to the order creation menu
-    #     Then select internal rebuild option
-    #     Then the purchase order number is captured
-    #     Then the user searches for the newly created order in the inquiry list page
-    #     Then Go to unbillable order page and select stock number
-    #     Then Click on complete button to verify internal RO validations
-    #     Then Then select internal ro and click on complete button without select activity Code
-    #     Then verifies the validation message for activity code is displayed
-    #     Then select activity code and click on complete button without entering stock details
-    #     Then verifies the validation message for stock details is displayed
-    #     Then enter stock details and click on complete button 
-    #     Then should be able to complete the unbillable work order successfully
+    @verifyInternalRebuildOrderUnbillableOrderValidations @sanity @po
+    Scenario: Verify internalRebuild order validations in unbillable order
+        Given the admin user is logged into the application
+        Then the admin navigates to the order creation menu
+        Then select internal rebuild option
+        Then the purchase order number is captured
+        Then the user searches for the newly created order in the inquiry list page
+        Then Navigate to the Unbillable Order page and select a stock number
+        Then Click the Complete button and verify hour validations appear
+        Then Enter the activity code and hours, then click Complete and verify internal RO validations
+        Then Select an internal RO, click Complete without selecting a stock number, and confirm the validation message for missing stock number is displayed
+        Then Finally, select a stock number and click Complete
+        Then the unbillable work order number is captured
 
-    # @CreateUnbillableOrderHavingNormalOrderAndInternalRO @sanity @po
-    # Scenario: Create unbillable order having normal order and internal RO
-    #     Given the admin user is logged into the application
-    #     Then the admin navigates to the order creation menu
-    #     Then select internal rebuild option
-    #     Then the purchase order number is captured
-    #     Then the user searches for the newly created order in the inquiry list page
-    #     Then Go to unbillable order page and add normal order and internal RO
-    #     Then the unbillable work order number is captured
-    #     Then the user searches for the newly created order in the inquiry list page
+    @CreateUnbillableOrderHavingNormalOrderAndInternalRO @sanity @po
+    Scenario: Create unbillable order having normal order and internal RO
+        Given the admin user is logged into the application
+        Then the admin navigates to the order creation menu
+        Then select internal rebuild option
+        Then the purchase order number is captured
+        Then the user searches for the newly created order in the inquiry list page
+        Then Go to unbillable order page and add normal order and internal RO
+        Then the unbillable work order number is captured
+
 

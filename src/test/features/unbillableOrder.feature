@@ -144,6 +144,9 @@ Feature: Verify functionalities under Un-Billable Work Order
 
 
     # Scenario: Create unbillable work order PM details verification
+    # Scenario: Search functionality in inquirey screen for unbillable work order
+    # Scenario: Verify Batch close screen functionalities for unbillable work order
+    
     # Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift 
     # Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for Vessel Sail
     # Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for 4 and Go
@@ -169,8 +172,7 @@ Feature: Verify functionalities under Un-Billable Work Order
     # Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for Vessel Sail
     # Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for 4 and Go
     # Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for PMA Training
-    # Scenario: Search functionality in inquirey screen for unbillable work order
-    # Scenario: Verify Batch close screen functionalities for unbillable work order
+
 
 
 

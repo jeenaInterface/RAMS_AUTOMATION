@@ -169,6 +169,20 @@ export default class PurchaseOrderPage {
         retreiveReceiveButton: "//span[normalize-space(text())='Retrieve Receive']",
         stockNoTransfer: "(//input[@class='el-input__inner'])[1]",
         saveButton: "//span[normalize-space(text())='Save']",
+        hourValidationMessage: "(//div[@class='el-message-box__content'])[1]",
+        internalROValidation: "(//p[normalize-space()='Please check Internal RO Number.'])[1]",
+        stockNumberValidationMessage: "//p[contains(text(),'There is a Rebuild Stock Number entry without any ')]",
+        hourValidationOkayButton: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
+
+         PlusButtonAddAsset1: "(//i[@class='ivu-icon ivu-icon-plus'])[3]",
+        assetNumber2: "(//input[@placeholder='-- Input Text --'])[2]",
+        componentCode2: "(//input[@placeholder='Component Code'])[2]",
+        damageCode2: "(//input[@placeholder='Damage Code'])[2]",
+        repairCode2: "(//input[@placeholder='Repair Code'])[2]",
+        repairLocation2: "(//tr[@class='activity-row'])[2]//input[@placeholder='--Select One--']",
+        actualHours2: "(//div[@class='el-input input-align']//input[@type='text'])[2]",
+        stockQuantitywo2: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[2]",
+
 
 
     }
@@ -1041,6 +1055,10 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+
+    }
+    async clickCloseCompleteButton(): Promise<void> {
         await this.page.locator(this.Elements.completeButton).click();
         await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
         await fixture.page.waitForTimeout(2000);
@@ -1160,7 +1178,7 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.cancelDSuccessMessage).click();
 
     }
-     async returnOperation(): Promise<void> {
+    async returnOperation(): Promise<void> {
         const randomNumber = getRandomInt(1000, 9999);
 
         await this.page.locator(this.Elements.stockNoTransfer).fill(this.payslipNumber);
@@ -1187,6 +1205,184 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(2000);
 
 
+    }
+    async FillStockNumberInWO(): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('ASCRB');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'ASCRB' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(1).type('1008');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByText('1008 - 1000X20RCP - tire flexi van recap 10.00x20').click();
+        await fixture.page.waitForTimeout(1000);
+
+
+    }
+    async clickOnCompleteToVerifyHourValidation(): Promise<void> {
+        await this.page.locator(this.Elements.completeButton).click();
+        const errorMessageLocator = this.page.locator(this.Elements.hourValidationMessage);
+
+        // Wait for the error message to appear and be visible (timeout optional)
+        await errorMessageLocator.waitFor({ state: 'visible', timeout: 5000 });
+        const isVisible = await errorMessageLocator.isVisible();
+
+        if (!isVisible) {
+            throw new Error("Hour validation error message not found or not visible.");
+        }
+        await this.page.locator(this.Elements.hourValidationOkayButton).click();
+
+    }
+    async FillActivityCode(): Promise<void> {
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('2EL - Electrical').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BO - Burned out').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('CA - Calibration - ALL').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('EROM - Electrical Room').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.locator(this.Elements.completeButton).click();
+        //verify internal RO field is mandatory
+        const errorMessageLocator = this.page.locator(this.Elements.internalROValidation);
+        // Wait for the error message to appear and be visible (timeout optional)
+        await errorMessageLocator.waitFor({ state: 'visible', timeout: 5000 });
+        const isVisible = await errorMessageLocator.isVisible();
+        if (!isVisible) {
+            throw new Error("Internal RO validation error message not found or not visible.");
+        }
+
+        await this.page.locator(this.Elements.hourValidationOkayButton).click();
+    }
+    async verifyStockNumberValidation(): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.internalRONumber).click();
+        await this.page.locator(this.Elements.internalRONumber).fill(this.purchaseOrderNo);
+        // await this.page.locator(this.Elements.internalRONumber).fill("325871");
+        await this.page.getByText(this.purchaseOrderNo).click();
+        // await this.page.getByText("325871").click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.completeButton).click();
+        const errorMessageLocator = this.page.locator(this.Elements.stockNumberValidationMessage);
+        // Wait for the error message to appear and be visible (timeout optional)
+        await errorMessageLocator.waitFor({ state: 'visible', timeout: 5000 });
+        const isVisible = await errorMessageLocator.isVisible();
+        if (!isVisible) {
+            throw new Error("Stock number validation error message not found or not visible.");
+        }
+        await this.page.locator(this.Elements.hourValidationOkayButton).click();
+    }
+    async FillStockNumber(): Promise<void> {
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(3).type('1008');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByRole('listitem').filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' }).locator('span').click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.closeButtonWO).click();
+        await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        const element = await fixture.page.locator(this.Elements.headertitle).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.workOrderNumber = match[1];
+                console.log(this.workOrderNumber);
+                // Use workOrderNumber as needed
+            }
+        }
+
+    }
+     async asst2Details(): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('ASCRB');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'ASCRB' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(1).type('1008');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByText('1008 - 1000X20RCP - tire flexi van recap 10.00x20').click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.internalRONumber).click();
+        await this.page.locator(this.Elements.internalRONumber).fill(this.purchaseOrderNo);
+        // await this.page.locator(this.Elements.internalRONumber).fill("325871");
+        await this.page.getByText(this.purchaseOrderNo).click();
+        // await this.page.getByText("325871").click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('2EL - Electrical').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BO - Burned out').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('CA - Calibration - ALL').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('EROM - Electrical Room').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('3');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(3).type('1008');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.getByRole('listitem').filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' }).locator('span').click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+
+        await this.page.locator(this.Elements.PlusButtonAddAsset1).click();
+        await fixture.page.waitForTimeout(2000);
+        const assetInput2 = this.page.locator(this.Elements.assetNumber2);
+        await assetInput2.type('AGVOVR');
+        await fixture.page.waitForTimeout(1000);
+        const suggestion2 = this.page.getByRole('listitem').filter({ hasText: 'AGVOVR' }).first();
+        await suggestion2.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion2.click();
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.componentCode2).click();
+        await this.page.getByText('3BA - Battery').click();
+        await this.page.locator(this.Elements.damageCode2).click();
+        await this.page.getByText('BR - Broken').nth(1).click();
+        await this.page.locator(this.Elements.repairCode2).click();
+        await this.page.getByText('IP - Inspect and report').nth(1).click();
+        await this.page.locator(this.Elements.repairLocation2).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours2).click();
+        await this.page.locator(this.Elements.actualHours2).fill('5');
+        await fixture.page.waitForTimeout(1000);
     }
 
 }

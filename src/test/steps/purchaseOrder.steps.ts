@@ -240,6 +240,8 @@ Then('verifies the value in the receive status field in Purchase Order', async f
 Then('Go to unbillable order page and map the internal rebuild order', async () => {
     // purchasePage = new purchaseOrderPage(fixture.page);
     await purchasePage.createUnbillableOrderForInternalRO();
+    await purchasePage.clickCloseCompleteButton();
+
 });
 Then('the unbillable work order number is captured', async function (this: any) {
     let uwo = purchasePage.workOrderNumber || '';
@@ -289,3 +291,24 @@ Then('verifies the receive status value is updated to Not Received',
             fixture.logger?.info(`Receive Status: ${status}`);
         }
     });
+Then('Navigate to the Unbillable Order page and select a stock number', async () => {
+    await purchasePage.FillStockNumberInWO();
+});
+Then('Click the Complete button and verify hour validations appear', async () => {
+    await purchasePage.clickOnCompleteToVerifyHourValidation();
+});
+Then('Enter the activity code and hours, then click Complete and verify internal RO validations', async () => {
+    await purchasePage.FillActivityCode();
+});
+Then('Select an internal RO, click Complete without selecting a stock number, and confirm the validation message for missing stock number is displayed', async () => {
+    await purchasePage.verifyStockNumberValidation();
+});
+Then('Finally, select a stock number and click Complete', async () => {
+    await purchasePage.FillStockNumber();
+});
+Then('Go to unbillable order page and add normal order and internal RO', async () => {
+    await purchasePage.asst2Details();
+    await purchasePage.clickCloseCompleteButton();
+
+
+});
