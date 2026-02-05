@@ -196,7 +196,8 @@ export default class UnbillableOrderPage {
         IsConsistantWithWThirdUser: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[7]",
         showWODetailsThirdUser: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[8]/div/div/div/div/button/span/i",
 
-
+        repairDate: "(//label[normalize-space(text())='Repair Date']/following::input)[1]",
+        repairDatePayroll: "(//label[normalize-space(text())='Repair Date:']/following::input)[1]",
 
 
 
@@ -1202,7 +1203,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
     }
-        async CreateNewOrderToVerifyPayrollSecondShiftOT(specialShift: string): Promise<void> {
+    async CreateNewOrderToVerifyPayrollSecondShiftOT(specialShift: string): Promise<void> {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.mechanicSearch).click();
         await this.page.locator(this.Elements.userIDSearchBox).fill('BRAD.WILLIAMS');
@@ -1219,7 +1220,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.lbctLeadCheckBox).check();
         await fixture.page.waitForTimeout(1000);
     }
-        async CreateNewOrderForVerifyPayrollThirdShiftOT(specialShift: string): Promise<void> {
+    async CreateNewOrderForVerifyPayrollThirdShiftOT(specialShift: string): Promise<void> {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.mechanicSearch).click();
         await this.page.locator(this.Elements.userIDSearchBox).fill('ARNULFO.LOPEZ');
@@ -1269,7 +1270,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
     }
-        async STandOTForVessel(): Promise<void> {
+    async STandOTForVessel(): Promise<void> {
         //verify ST=8 and OT=2
 
         this.ST = await this.page.locator(
@@ -1284,7 +1285,7 @@ export default class UnbillableOrderPage {
         expect(this.OT).toBe('0.00');
         await fixture.page.waitForTimeout(1000);
     }
-        async STandOTSecondShiftForVessel(): Promise<void> {
+    async STandOTSecondShiftForVessel(): Promise<void> {
         //verify ST=8 and OT=2
 
         this.ST = await this.page.locator(
@@ -1299,7 +1300,7 @@ export default class UnbillableOrderPage {
         expect(this.OT).toBe('0.00');
         await fixture.page.waitForTimeout(1000);
     }
-        async STandOTThirdShiftForVessel(): Promise<void> {
+    async STandOTThirdShiftForVessel(): Promise<void> {
         //verify ST=8 and OT=2
 
         this.ST = await this.page.locator(
@@ -1312,6 +1313,71 @@ export default class UnbillableOrderPage {
         expect(IsConsistantWithWO).toBe('YES');
         expect(this.ST).toBe('4.00');
         expect(this.OT).toBe('0.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+
+    async CreateNewOrderForFirstShiftWeekEnd(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ANDY.REYES');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        // await this.page.locator(this.Elements.repairDate).click();
+        // Calculate last Sunday's date
+        await this.page.locator(this.Elements.repairDate).click();
+        const today = new Date();
+        const lastSunday = new Date(today);
+        lastSunday.setDate(today.getDate() - today.getDay());
+
+        const year = lastSunday.getFullYear();
+        const month = lastSunday.toLocaleString('default', { month: 'short' }); // e.g., "Feb"
+        const day = String(lastSunday.getDate());
+
+
+        //click on the calculated date in the calendar
+        await this.page.locator(`//td[contains(@class, 'available') and normalize-space(text())='${day}']`).click();
+
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+
+    async datePayrollScreen(): Promise<void> {
+        await this.page.locator(this.Elements.repairDatePayroll).click();
+        const today = new Date();
+        const lastSunday = new Date(today);
+        lastSunday.setDate(today.getDate() - today.getDay());
+
+        const year = lastSunday.getFullYear();
+        const month = lastSunday.toLocaleString('default', { month: 'short' }); // e.g., "Feb"
+        const day = String(lastSunday.getDate());
+
+
+        //click on the calculated date in the calendar
+        await this.page.locator(`//td[contains(@class, 'available') and normalize-space(text())='${day}']`).click();
+        await fixture.page.waitForTimeout(3000);
+
+    }
+    async STandOTForWeekend(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('0.00');
+        expect(this.OT).toBe('10.00');
         await fixture.page.waitForTimeout(1000);
     }
 
