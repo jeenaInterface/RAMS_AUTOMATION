@@ -187,6 +187,18 @@ export default class UnbillableOrderPage {
         showWODetails: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[8]/div/div/div/div/button/span/i",
         WOLinkOnPopUp: "(//div[@class='cell']//a)[1]",
         refreshButton: "//span[normalize-space()='Refresh']",
+        cancelokButton1: "(//button[contains(@class,'el-button el-button--default el-button--primary')])[1]",
+        cancelButton1: "//div[@class='work-order-footer']//span[contains(text(),'Cancel')]",
+        hourType: "(//label[normalize-space(text())='Hour Type']/following::input)[1]",
+        IsConsistantWithWO2ndUser: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[7]",
+        showWODetails2ndUser: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[8]/div/div/div/div/button/span/i",
+
+        IsConsistantWithWThirdUser: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[7]",
+        showWODetailsThirdUser: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[8]/div/div/div/div/button/span/i",
+
+
+
+
 
     };
 
@@ -965,12 +977,15 @@ export default class UnbillableOrderPage {
         await this.page.getByText('Container - Container Maintenance').click();
         await this.page.locator(this.Elements.shopPayrollScreenHeader).click();
         await this.page.getByText('Crane - Crane Maintenance').click();
+        await this.page.locator(this.Elements.refreshButton).click();
+        await this.page.locator(this.Elements.shopPayrollScreenHeader).click();
+        await this.page.getByText('Crane - Crane Maintenance').click();
         await fixture.page.waitForTimeout(1000);
     }
 
-    async verifyShiftInPayrollScreen(): Promise<void> {
+    async verifyShiftInPayrollScreen(Shift: string): Promise<void> {
         await this.page.locator(this.Elements.ShiftListPayrollScreen).click();
-        await this.page.getByText('1 - First Shift').click();
+        await this.page.getByText(Shift).click();
         await this.page.locator(this.Elements.refreshButton).click();
         await fixture.page.waitForTimeout(3000);
 
@@ -980,16 +995,16 @@ export default class UnbillableOrderPage {
         //verify ST=8 and OT=2
 
         this.ST = await this.page.locator(
-  "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
-).inputValue();
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
+        ).inputValue();
         this.OT = await this.page.locator(
-  "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
-).inputValue();
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
+        ).inputValue();
         const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO).textContent();
         expect(IsConsistantWithWO).toBe('YES');
         expect(this.ST).toBe('8.00');
         expect(this.OT).toBe('2.00');
-        await fixture.page.waitForTimeout(3000);
+        await fixture.page.waitForTimeout(1000);
     }
     async clickonWObUttonInPayrollScreen(): Promise<void> {
         await this.page.locator(this.Elements.showWODetails).click();
@@ -998,6 +1013,306 @@ export default class UnbillableOrderPage {
         //add delay
         await fixture.page.waitForTimeout(3000);
 
+    }
+    async clickonWObUttonInPayrollScreenSecondShiftNormal(): Promise<void> {
+        await this.page.locator(this.Elements.showWODetails2ndUser).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.WOLinkOnPopUp).click();
+        //add delay
+        await fixture.page.waitForTimeout(3000);
+
+    }
+    async clickonWObUttonInPayrollScreenThirdShiftNormal(): Promise<void> {
+        await this.page.locator(this.Elements.showWODetailsThirdUser).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.WOLinkOnPopUp).click();
+        //add delay
+        await fixture.page.waitForTimeout(3000);
+
+    }
+    async clickOnCancelButtonAfterVerifyPayroll(): Promise<void> {
+        await this.page.locator(this.Elements.cancelButton1).click();
+        await this.page.waitForSelector(this.Elements.cancelokButton1);
+        await this.page.locator(this.Elements.cancelokButton1).click();
+        await this.page.waitForLoadState('networkidle');
+        //add delay
+        await fixture.page.waitForTimeout(2000);
+        // Wait for the header to update with the new status
+        await this.page.locator(this.Elements.headerTitle).locator('xpath=.').waitFor({ state: 'visible' });
+        await fixture.page.waitForTimeout(1000);
+        await this.captureUnbillableOrderStatus();
+        //verify the status is cancelled
+        const status = this.unbillableOrderStatus;
+        expect(status.toLowerCase()).toBe('cancelled');
+    }
+    async STandOTAfterCancel(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('0.00');
+        expect(this.OT).toBe('0.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+    async CreateNewOrderForFirstShiftToVerifyPayrollOT(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ANDY.REYES');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.hourType).click();
+        await this.page.getByText('Over Time').click();
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    //secondshift
+    async CreateNewOrderForFirstShiftToVerifyPayrollSecondShift(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('BRAD.WILLIAMS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async STandOTSecondShiftNormal(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO2ndUser).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('8.00');
+        expect(this.OT).toBe('2.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+    async STandOTAfterCancelSecondShiftNormal(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO2ndUser).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('0.00');
+        expect(this.OT).toBe('0.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+
+    async CreateNewOrderForFirstShiftToVerifyPayrollThirdShift(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ARNULFO.LOPEZ');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async STandOTThirdShiftNormal(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWThirdUser).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('5.00');
+        expect(this.OT).toBe('1.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+    async STandOTAfterCancelThirdShiftNormal(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWThirdUser).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('0.00');
+        expect(this.OT).toBe('0.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+    async asst8DetailsForThirdShift(): Promise<void> {
+        //Asset 1
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('AGV005');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'AGV005' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.agvHours).click();
+        await this.page.locator(this.Elements.agvHours).fill('21436');
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('3BA - Battery').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IP - Inspect and report').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('5');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+    }
+        async CreateNewOrderToVerifyPayrollSecondShiftOT(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('BRAD.WILLIAMS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.hourType).click();
+        await this.page.getByText('Over Time').click();
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+        async CreateNewOrderForVerifyPayrollThirdShiftOT(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ARNULFO.LOPEZ');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.hourType).click();
+        await this.page.getByText('Over Time').click();
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async asst8DetailsForVesselSail(): Promise<void> {
+        //Asset 1
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('AGV005');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'AGV005' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.agvHours).click();
+        await this.page.locator(this.Elements.agvHours).fill('21436');
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('3BA - Battery').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IP - Inspect and report').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('4');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+    }
+        async STandOTForVessel(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('4.00');
+        expect(this.OT).toBe('0.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+        async STandOTSecondShiftForVessel(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO2ndUser).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('4.00');
+        expect(this.OT).toBe('0.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+        async STandOTThirdShiftForVessel(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWThirdUser).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('4.00');
+        expect(this.OT).toBe('0.00');
+        await fixture.page.waitForTimeout(1000);
     }
 
 }
