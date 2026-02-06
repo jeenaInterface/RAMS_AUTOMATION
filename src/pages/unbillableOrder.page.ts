@@ -1520,4 +1520,57 @@ export default class UnbillableOrderPage {
         expect(this.OT).toBe('4.00');
         await fixture.page.waitForTimeout(1000);
     }
+    async verifyLeadManCheckBox(): Promise<void> {
+        const isChecked = await this.page.locator(this.Elements.lbctLeadCheckBox).isChecked();
+
+        if (!isChecked) {
+            throw new Error('Lead Mechanic checkbox is not checked as expected');
+        }
+    }
+async verifyLeadManCheckBoxNotChecked(): Promise<void> {
+    const isChecked = await this.page.locator(this.Elements.lbctLeadCheckBox).isChecked();
+
+    if (isChecked) {
+        throw new Error('Lead Mechanic checkbox is checked but expected to be unchecked');
+    }
+    // Checkbox is unchecked; no further action needed
+}
+ async bombCartasstDetails(): Promise<void> {
+        //Asset 1
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('BC001');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.IsPMCheckBox).check();
+        await this.page.locator(this.Elements.PMGroupList).click();
+        await this.page.getByText('General PM').click();
+        await this.page.locator(this.Elements.PMName).click();
+        await this.page.getByText('3M PM').click();
+        // await this.page.locator(this.Elements.PMHours).click();
+        // await this.page.locator(this.Elements.PMHours).fill('2');
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('4MZ - Mechanical Misc').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('LK - Leak').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('GS - Straighten').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('FRRT - FRRT - Front Right').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+    }
 }

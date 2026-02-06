@@ -796,3 +796,15 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
   await unbillableOrderPage.verifyShiftInPayrollScreen('3 - Third Shift');
   await unbillableOrderPage.STandOTThirdShiftForWeekEndVesselSAIL();
 });
+
+Then('confirm that the IsLead checkbox is checked by default', async () => {
+  await unbillableOrderPage.verifyLeadManCheckBox();
+});
+Then('confirm that the IsLead checkbox is not checked by default', async () => {
+  await unbillableOrderPage.verifyLeadManCheckBoxNotChecked();
+});
+When('enters all the required fields for unbillable work order and and select Is PM work order checkbox then clicks on the Draft button for bombcart asset', async () => {
+  await unbillableOrderPage.CreateNewOrderForFirstShift('1 - No');
+  await unbillableOrderPage.bombCartasstDetails();
+  await unbillableOrderPage.clickOnDraftButton();
+});

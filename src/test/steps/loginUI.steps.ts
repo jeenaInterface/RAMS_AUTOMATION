@@ -32,3 +32,17 @@ When('the admin logs back into the application', async () => {
   await login.enterPassword(process.env.userPassword);
   await login.clickLoginButton();
 });
+When('the lead mechanic user logs into the application', async () => {
+    login = new loginPage(fixture.page);
+  await login.navigateToLoginPage();
+  await login.enterUserName(process.env.mechEmail);
+  await login.enterPassword(process.env.mechPassword);
+  await login.clickLoginButtonMechanic();
+});
+When('the mechanic user logs into the application', async () => {
+    login = new loginPage(fixture.page);
+  await login.navigateToLoginPage();
+  await login.enterUserName(process.env.mechEmail);
+  await login.enterPassword(process.env.mechPassword);
+  await login.clickLoginButtonMechanic1();
+});

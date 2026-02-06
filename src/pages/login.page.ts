@@ -20,7 +20,8 @@ export default class LoginPage {
         username: "//i[contains(@class,'menu-icon ivu-icon')]/following-sibling::span[1]",
         logOutButton: "//span[normalize-space()='Log Out']",
         logOut: "//a[normalize-space(text())='Logout']",
-        yesButton: "//span[normalize-space(text())='YES']"
+        yesButton: "//span[normalize-space(text())='YES']",
+        noButton:"//span[normalize-space(text())='NO']"
     };
 
     async navigateToLoginPage(): Promise<void> {
@@ -46,6 +47,11 @@ export default class LoginPage {
     async clickLoginButtonMechanic(): Promise<void> {
         await this.page.locator(this.Elements.signInButton).click();
         await this.page.locator(this.Elements.yesButton).click();
+
+    }
+        async clickLoginButtonMechanic1(): Promise<void> {
+        await this.page.locator(this.Elements.signInButton).click();
+        await this.page.locator(this.Elements.noButton).click();
 
     }
 

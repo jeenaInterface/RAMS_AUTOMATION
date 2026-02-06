@@ -142,15 +142,6 @@ Feature: Verify functionalities under Un-Billable Work Order
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift and selects special shift as PMA Training
     Then Verify hour validation messages are displayed as expected for the third shift  for special shift as PMA Training
 
-  @PM @sanity @bwo
-  Scenario: Create unbillable work order PM details verification
-    Given the admin user is logged into the application
-    When the admin navigates to the unbillable work order creation menu
-    And enters all the required fields for unbillable work order and and select Is PM work order checkbox then clicks on the Draft button
-    Then the unbillable work order number is captured for future reference
-    When the admin clicks the complete and then close button
-    Then Search for the recently created unbillable work order using the captured work order number
-
 
   @BatchClose @sanity @bwo
   Scenario: Verify Batch close screen functionalities for unbillable work order
@@ -190,7 +181,7 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then verify the search functionality using asset manufacturer and verify the results are displayed as expected 'ZPMC'
     Then verify the search functionality using asset manufacturer claime type and verify the results are displayed as expected 'Claim with Parts'
 
-@weekDaySTNormalShift @sanity @bwo
+  @weekDaySTNormalShift @sanity @bwo
   Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for first shift
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
@@ -202,7 +193,7 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 
-    @weekDaySTNormalShiftSTSecondShift @sanity @bwo
+  @weekDaySTNormalShiftSTSecondShift @sanity @bwo
   Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for second shift
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
@@ -226,8 +217,8 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
- @weekDayOTNormalShiftFirstShiftOT @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift
+  @weekDayOTNormalShiftFirstShiftOT @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for first shift and close the WO
@@ -239,8 +230,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 
 
- @weekDayOTNormalShiftSecondShiftOT @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for second shift
+  @weekDayOTNormalShiftSecondShiftOT @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for second shift
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for second shift and close the WO
@@ -251,8 +242,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift after cancelling the WO
 
-     @weekDayOTNormalShiftThirdShiftOT @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for third shift
+  @weekDayOTNormalShiftThirdShiftOT @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for third shift
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for third shift and close the WO
@@ -263,8 +254,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
-@weekDaySTVesselFirstShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for first shift for Vessel Sail
+  @weekDaySTVesselFirstShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for first shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for first shift with special shift as Vessel Sail and close the WO
@@ -275,8 +266,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 
-@weekDaySTVesselSecondShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for second shift for Vessel Sail
+  @weekDaySTVesselSecondShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for second shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for second shift with special shift as Vessel Sail and close the WO
@@ -287,8 +278,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift after cancelling the WO
 
-@weekDaySTVesselThirdShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for third shift for Vessel Sail
+  @weekDaySTVesselThirdShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for third shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for third shift with special shift as Vessel Sail and close the WO
@@ -299,8 +290,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
-    @weekDayOTVesselFirstShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for Vessel Sail
+  @weekDayOTVesselFirstShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for first shift with special shift as Vessel Sail and close the WO
@@ -311,8 +302,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 
-@weekDayOTVesselSecondShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for second shift for Vessel Sail
+  @weekDayOTVesselSecondShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for second shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for second shift with special shift as Vessel Sail and close the WO
@@ -323,8 +314,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift after cancelling the WO
 
-@weekDayOTVesselThirdShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for third shift for Vessel Sail
+  @weekDayOTVesselThirdShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for third shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for third shift with special shift as Vessel Sail and close the WO
@@ -335,8 +326,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
-@weekDaySTFourAndGoFirstShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for first shift for 4 and Go
+  @weekDaySTFourAndGoFirstShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for first shift for 4 and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for first shift with special shift as four and Go and close the WO
@@ -347,8 +338,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 
-@weekDaySTFourAndGoSecondShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for second shift for 4 and Go
+  @weekDaySTFourAndGoSecondShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for second shift for 4 and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for second shift with special shift as four and Go and close the WO
@@ -359,8 +350,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift after cancelling the WO
 
-@weekDaySTFourAndGoThirdShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for third shift for 4 and Go
+  @weekDaySTFourAndGoThirdShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for third shift for 4 and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for third shift with special shift as four and Go and close the WO
@@ -371,8 +362,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
-@weekDayOTFourAndGoFirstShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for 4 and Go
+  @weekDayOTFourAndGoFirstShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for 4 and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for first shift with special shift as four and Go and close the WO
@@ -383,8 +374,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 
-@weekDayOTFourAndGoSecondShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for second shift for 4 and Go
+  @weekDayOTFourAndGoSecondShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for second shift for 4 and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for second shift with special shift as four and Go and close the WO
@@ -395,8 +386,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift after cancelling the WO
 
-@weekDayOTFourAndGoThirdShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for third shift for 4 and Go
+  @weekDayOTFourAndGoThirdShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for third shift for 4 and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for third shift with special shift as four and Go and close the WO
@@ -407,8 +398,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
-@weekDaySTPMATrainingFirstShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for first shift for PMA Training
+  @weekDaySTPMATrainingFirstShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for first shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for first shift with special shift as PMA Training and close the WO
@@ -419,8 +410,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 
-@weekDaySTPMATrainingSecondShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for second shift for PMA Training
+  @weekDaySTPMATrainingSecondShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for second shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for second shift with special shift as PMA Training and close the WO
@@ -431,8 +422,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift after cancelling the WO
 
-@weekDaySTPMATrainingThirdShift @sanity @bwo
-Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for third shift for PMA Training
+  @weekDaySTPMATrainingThirdShift @sanity @bwo
+  Scenario: Create a WO for weekday and select straight time in hour type, the verify ST and OT in payroll screen for third shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select straight time in hour type for third shift with special shift as PMA Training and close the WO
@@ -443,8 +434,8 @@ Scenario: Create a WO for weekday and select straight time in hour type, the ver
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
-@weekDayOTPMATrainingFirstShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for PMA Training
+  @weekDayOTPMATrainingFirstShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for first shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for first shift with special shift as PMA Training and close the WO
@@ -455,8 +446,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 
-@weekDayOTPMATrainingSecondShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for second shift for PMA Training
+  @weekDayOTPMATrainingSecondShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for second shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for second shift with special shift as PMA Training and close the WO
@@ -467,8 +458,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift after cancelling the WO
 
-    @weekDayOTPMATrainingThirdShift @sanity @bwo
-Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for third shift for PMA Training
+  @weekDayOTPMATrainingThirdShift @sanity @bwo
+  Scenario: Create a WO for weekday and select overtime in hour type, the verify ST and OT in payroll screen for third shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekday and select overtime in hour type for third shift with special shift as PMA Training and close the WO
@@ -479,8 +470,8 @@ Scenario: Create a WO for weekday and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
-@weekEndSTNormalShiftFirstShift @sanity @bwo
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for first shift
+  @weekEndSTNormalShiftFirstShift @sanity @bwo
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for first shift
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend and select overtime in hour type for first shift and close the WO
@@ -491,8 +482,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift for weekend after cancelling the WO
 
-@weekEndSTNormalShiftSecondShift @sanity @bwo
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for second shift
+  @weekEndSTNormalShiftSecondShift @sanity @bwo
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for second shift
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend and select overtime in hour type for second shift and close the WO
@@ -503,8 +494,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift for weekend after cancelling the WO
 
-@weekEndSTNormalThirdShift @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift
+  @weekEndSTNormalThirdShift @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend and select overtime in hour type for third shift and close the WO
@@ -515,8 +506,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift for weekend after cancelling the WO
 
-@weekEndSTNormalShiftFirstShiftVessel @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for first shift for Vessel Sail
+  @weekEndSTNormalShiftFirstShiftVessel @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for first shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift vessel sail and select overtime in hour type for first shift and close the WO
@@ -527,8 +518,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift for weekend after cancelling the WO
 
-    @weekEndSTNormalShiftSecondShiftVessel @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for second shift for Vessel Sail
+  @weekEndSTNormalShiftSecondShiftVessel @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for second shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift vessel sail and select overtime in hour type for second shift and close the WO
@@ -539,8 +530,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift for weekend after cancelling the WO
 
-   @weekEndSTNormalShiftThirdShiftVessel @sanity  
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for Vessel Sail
+  @weekEndSTNormalShiftThirdShiftVessel @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for Vessel Sail
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift vessel sail and select overtime in hour type for third shift and close the WO
@@ -551,8 +542,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift for weekend after cancelling the WO
 
-@weekEndOTNormalShiftFirstShiftFourandGo @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for first shift for four and Go
+  @weekEndOTNormalShiftFirstShiftFourandGo @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for first shift for four and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift four and Go and select overtime in hour type for first shift and close the WO
@@ -563,8 +554,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift for weekend after cancelling the WO
 
-  @weekEndOTNormalShiftSecondShiftFourandGo @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for second shift for four and Go
+  @weekEndOTNormalShiftSecondShiftFourandGo @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for second shift for four and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift four and Go and select overtime in hour type for second shift and close the WO
@@ -575,8 +566,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift for weekend after cancelling the WO
 
-@weekEndOTNormalShiftThirdShiftFourAndGo @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for four and Go
+  @weekEndOTNormalShiftThirdShiftFourAndGo @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for four and Go
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift four and Go and select overtime in hour type for third shift and close the WO
@@ -587,8 +578,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift for weekend after cancelling the WO
 
-@weekEndOTNormalShiftFirstShiftPMATraining @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for first shift for PMA Training
+  @weekEndOTNormalShiftFirstShiftPMATraining @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for first shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift PMA Training and select overtime in hour type for first shift and close the WO
@@ -599,8 +590,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift for weekend after cancelling the WO
 
-      @weekEndOTNormalShiftSecondShiftPMATraining @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for second shift for PMA Training
+  @weekEndOTNormalShiftSecondShiftPMATraining @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for second shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift PMA Training and select overtime in hour type for second shift and close the WO
@@ -611,8 +602,8 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift for weekend after cancelling the WO
 
-@weekEndOTNormalShiftThirdShiftPMATraining @sanity 
-Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for PMA Training
+  @weekEndOTNormalShiftThirdShiftPMATraining @sanity
+  Scenario: Create a WO for weekend and select overtime in hour type, the verify ST and OT in payroll screen for third shift for PMA Training
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And Create a WO for weekend for the special shift PMA Training and select overtime in hour type for third shift and close the WO
@@ -623,14 +614,41 @@ Scenario: Create a WO for weekend and select overtime in hour type, the verify S
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift for weekend after cancelling the WO
 
+  @leadManCheckBox @sanity
+  Scenario: Verify that the IsLead checkbox is checked by default when logged in as Lead Mechanic
+    Given the lead mechanic user logs into the application
+    And the admin navigates to the unbillable work order creation menu
+    Then confirm that the IsLead checkbox is checked by default
+@leadManNotCheckBox @sanity
+  Scenario: Verify that the IsLead checkbox is not checked by default when logged in as Mechanic
+    Given the mechanic user logs into the application
+    And the admin navigates to the unbillable work order creation menu
+    Then confirm that the IsLead checkbox is not checked by default
 
-    #Scenario: verift IsLead checkBox is ticked by default when logged in as Lead Mechanic
-    #Scenario: verift IsLead checkBox is not ticked by default when logged in as Mechanic
-    #Scenario: Verify IsPm functionality for Bombcart assets
-    #Scenario: Verify IsPm functionality for YT-Yard Tractor assets
 
-    #Scenario: Verify payroll review functionality
-     #Scenario: Verify approve payroll functionality
+  @YT-YardTractor @sanity @bwo
+  Scenario: Create unbillable work order PM details verification for YT-YardTractor asset
+    Given the admin user is logged into the application
+    When the admin navigates to the unbillable work order creation menu
+    And enters all the required fields for unbillable work order and and select Is PM work order checkbox then clicks on the Draft button
+    Then the unbillable work order number is captured for future reference
+    When the admin clicks the complete and then close button
+    Then Search for the recently created unbillable work order using the captured work order number
+
+#Scenario: Verify IsPm functionality for Bombcart assets
+
+  @Bombcartpm @sanity @bwo
+  Scenario: Create unbillable work order PM details verification for Bombcart asset
+    Given the admin user is logged into the application
+    When the admin navigates to the unbillable work order creation menu
+    And enters all the required fields for unbillable work order and and select Is PM work order checkbox then clicks on the Draft button for bombcart asset
+    Then the unbillable work order number is captured for future reference
+    When the admin clicks the complete and then close button
+    Then Search for the recently created unbillable work order using the captured work order number
+
+
+#Scenario: Verify payroll review functionality
+#Scenario: Verify approve payroll functionality
 
 
 
