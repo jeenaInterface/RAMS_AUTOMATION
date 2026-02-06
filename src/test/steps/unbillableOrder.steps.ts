@@ -595,7 +595,7 @@ When('Create a WO for weekday and select overtime in hour type for third shift w
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
 
-When('Create a WO for weekend and select straight time in hour type for first shift and close the WO', async () => {
+When('Create a WO for weekend and select overtime in hour type for first shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftWeekEnd('1 - No');
   await unbillableOrderPage.asst8Details();
   await unbillableOrderPage.clickOnDraftButton1();
@@ -615,4 +615,50 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
   await unbillableOrderPage.verifyShopInPayrollScreen();
   await unbillableOrderPage.verifyShiftInPayrollScreen('1 - First Shift');
   await unbillableOrderPage.STandOTAfterCancel();
+});
+
+When('Create a WO for weekend and select overtime in hour type for second shift and close the WO', async () => {
+  await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOTWeekEnd('1 - No');
+  await unbillableOrderPage.asst8Details();
+  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+  await unbillableOrderPage.clickOnCloseButtonNoStatus();
+});
+Then('the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift for weekend', async () => {
+  await unbillableOrderPage.navigateToPayrollReviewScreen();
+  await unbillableOrderPage.datePayrollScreen();
+  await unbillableOrderPage.verifyShopInPayrollScreen();
+  await unbillableOrderPage.verifyShiftInPayrollScreen('2 - Second Shift');
+  await unbillableOrderPage.STandOTSecondShiftForWeekEndNormal();
+});
+Then('the admin navigates to the payroll screen and verify ST and OT for the created WO for second shift for weekend after cancelling the WO', async () => {
+  await unbillableOrderPage.navigateToPayrollReviewScreen();
+  await unbillableOrderPage.datePayrollScreen();  
+  await unbillableOrderPage.verifyShopInPayrollScreen();
+
+  await unbillableOrderPage.verifyShiftInPayrollScreen('2 - Second Shift');
+  await unbillableOrderPage.STandOTAfterCancelSecondShiftNormal();
+});
+
+When('Create a WO for weekend and select overtime in hour type for third shift and close the WO', async () => {
+  await unbillableOrderPage.CreateNewOrderToVerifyPayrollThridShiftOTWeekEnd('1 - No');
+  await unbillableOrderPage.asst8DetailsForThirdShift();
+  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnCompleteButtonNoStatus();
+  await unbillableOrderPage.clickOnCloseButtonNoStatus();
+});
+
+Then('the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift for weekend', async () => {
+  await unbillableOrderPage.navigateToPayrollReviewScreen();
+  await unbillableOrderPage.datePayrollScreen();
+  await unbillableOrderPage.verifyShopInPayrollScreen();
+  await unbillableOrderPage.verifyShiftInPayrollScreen('3 - Third Shift');
+  await unbillableOrderPage.STandOTThirdShiftForWeekEndNormal();
+});
+Then('the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift for weekend after cancelling the WO', async () => {
+  await unbillableOrderPage.navigateToPayrollReviewScreen();
+  await unbillableOrderPage.datePayrollScreen();  
+  await unbillableOrderPage.verifyShopInPayrollScreen();
+  await unbillableOrderPage.verifyShiftInPayrollScreen('3 - Third Shift');
+  await unbillableOrderPage.STandOTAfterCancelThirdShiftNormal();
 });
