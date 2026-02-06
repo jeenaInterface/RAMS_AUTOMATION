@@ -1413,7 +1413,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.lbctLeadCheckBox).check();
         await fixture.page.waitForTimeout(1000);
     }
-   async STandOTSecondShiftForWeekEndNormal(): Promise<void> {
+    async STandOTSecondShiftForWeekEndNormal(): Promise<void> {
         //verify ST=8 and OT=2
 
         this.ST = await this.page.locator(
@@ -1428,7 +1428,7 @@ export default class UnbillableOrderPage {
         expect(this.OT).toBe('10.00');
         await fixture.page.waitForTimeout(1000);
     }
-     async CreateNewOrderToVerifyPayrollThridShiftOTWeekEnd(specialShift: string): Promise<void> {
+    async CreateNewOrderToVerifyPayrollThridShiftOTWeekEnd(specialShift: string): Promise<void> {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.mechanicSearch).click();
         await this.page.locator(this.Elements.userIDSearchBox).fill('ARNULFO.LOPEZ');
@@ -1460,7 +1460,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.lbctLeadCheckBox).check();
         await fixture.page.waitForTimeout(1000);
     }
-       async STandOTThirdShiftForWeekEndNormal(): Promise<void> {
+    async STandOTThirdShiftForWeekEndNormal(): Promise<void> {
         //verify ST=8 and OT=2
 
         this.ST = await this.page.locator(
@@ -1475,5 +1475,49 @@ export default class UnbillableOrderPage {
         expect(this.OT).toBe('6.00');
         await fixture.page.waitForTimeout(1000);
     }
+    async STandOTForWeekendForVesselSailFirstShift(): Promise<void> {
+        //verify ST=8 and OT=2
 
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('0.00');
+        expect(this.OT).toBe('4.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+    async STandOTSecondShiftForWeekEndVesselSAIL(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='BRAD.WILLIAMS']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO2ndUser).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('0.00');
+        expect(this.OT).toBe('4.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+    async STandOTThirdShiftForWeekEndVesselSAIL(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ARNULFO.LOPEZ']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWThirdUser).textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('0.00');
+        expect(this.OT).toBe('4.00');
+        await fixture.page.waitForTimeout(1000);
+    }
 }
