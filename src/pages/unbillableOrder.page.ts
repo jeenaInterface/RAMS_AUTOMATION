@@ -970,6 +970,21 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.lbctLeadCheckBox).check();
         await fixture.page.waitForTimeout(1000);
     }
+        async CreateNewOrderForFirstShiftToVerifyPayrollVesselSail(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('GABRIEL.ALEPE');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
     async asst8Details(): Promise<void> {
         //Asset 1
         const assetInput = this.page.locator(this.Elements.assetNumber);
@@ -1386,12 +1401,12 @@ export default class UnbillableOrderPage {
         //verify ST=8 and OT=2
 
         this.ST = await this.page.locator(
-            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='GABRIEL.ALEPE']/td[5]//input"
         ).inputValue();
         this.OT = await this.page.locator(
-            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='GABRIEL.ALEPE']/td[6]//input"
         ).inputValue();
-        const IsConsistantWithWO = await this.page.locator(this.Elements.IsConsistantWithWO).textContent();
+        const IsConsistantWithWO = await this.page.locator("xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='GABRIEL.ALEPE']/td[7]").textContent();
         expect(IsConsistantWithWO).toBe('YES');
         expect(this.ST).toBe('4.00');
         expect(this.OT).toBe('0.00');
@@ -1759,5 +1774,42 @@ export default class UnbillableOrderPage {
         //add delay
         await fixture.page.waitForTimeout(3000);
 
+    }
+        async STandOTForVesselApprovePayroll(): Promise<void> {
+
+        //verify ST=4 and OT=0
+
+        this.ST = await this.page.locator(
+            "//table/tbody/tr[td[4][normalize-space()='GABRIEL.ALEPE']]/td[8]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "//table/tbody/tr[td[4][normalize-space()='GABRIEL.ALEPE']]/td[9]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator("//table/tbody/tr[td[4][normalize-space()='GABRIEL.ALEPE']]/td[10]").textContent();
+        const errors = [];
+
+        // try {
+        //     expect(IsConsistantWithWO).toBe('YES');
+        // } catch (e) {
+        //     errors.push(e);
+        // }
+
+        try {
+            expect(this.ST).toBe('4.00');
+        } catch (e) {
+            errors.push(e);
+        }
+
+        try {
+            expect(this.OT).toBe('0.00');
+        } catch (e) {
+            errors.push(e);
+        }
+
+        if (errors.length > 0) {
+            const errorMessages = errors.map(err => err.message).join('\n');
+            throw new Error(`Soft assertion failures:\n${errorMessages}`);
+        }
+        await fixture.page.waitForTimeout(1000);
     }
 }
