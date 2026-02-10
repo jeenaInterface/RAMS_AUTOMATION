@@ -412,10 +412,10 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
   await unbillableOrderPage.STandOTAfterCancelThirdShiftNormal();
 });
 Then('Open the Show Detail of WOs in payroll screen for the created WO and click on the WO link for third shift', async () => {
-  await unbillableOrderPage.clickonWObUttonInPayroll_Third_ScreenApprovePayroll();
+  await unbillableOrderPage.clickonWObUttonInPayrollScreenThirdShiftNormal();
 });
 Then('Open the Show Detail of WOs for the created WO and click on the WO link for third shift in the approve payroll screen', async () => {
-  await unbillableOrderPage.clickonWObUttonInPayrollScreenThirdShiftNormal();
+  await unbillableOrderPage.clickonWObUttonInPayrollScreenThirdShiftNormalApproveScreen();
 });
 When('Create a WO for weekday and select overtime in hour type for second shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOT('1 - No');
