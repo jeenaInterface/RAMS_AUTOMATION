@@ -12,8 +12,10 @@ export default class PMPage {
     public pmNumber: string = '';
     public pmHours: string = '';
     public assetGroupSelected: string = '';
-    public pmGroupname:string ='';
-    public pmName1:string ='';
+    public pmGroupname: string = '';
+    public pmName1: string = '';
+    public randomHour: string = '';
+    public unbillableOrderNumber: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -57,6 +59,7 @@ export default class PMPage {
         completeButton: "//span[normalize-space(text())='Complete']",
         downloadButton: "//span[normalize-space(text())='Download']",
         searchButton: "//span[normalize-space(text())='Search']",
+        WOLINKE: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
 
         // Form fields
         assetGroupDropdown: "(//input[@placeholder='--Select One--'])[1]",
@@ -81,19 +84,55 @@ export default class PMPage {
 
         // Dialogs
         dialogHeader: "//div[@class='el-dialog__header']//span[1]",
-        pmListTable: "//table[@class='el-table__body']",
+        pmListTable: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/span[1]",
 
         // Unbillable order elements
-        unbillableOrderMenu: "//span[normalize-space()='- Unbillable Order']",
-        currentUsageInput: "(//input[@type='text'])[1]",
-        assetSearchInBatchUpdate: "(//input[@placeholder='--Input Text--'])[1]",
-        pmHoursCheckInBatchUpdate: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]",
+        WorkOrderMenu: "//span[normalize-space()='Work Order']",
+        createUnbillableOrderMenu: "//span[normalize-space()='- Create Un-billable Work Order']",
+        inquireUnbillableOrderMenu: "//span[normalize-space(text())='- Inquire Un-billable Work Order']",
+        WONumberSearch: "(//label[normalize-space(text())='Work Order No.']/following::input)[1]",
 
         // Modal elements
         confirmDeleteMessage: "//div[@class='el-message-box__message']//p[1]",
         operationTextBox: "(//input[@placeholder='--Input Text--'])[1]",
         searchResult: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/span[1]",
         actionLogTable: "//div[@class='el-dialog__wrapper']//table[@class='el-table__body']",
+
+        mechanicSearch: "//div[@class='select-lookup form-control']//i[1]",
+        userIDSearchBox: "(//span[normalize-space(text())='Lookup Mechanic']/following::input)[1]",
+        LOOKuPmechanicSearch: "//div[@class='el-dialog__wrapper']//span[contains(text(),'Search')]",
+        lookUpMechanicOkButton: "(//span[contains(text(),'OK')])[1]",
+        specialShiftOption: "(//label[normalize-space(text())='Special Shift']/following::input)[1]",
+        note: "(//label[normalize-space(text())='Notes']/following::textarea)[1]",
+        lbctLeadCheckBox: "(//span[@class='el-checkbox__inner'])[1]",
+
+        assetNumber: "(//input[@placeholder='-- Input Text --'])[1]",
+        componentCode: "//input[@placeholder='Component Code']",
+        damageCode: "//input[@placeholder='Damage Code']",
+        repairCode3: "//input[@placeholder='Repair Code']",
+        repairLocation: "//tr[@class='activity-row']//input[@placeholder='--Select One--']",
+        actualHours: "//div[@class='el-input input-align']//input[@type='text']",
+        stockQuantitywo: "//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text']",
+        // completeButton: "//span[normalize-space()='Complete']",
+        okButtonOnCompletePopup: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
+        closeButtonWO: "//span[normalize-space()='Close']",
+        OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
+        headertitle: "(//span[@class='header-title font-size-title'])[1]",
+        cancelButton1: "//div[@class='work-order-footer']//span[contains(text(),'Cancel')]",
+        cancelokButton1: "(//button[contains(@class,'el-button el-button--default el-button--primary')])[1]",
+
+
+        IsPMCheckBox: "(//span[@class='el-checkbox__inner'])[2]",
+        PMGroupList: "(//span[normalize-space(text())='Is Final Repair for PM']/following::input)[1]",
+        PMName: "(//label[normalize-space(text())='PM Name']/following::input)[1]",
+        PMHours: "(//label[normalize-space(text())='Hours']/following::input)[1]",
+        batchUpdateAssetUageMenu: "//span[normalize-space()='- Batch Update Asset Usage']",
+        assetNumberSearch: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        currentUSageTextBox: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        woError: "//p[contains(text(),'There exist not cancelled work order that related to this PM Group')]",
+        lastUpdateUsage: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/span[1]",
+
+
     };
 
 
@@ -116,6 +155,11 @@ export default class PMPage {
 
         // Fill PM details
         await this.page.locator(this.Elements.pmGroupName).fill(this.pmGroupname);
+    }
+    async selectAssetGroupForDelete(): Promise<void> {
+        await this.page.locator(this.Elements.assetGroupDropdown).click();
+        await this.page.getByText('BC-Bombcart').click();
+        await fixture.page.waitForTimeout(500);
     }
 
 
@@ -220,110 +264,236 @@ export default class PMPage {
         await fixture.page.waitForTimeout(500);
 
         // Verify success message
+        await this.base.waitAndClick(this.Elements.cancelokButton1);
+        await fixture.page.waitForTimeout(1000);
+    }
+    async verifyDeleteFunctionalityToverifyMessage(): Promise<void> {
+        fixture.logger.info("Verifying delete functionality");
+
+        // Click delete button
+        await this.base.waitAndClick(this.Elements.firstRowDeleteButton);
+        await fixture.page.waitForTimeout(500);
+
+        // Confirm delete
+        await this.base.waitAndClick(this.Elements.yesButton);
+        await fixture.page.waitForTimeout(500);
+
+        // Verify success message
         await this.base.waitAndClick(this.Elements.successOkayButton);
         await fixture.page.waitForTimeout(1000);
     }
+    async clickOnCreateUnbillableOrderMenu(): Promise<void> {
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrderMenu).click();
+    }
+    async CreateNewOrderForFirstShift(specialShift: string): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('ADRIAN.LOPEZ');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.specialShiftOption).click();
+        await this.page.getByText(specialShift).click();//select special shift from dropdown
+        const notesInput = this.page.locator(this.Elements.note);
+        await notesInput.fill('Automation test notes ' + getRandomInt(1000, 9999).toString());
+        await this.page.locator(this.Elements.lbctLeadCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+    }
+    async bombCartasstDetails(): Promise<void> {
+        //Asset 1
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('BC001');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
 
-//     /**
-//      * Create an unbillable order with PM
-//      */
-//     async createUnbillableOrderWithPm(): Promise<void> {
-//         fixture.logger.info("Creating unbillable order with PM");
 
-//         // This assumes we're already on unbillable order screen
-//         await this.base.waitAndClick(this.Elements.createButton);
-//         await fixture.page.waitForTimeout(500);
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.IsPMCheckBox).check();
+        await this.page.locator(this.Elements.PMGroupList).click();
+        if (!this.pmGroupname) {
+            throw new Error('pmGroupname is empty. Ensure a PM group was created before selecting PM details.');
+        }
+        await this.page.getByText(this.pmGroupname).click();
+        await this.page.locator(this.Elements.PMName).click();
+        if (!this.pmName1) {
+            throw new Error('pmName1 is empty. Ensure a PM was created before selecting PM details.');
+        }
+        await this.page.getByText(this.pmName1).click();
+        const pmHoursText = await this.page.locator(this.Elements.PMHours).textContent();
+        this.randomHour = pmHoursText ? pmHoursText.trim() : '';
+        await fixture.page.waitForTimeout(1000);
 
-//         // Fill in required fields and associate PM
-//         // Implementation details depend on actual unbillable order form
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('4MZ - Mechanical Misc').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('LK - Leak').click();
+        await this.page.locator(this.Elements.repairCode3).click();
+        await this.page.getByText('GS - Straighten').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('FRRT - FRRT - Front Right').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+    }
+    async goToBatchUpdateAssetUsageScreen(): Promise<void> {
+        fixture.logger.info("Navigating to Batch Update Asset Usage screen");
 
-//         await this.base.waitAndClick(this.Elements.saveButton);
-//         await fixture.page.waitForTimeout(1000);
-//     }
+        await this.base.waitAndClick(this.Elements.pmMenu);
+        await this.base.waitAndClick(this.Elements.batchUpdateAssetUsageMenu);
+        await fixture.page.waitForTimeout(1000);
+    }
+    /**
+ * Verify last update usage of the asset
+ */
+    async verifyLastUpdateUsage(): Promise<void> {
+        fixture.logger.info("Verifying last update usage of asset");
 
-//     /**
-//      * Copy PM hours from unbillable order
-//      */
-//     async copyPmHours(): Promise<void> {
-//         fixture.logger.info("Copying PM hours");
-
-//         // Click on first PM entry
-//         await this.base.waitAndClick(this.Elements.firstRowPM);
-//         await fixture.page.waitForTimeout(500);
-
-//         // Get PM hours value
-//         const hoursText = await this.page.locator(this.Elements.pmHoursInTable).textContent();
-//         this.pmHours = hoursText?.trim().split('\n')[0] || '';
-
-//         fixture.logger.info(`PM hours captured: ${this.pmHours}`);
-//     }
-
-//     /**
-//      * Go to Batch Update Asset Usage screen
-//      */
-//     async goToBatchUpdateAssetUsageScreen(): Promise<void> {
-//         fixture.logger.info("Navigating to Batch Update Asset Usage screen");
-
-//         await this.base.waitAndClick(this.Elements.assetMenu);
-//         await this.base.waitAndClick(this.Elements.batchUpdateAssetUsageMenu);
-//         await fixture.page.waitForTimeout(1000);
-//     }
-
-//     /**
-//      * Verify last update usage of the asset
-//      */
-//     async verifyLastUpdateUsage(): Promise<void> {
-//         fixture.logger.info("Verifying last update usage of asset");
-
-//         // Search for the asset
-//         await this.page.locator(this.Elements.assetSearchInBatchUpdate).fill(this.assetGroupSelected);
-//         await this.base.waitAndClick(this.Elements.searchButton);
-//         await fixture.page.waitForTimeout(500);
-
-//         // Verify result is displayed
-//         const resultTable = this.page.locator(this.Elements.pmListTable);
-//         await expect(resultTable).toBeVisible();
-//     }
-
-//     /**
-//      * Verify PM hours matching between unbillable order and batch update asset usage
-//      */
-//     async verifyPmHoursMatching(): Promise<void> {
-//         fixture.logger.info("Verifying PM hours matching");
-
-//         // Get PM hours from batch update screen
-//         const batchUpdateHours = await this.page.locator(this.Elements.pmHoursCheckInBatchUpdate).textContent();
-
-//         // Verify it matches the captured hours
-//         expect(batchUpdateHours?.trim()).toContain(this.pmHours);
-
-//         fixture.logger.info(`PM hours verified: ${this.pmHours}`);
-//     }
-
-//     /**
-//      * Update current usage in batch update screen
-//      */
-//     async updateCurrentUsage(): Promise<void> {
-//         fixture.logger.info("Updating current usage");
-
-//         const randomUsage = getRandomInt(100, 500);
-
-//         await this.page.locator(this.Elements.currentUsageInput).fill(randomUsage.toString());
-//         await fixture.page.waitForTimeout(500);
-//     }
+        // Search for the asset
+        await this.page.locator(this.Elements.assetNumberSearch).fill('BC001');
+        await fixture.page.waitForTimeout(1000);
+    }
 
 
 
-//     /**
-//      * Verify download usage functionality
-//      */
-//     async verifyDownloadUsage(): Promise<void> {
-//         fixture.logger.info("Verifying download usage functionality");
 
-//         // Click download button
-//         await this.base.waitAndClick(this.Elements.downloadButton);
-//         await fixture.page.waitForTimeout(1000);
+    async currentusage(): Promise<void> {
+        fixture.logger.info("Verifying PM hours matching");
+        const lastUpdateUsageText = await this.page.locator(this.Elements.lastUpdateUsage).textContent();
+        const lastUpdateUsageText1 = parseInt(lastUpdateUsageText.trim(), 10);
 
-//         fixture.logger.info("Download initiated successfully");
-//     }
+        // Generate random number greater than currentUsage (e.g., between currentUsage+1 and currentUsage+100)
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        this.randomHour = getRandomInt(lastUpdateUsageText1 + 1, lastUpdateUsageText1 + 100);
+
+        await this.page.locator(this.Elements.currentUSageTextBox).fill(this.randomHour.toString());
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.saveButton).click();
+        await this.page.locator(this.Elements.successOkayButton).click();
+        await fixture.page.waitForTimeout(2000);
+
+
+
+    }
+    async bombCartasstDetailsVerifypmHours(): Promise<void> {
+        //Asset 1
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('BC001');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.IsPMCheckBox).check();
+        await fixture.page.waitForTimeout(1000);
+        // await this.page.locator(this.Elements.PMGroupList).click();
+
+        // await this.page.getByText(this.pmGroupname).click();
+        // await this.page.locator(this.Elements.PMName).click();
+        // await this.page.getByText(this.pmName1).click();
+        await fixture.page.waitForTimeout(2000);
+
+        const pmhours = await this.page.locator(this.Elements.PMHours).inputValue();
+
+        // Convert both to string or number to ensure type consistency
+        await expect(pmhours).toEqual(this.randomHour.toString());
+
+        await fixture.page.waitForTimeout(1000);
+    }
+    async clickOnInquireUnbillableOrderMenu(): Promise<void> {
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.inquireUnbillableOrderMenu).click();
+    }
+    async searchbyWONumber(): Promise<void> {
+        await this.page.locator(this.Elements.WONumberSearch).fill(this.unbillableOrderNumber);
+        await this.page.locator(this.Elements.searchButton).first().click();
+        await this.page.locator(this.Elements.WOLINKE).click();
+        await fixture.page.waitForTimeout(4000);
+
+    }
+    async clickOnCompleteButtonNoStatus(): Promise<void> {
+
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+        await this.page.waitForLoadState('networkidle');
+        this.captureUnbillableOrderNumber();
+
+        //add delay
+        await fixture.page.waitForTimeout(5000);
+    }
+    async captureUnbillableOrderNumber(): Promise<void> {
+        const element = await fixture.page.locator(this.Elements.headertitle).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.unbillableOrderNumber = match[1];
+                console.log(this.unbillableOrderNumber);
+                // Use workOrderNumber as needed
+            }
+        }
+    }
+    async clickOnCloseButtonNoStatus(): Promise<void> {
+        await fixture.page.waitForTimeout(5000);
+        await this.page.locator(this.Elements.closeButtonWO).click();
+        await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
+        await this.page.waitForLoadState('networkidle');
+
+    }
+    async clickOnCancelButton(): Promise<void> {
+        await fixture.page.waitForTimeout(10000);
+        await this.page.locator(this.Elements.cancelButton1).click();
+        await this.page.waitForSelector(this.Elements.cancelokButton1);
+        await this.page.locator(this.Elements.cancelokButton1).click();
+        await this.page.waitForLoadState('networkidle');
+
+    }
+
+
+    async verifywoexistsMessage(): Promise<void> {
+        fixture.logger.info("Updating current usage");
+
+        const randomUsage = getRandomInt(100, 500);
+
+        const errorMessage = await this.page.locator(this.Elements.woError).textContent();
+        await expect(errorMessage).toContain("There exist not cancelled work order that related to this PM Group, you cannot delete this PM Group.");
+
+
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.successOkayButton).click();
+        await fixture.page.waitForTimeout(500);
+
+    }
+
+
+
+    //     /**
+    //      * Verify download usage functionality
+    //      */
+    //     async verifyDownloadUsage(): Promise<void> {
+    //         fixture.logger.info("Verifying download usage functionality");
+
+    //         // Click download button
+    //         await this.base.waitAndClick(this.Elements.downloadButton);
+    //         await fixture.page.waitForTimeout(1000);
+
+    //         fixture.logger.info("Download initiated successfully");
+    //     }
 }

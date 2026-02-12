@@ -39,33 +39,54 @@ Then('delete the entry created for per calendar', async () => {
   await pmPage.verifyDeleteFunctionality();
 });
 
-// When('Create an unbillable order having pm and copy the pm hours', async () => {
-//   pmPage = new PMPage(fixture.page);
-//   // Navigate to unbillable order and create
-//   await pmPage.createUnbillableOrderWithPm();
-//   // Copy PM hours for later comparison
-//   await pmPage.copyPmHours();
-// });
 
-// Then('go to batch update asset usage screen and verify the last update usage of the asset', async () => {
-//   await pmPage.goToBatchUpdateAssetUsageScreen();
-//   await pmPage.verifyLastUpdateUsage();
-// });
 
-// Then('verify the pm hours are matching in unbillable order and batch update asset usage screen', async () => {
-//   await pmPage.verifyPmHoursMatching();
-// });
+Then('Create an unbillable order with latest pm details created', async () => {
+  await pmPage.clickOnCreateUnbillableOrderMenu();
+  await pmPage.CreateNewOrderForFirstShift('1 - No');
+  await pmPage.bombCartasstDetails();
+  await pmPage.clickOnCompleteButtonNoStatus();
+  await pmPage.clickOnCloseButtonNoStatus();
+});
+Then('go to batch update asset usage screen', async () => {
+  pmPage = new PMPage(fixture.page);
+  await pmPage.goToBatchUpdateAssetUsageScreen();
+  await pmPage.verifyLastUpdateUsage();
+});
+Then('delete the entry created for per usage after verify the us', async () => {
+  await pmPage.navigateToMaintainPM();
+  await pmPage.selectAssetGroupForDelete();
+  await pmPage.verifyDeleteFunctionality();
+});
 
-// When('go to Batch Update Asset Usage', async () => {
-//   pmPage = new PMPage(fixture.page);
-//   await pmPage.goToBatchUpdateAssetUsageScreen();
-// });
+Then('Edit last usage entry usage', async () => {
+  await pmPage.currentusage();
+});
 
-// Then('update current usage and click on save button', async () => {
-//   await pmPage.updateCurrentUsage();
-//   await pmPage.clickSaveButton();
-// });
 
-// Then('verify downloadusage functyionality - reharse the feature file', async () => {
-//   await pmPage.verifyDownloadUsage();
-// });
+Then('go to create unbillable order and verify the updated pm hour is showing', async () => {
+  await pmPage.clickOnCreateUnbillableOrderMenu();
+  await pmPage.CreateNewOrderForFirstShift('1 - No');
+  await pmPage.bombCartasstDetailsVerifypmHours();
+});
+
+Then('go to inquire unbillable order page and cancel the unbillable order created for pm', async () => {
+  await pmPage.clickOnInquireUnbillableOrderMenu();
+  await pmPage.searchbyWONumber();
+  await pmPage.clickOnCancelButton();
+});
+Then('go to maintain pm page and try to delete the entry created for per usage', async () => {
+  await pmPage.navigateToMaintainPM();;
+  await pmPage.selectAssetGroupForDelete();
+  await pmPage.verifyDeleteFunctionalityToverifyMessage();
+});
+Then('go to maintain pm page and delete the entry created for per usage', async () => {
+  await pmPage.navigateToMaintainPM();;
+  await pmPage.selectAssetGroupForDelete();
+  await pmPage.verifyDeleteFunctionality();
+});
+Then('verify there is a validation showing as There exist not cancelled work order that related to this PM Group', async () => {
+  await pmPage.verifywoexistsMessage();
+});
+
+

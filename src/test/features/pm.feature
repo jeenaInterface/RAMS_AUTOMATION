@@ -13,15 +13,29 @@ Scenario: Create, update, delete and action log functionalities under pm module
     Then delete the entry created for per usage
     Then delete the entry created for per calendar
 
-@batchUpdateAssetUsage   @sanity
-Scenario: Verify the last update usage of the asset
+@createWOWithLatestPM   @sanity
+Scenario: Verify whether its able to create an unbillable order with a latest created pm
     Given the admin user is logged into the application
     When the admin navigates to the maintain PM
     Then Select any asset group
     Then Create a pm for per usage
-    When Create an unbillable order having pm and copy the pm hours
-    Then go to batch update asset usage screen and verify the last update usage of the asset
-    Then verify the pm hours are matching in unbillable order and batch update asset usage screen
+    When Create an unbillable order with latest pm details created
+    Then go to inquire unbillable order page and cancel the unbillable order created for pm
+    Then go to maintain pm page and delete the entry created for per usage
+
+    @assetUsageScreen   @sanity
+Scenario: Verify the last update usage of the asset
+    Given the admin user is logged into the application
+    Then go to batch update asset usage screen
+    Then Edit last usage entry usage
+    Then go to create unbillable order and verify the updated pm hour is showing
+
+    @downLoadUsage   @sanity
+Scenario: Verify the last update usage of the asset
+    Given the admin user is logged into the application
+    Then go to batch update asset usage screen
+    Then Verify downloadUsage functionality
+
 
 @curentUsage   @sanity
 Scenario: Verify the last update usage of the asset
