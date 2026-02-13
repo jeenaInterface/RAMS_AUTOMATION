@@ -88,5 +88,23 @@ Then('go to maintain pm page and delete the entry created for per usage', async 
 Then('verify there is a validation showing as There exist not cancelled work order that related to this PM Group', async () => {
   await pmPage.verifywoexistsMessage();
 });
+Then('Verify downloadUsage functionality', async function () {
+    const filePath = await pmPage.downloadReport();
+
+    // Attach a clickable text or path to the report for users to access manually
+    if (this.attach) {
+        // Attach as plain text or as HTML link if supported
+        const sharedFilePathText = `Report available at shared location: ${filePath}`;
+        await this.attach(sharedFilePathText, 'text/plain');
+    }
+});
+Then('go to batch update asset usage screen to copy last usage', async () => {
+  await pmPage.goToBatchUpdateAssetUsageScreen();
+  await pmPage.verifyLastUpdateUsage();
+  await pmPage.currentusage();
+});
+Then('go pm schedule dashboard', async () => {
+  await pmPage.goToPMSchedule();;
+});
 
 

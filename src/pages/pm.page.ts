@@ -3,6 +3,8 @@ import PlaywrightWrapper from "../helper/wrapper/PlaywrightWrappers";
 import { setDefaultTimeout } from "@cucumber/cucumber";
 import { getRandomInt, randomtext, currentDate } from "../helper/util/test-data/randomdata";
 import { fixture } from "../hooks/pageFixture";
+import * as fs from 'fs';
+import * as path from 'path';
 
 setDefaultTimeout(100 * 1000);
 
@@ -16,6 +18,7 @@ export default class PMPage {
     public pmName1: string = '';
     public randomHour: string = '';
     public unbillableOrderNumber: string = '';
+    public lastUpdateDate: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -27,7 +30,9 @@ export default class PMPage {
         pmMenu: "//span[normalize-space()='PM']",
         maintainPMMenu: "//span[normalize-space()='- Maintain PM']",
         batchUpdateAssetUsageMenu: "//span[normalize-space()='- Batch Update Asset Usage']",
-
+        pmSheduleDashboard: "//span[normalize-space()='- PM Schedule Dashboard']",
+        assetGroupInDasdhBoard: "(//label[normalize-space(text())='Asset Group']/following::input)[2]",
+        searchButton: "(//button[@type='button']/following-sibling::button)[1]",
 
         // Main buttons
         assetGroupList: "//label[normalize-space(text())='Asset Group']/following::input",
@@ -57,8 +62,8 @@ export default class PMPage {
         closeButton: "(//i[@class='el-dialog__close el-icon el-icon-close'])[2]",
         actionLogButton: "//button[contains(.,'Action Log')]",
         completeButton: "//span[normalize-space(text())='Complete']",
-        downloadButton: "//span[normalize-space(text())='Download']",
-        searchButton: "//span[normalize-space(text())='Search']",
+        downloadButton: "//span[normalize-space()='Download Usage']",
+        searchButtonOnDashboard: "//span[normalize-space(text())='Search']",
         WOLINKE: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
 
         // Form fields
@@ -131,6 +136,16 @@ export default class PMPage {
         currentUSageTextBox: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
         woError: "//p[contains(text(),'There exist not cancelled work order that related to this PM Group')]",
         lastUpdateUsage: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/span[1]",
+
+        lastUpdateDate: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[8]/div[1]/span[1]",
+        lastUpdateUsageInSchedule: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[9]/div[1]/span[1]",
+        nextPMName: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[10]/div[1]/span[1]",
+        nextPMExpectedAt: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[11]/div[1]/span[1]",
+        remaining: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[12]/div[1]/span[1]",
+        lastUpdateTimeinBatchUsage: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[6]/div[1]/span[1]",
+        assetNumberSearchSchedule:"//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        pmGroupSearch:"//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+
 
 
     };
@@ -364,9 +379,6 @@ export default class PMPage {
         await fixture.page.waitForTimeout(1000);
     }
 
-
-
-
     async currentusage(): Promise<void> {
         fixture.logger.info("Verifying PM hours matching");
         const lastUpdateUsageText = await this.page.locator(this.Elements.lastUpdateUsage).textContent();
@@ -381,6 +393,14 @@ export default class PMPage {
 
         await this.page.locator(this.Elements.currentUSageTextBox).fill(this.randomHour.toString());
         await fixture.page.waitForTimeout(2000);
+        const dateTimeStr = await this.page.locator(this.Elements.lastUpdateTimeinBatchUsage).textContent();
+        // dateTimeStr is like "2026-Feb-13 10:28:05"
+        this.lastUpdateDate = dateTimeStr.split(' ')[0];
+        // or alternatively:
+        // this.lastUpdateDate = dateTimeStr.substring(0, 11);
+
+        console.log(this.lastUpdateDate); // Should log: 2026-Feb-13
+
         await this.page.locator(this.Elements.saveButton).click();
         await this.page.locator(this.Elements.successOkayButton).click();
         await fixture.page.waitForTimeout(2000);
@@ -483,17 +503,90 @@ export default class PMPage {
     }
 
 
+    async downloadReport(): Promise<string> {
+        // const downloadPath = path.resolve(__dirname, 'downloads');
+        const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\RAMS Reports\\DownLoadUsage.xlsx';
 
-    //     /**
-    //      * Verify download usage functionality
-    //      */
-    //     async verifyDownloadUsage(): Promise<void> {
-    //         fixture.logger.info("Verifying download usage functionality");
+        if (!fs.existsSync(downloadPath)) {
+            fs.mkdirSync(downloadPath, { recursive: true });
+        }
+        this.clearDownloadFolder(downloadPath);
+        const [download] = await Promise.all([
+            this.page.waitForEvent('download'),
+            this.page.locator(this.Elements.downloadButton).click()
+        ]);
+        const downloadPathWithFileName = path.join(downloadPath, 'DownLoadUsage.xlsx');
+        await download.saveAs(downloadPathWithFileName);
+        expect(fs.existsSync(downloadPathWithFileName)).toBeTruthy();
+        // Add a delay to ensure file is fully downloaded
+        await fixture.page.waitForTimeout(5000);
+        return downloadPathWithFileName;
+    }
 
-    //         // Click download button
-    //         await this.base.waitAndClick(this.Elements.downloadButton);
-    //         await fixture.page.waitForTimeout(1000);
+    clearDownloadFolder(downloadPath: string): void {
+        fs.readdir(downloadPath, (err, files) => {
+            if (err) throw err;
+            for (const file of files) {
+                fs.unlink(path.join(downloadPath, file), err => {
+                    if (err) throw err;
+                });
+            }
+        });
+    }
+    async createPmPerUsageTocheckinSchedule(): Promise<void> {
 
-    //         fixture.logger.info("Download initiated successfully");
-    //     }
+
+        await fixture.page.waitForTimeout(500);
+
+        const randomNumber = getRandomInt(1000, 9999);
+
+        // Fill PM details
+        await this.page.locator(this.Elements.createPMButton).click();
+        this.pmName1 = `PM Usage ${randomNumber}`;
+        await this.page.locator(this.Elements.pmName1).fill(this.pmName1);
+        await this.page.locator(this.Elements.hours1).fill('100');
+        await this.page.locator(this.Elements.activityCode1).click();
+        await this.page.getByText('4EZ - Electrical / Electronics').click();
+        await this.page.locator(this.Elements.damageCode1).click();
+        await this.page.getByText('BO - Burned out').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IN - Install or Replace').click();
+        await this.base.waitAndClick(this.Elements.saveButton);
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.successOkayButton);
+        await fixture.page.waitForTimeout(1000);
+    }
+    async goToPMSchedule(): Promise<void> {
+        fixture.logger.info("Navigating to Batch Update Asset Usage screen");
+
+        await this.base.waitAndClick(this.Elements.pmMenu);
+        await this.base.waitAndClick(this.Elements.pmSheduleDashboard);
+        await fixture.page.waitForTimeout(1000);
+    }
+    async selectAssetGroupInDasboard(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.assetGroupInDasdhBoard);
+        await this.page.getByText('BC-Bombcart').click();
+        await this.base.waitAndClick(this.Elements.searchButtonOnDashboard);
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.assetNumberSearchSchedule).fill("BC001");
+        await this.page.locator(this.Elements.pmGroupSearch).fill(this.pmGroupname);
+    }
+        async verifyUsageDataOnDashBoard(): Promise<void> {
+            //last update date is equal to this.lastUpdateDate
+             const dateTimeStr = await this.page.locator(this.Elements.lastUpdateDate).textContent();
+             expect(dateTimeStr).toContain(this.lastUpdateDate);
+             const lastupdateUsage = await this.page.locator(this.Elements.lastUpdateUsageInSchedule).textContent();
+             expect(lastupdateUsage).toContain(this.randomHour);
+             const nextPM = await this.page.locator(this.Elements.nextPMName).textContent();
+             expect(nextPM).toContain(this.pmName1);
+             const nextPMExpectedAt1 = await this.page.locator(this.Elements.nextPMExpectedAt).textContent();
+             expect(nextPMExpectedAt1).toContain(this.randomHour + 100);
+
+
+
+    }
+
+
+
+
 }

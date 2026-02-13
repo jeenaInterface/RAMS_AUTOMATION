@@ -35,11 +35,16 @@ Scenario: Verify the last update usage of the asset
     Given the admin user is logged into the application
     Then go to batch update asset usage screen
     Then Verify downloadUsage functionality
+    Then user click on logout button
 
 
-@curentUsage   @sanity
-Scenario: Verify the last update usage of the asset
+@pmScheduleDashBoard   @sanity
+Scenario: Verify pm schedule dashboard
         Given the admin user is logged into the application
-        When go to Batch Update Asset Usage  
-        Then update current usage and click on save button
-        Then verify downloadusage functyionality - reharse the feature file
+        When the admin navigates to the maintain PM
+        Then Select any asset group
+        Then Create a pm for per usage
+        When go to batch update asset usage screen to copy last usage
+        Then go pm schedule dashboard
+        Then verify last update usage, last update date, next pm name and next pm expected
+        Then go to maintain pm page and delete the entry created for per usage
