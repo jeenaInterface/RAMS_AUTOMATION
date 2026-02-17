@@ -48,3 +48,14 @@ Scenario: Verify pm schedule dashboard
         Then go pm schedule dashboard
         Then verify last update usage, last update date, next pm name and next pm expected
         Then go to maintain pm page and delete the entry created for per usage
+
+
+@pmScheduleDashBoardPerCalendar   @sanity
+Scenario: Verify pm schedule dashboard for per calendar entry
+        Given the admin user is logged into the application
+        When the admin navigates to the maintain PM
+        Then Create a pm for per calendar
+        When go to batch update asset usage screen to copy last usage
+        Then go pm schedule dashboard
+        Then verify next pm name and next pm expected at values
+        Then go to maintain pm page and delete the entry created for per usage

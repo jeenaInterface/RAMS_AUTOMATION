@@ -19,6 +19,7 @@ export default class PMPage {
     public randomHour: string = '';
     public unbillableOrderNumber: string = '';
     public lastUpdateDate: string = '';
+    public pmName2: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -137,14 +138,14 @@ export default class PMPage {
         woError: "//p[contains(text(),'There exist not cancelled work order that related to this PM Group')]",
         lastUpdateUsage: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/span[1]",
 
-        lastUpdateDate: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[8]/div[1]/span[1]",
-        lastUpdateUsageInSchedule: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[9]/div[1]/span[1]",
-        nextPMName: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[10]/div[1]/span[1]",
-        nextPMExpectedAt: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[11]/div[1]/span[1]",
-        remaining: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[12]/div[1]/span[1]",
+        lastUpdateDate: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[8]/div[1]/span[1]",
+        lastUpdateUsageInSchedule: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[9]/div[1]/span[1]",
+        nextPMName: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[10]/div[1]",
+        nextPMExpectedAt: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[11]/div[1]",
+        remaining: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[12]/div[1]/span[1]",
         lastUpdateTimeinBatchUsage: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[6]/div[1]/span[1]",
-        assetNumberSearchSchedule:"//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
-        pmGroupSearch:"//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        assetNumberSearchSchedule: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        pmGroupSearch: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
 
 
 
@@ -200,8 +201,8 @@ export default class PMPage {
         await this.page.locator(this.Elements.createPMButton).click();
         await fixture.page.waitForTimeout(1000);
 
-        const PMName2 = `PM Usage2 ${randomNumber}`;
-        await this.page.locator(this.Elements.pmName2).fill(PMName2);
+        this.pmName2 = `PM Usage2 ${randomNumber}`;
+        await this.page.locator(this.Elements.pmName2).fill(this.pmName2);
         await this.page.locator(this.Elements.hours2).fill('10');
         await this.page.locator(this.Elements.activityCode2).click();
         await this.page.getByText('4MZ - Mechanical Misc').nth(1).click();
@@ -571,22 +572,35 @@ export default class PMPage {
         await this.page.locator(this.Elements.assetNumberSearchSchedule).fill("BC001");
         await this.page.locator(this.Elements.pmGroupSearch).fill(this.pmGroupname);
     }
-        async verifyUsageDataOnDashBoard(): Promise<void> {
-            //last update date is equal to this.lastUpdateDate
-             const dateTimeStr = await this.page.locator(this.Elements.lastUpdateDate).textContent();
-             expect(dateTimeStr).toContain(this.lastUpdateDate);
-             const lastupdateUsage = await this.page.locator(this.Elements.lastUpdateUsageInSchedule).textContent();
-             expect(lastupdateUsage).toContain(this.randomHour);
-             const nextPM = await this.page.locator(this.Elements.nextPMName).textContent();
-             expect(nextPM).toContain(this.pmName1);
-             const nextPMExpectedAt1 = await this.page.locator(this.Elements.nextPMExpectedAt).textContent();
-             expect(nextPMExpectedAt1).toContain(this.randomHour + 100);
+    async verifyUsageDataOnDashBoard(): Promise<void> {
+        //last update date is equal to this.lastUpdateDate
+        const dateTimeStr = await this.page.locator(this.Elements.lastUpdateDate).textContent();
+        expect(dateTimeStr).toContain(this.lastUpdateDate);
+        const lastupdateUsage = await this.page.locator(this.Elements.lastUpdateUsageInSchedule).textContent();
+        expect(lastupdateUsage).toContain(this.randomHour.toString());
+        const nextPM = await this.page.locator(this.Elements.nextPMName).textContent();
+        expect(nextPM).toContain(this.pmName2);
 
+    }
+    async verifyUsageDataOnDashBoardPerCalendar(): Promise<void> {
+        const nextPM = await this.page.locator(this.Elements.nextPMName).textContent();
+        expect(nextPM).toContain(this.pmName2);
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+        const lastUpdate = new Date(this.lastUpdateDate);
+        const expectedDate = new Date(lastUpdate);
+        expectedDate.setDate(lastUpdate.getDate() + 9);
+
+        const year = expectedDate.getFullYear();
+        const month = months[expectedDate.getMonth()];
+        const day = String(expectedDate.getDate()).padStart(2, '0');
+
+        const formattedExpectedDate = `${year}-${month}-${day}`;
+
+        const nextPMExpectedAt = await this.page.locator(this.Elements.nextPMExpectedAt).textContent();
+
+        expect(nextPMExpectedAt).toContain(formattedExpectedDate);
 
 
     }
-
-
-
-
 }

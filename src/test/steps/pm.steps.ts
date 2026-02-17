@@ -104,7 +104,16 @@ Then('go to batch update asset usage screen to copy last usage', async () => {
   await pmPage.currentusage();
 });
 Then('go pm schedule dashboard', async () => {
-  await pmPage.goToPMSchedule();;
+  await pmPage.goToPMSchedule();
+  await pmPage.selectAssetGroupInDasboard();
 });
+Then('verify last update usage, last update date, next pm name and next pm expected', async () => {
+  await pmPage.verifyUsageDataOnDashBoard();;
+});
+
+Then('verify next pm name and next pm expected at values', async () => {
+  await pmPage.verifyUsageDataOnDashBoardPerCalendar();;
+});
+
 
 
