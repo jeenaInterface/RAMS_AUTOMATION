@@ -1,6 +1,6 @@
 Feature: UOM Conversion Factor module
 
-    @UOM @sanity
+    @UOM @sanity @sysyemsettings
 
     Scenario: Verify Create/Edit/Delete UOM Conversion Factor functionality
 

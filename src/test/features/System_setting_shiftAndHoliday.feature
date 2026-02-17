@@ -1,5 +1,5 @@
 Feature: Shift and Holiday module
-    @Shift @sanity
+    @Shift @sanity @sysyemsettings
 
     Scenario: Verify Edit/ActionLog functionalities
 

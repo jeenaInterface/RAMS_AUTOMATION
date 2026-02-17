@@ -1,6 +1,6 @@
 Feature:  Interface Mapping Module
 
-    @AP @sanity
+    @AP @sanity @sysyemsettings
 
     Scenario: Verify Create/Edit/Delete/ActionLog functionalities in Interface Mapping Module - AR
 
@@ -12,7 +12,7 @@ Feature:  Interface Mapping Module
         Then verify the delete functionality by selecting the created Interface Mapping
         Then Verify action log functionality in Interface Mapping module - AR
         
-    @AP @sanity
+    @AP @sanity @sysyemsettings
 
     Scenario: Verify Create/Edit/Delete/ActionLog functionalities in Interface Mapping Module - AP  
         Given User logged into the application

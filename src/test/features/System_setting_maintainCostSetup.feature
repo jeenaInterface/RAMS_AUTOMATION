@@ -1,6 +1,6 @@
 Feature: Maintain cost setup module
 
-    @cost @sanity
+    @cost @sanity @sysyemsettings
 
     Scenario: Verify Edit/Delete Maintain cost setup functionality
 

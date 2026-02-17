@@ -156,7 +156,7 @@ export default class TariffPage {
         await this.page.getByRole('listitem').filter({ hasText: '2EL - Electrical' }).click();
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.repairCode).click();
-        await this.page.getByText('"B" - Service with Rope Check').click();
+        await this.page.getByText('IN - Install or Replace').click();
         await this.page.locator(this.Elements.chargeTypeDropdown).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Fixed Hour' }).locator('span').click();
         await this.page.locator('#app-modal').getByRole('textbox', { name: '--Input Text--' }).click();

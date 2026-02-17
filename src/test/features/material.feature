@@ -14,7 +14,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies that the New button works as expected
         And verifies that the action log records the performed actions accurately
 
-    @search @sanity @material
+    @searchMaterial @sanity @material
 
     Scenario: search Material
         Given the admin user is logged into the application
@@ -42,16 +42,17 @@ Feature: Add, Update, and Search Functionalities in material Module
         When the admin navigates to the material creation page
         And the admin fills in the mandatory fields one by one and attempts to submit the form each time
 
-    @createOrder @sanity @material
+    @createOrderFromMaterial @sanity @material
 
     Scenario: Verify create order functionlity from material module and verify order track is recorded under the material after receiving the material
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
         When enters all required details to create a new material
+        Then the admin searches for the newly created material using its Stock No.
+        # And confirms that the search results correctly display the matching Stock No.
         Then the created Stock No is captured for further use
-        # When the admin navigates to the inquire material page
-        # Then the admin searches for an existing material by Stock No.
-        # Then click on the link
+        # # Then the admin searches for an existing material by Stock No.
+        Then click on the link
         And submits the create order form after filling in the required order details
         Then the Purchase Order number is captured for further use
         Then Do receive material and review for the created order

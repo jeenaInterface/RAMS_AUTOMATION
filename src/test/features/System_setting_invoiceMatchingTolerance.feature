@@ -1,5 +1,5 @@
 Feature:  Invoice Matching Tolerance module
-    @invoice @sanity
+    @invoice @sanity @sysyemsettings
 
     Scenario: Verify Edit/Reset/ActionLog functionalities in Invoice Matching Tolerance
 

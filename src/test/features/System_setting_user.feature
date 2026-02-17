@@ -1,6 +1,6 @@
 Feature: User module
 
-  @user @sanity
+  @user @sanity  @sysyemsettings
   Scenario: Verify Create/Edit User functionality
     Given User logged into the application
     Then select user from the system settings menu

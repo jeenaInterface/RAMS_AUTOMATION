@@ -1,6 +1,6 @@
 Feature: Asset module
 
-  @Asset @sanity
+  @Asset @sanity @sysyemsettings
   Scenario: Verify Create/Edit asset functionality
     Given User logged into the application
     Then select asset from the system settings menu

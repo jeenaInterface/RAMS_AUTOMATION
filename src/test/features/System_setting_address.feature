@@ -1,5 +1,5 @@
 Feature: Address module
-    @address @sanity
+    @address @sanity @sysyemsettings
 
     Scenario: Verify Edit/ActionLog functionalities
 

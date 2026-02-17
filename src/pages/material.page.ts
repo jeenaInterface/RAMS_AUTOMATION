@@ -247,7 +247,7 @@ export default class MaterialPage {
         if (await fileInput.count() > 0) {
             await fileInput.setInputFiles(imagePath);
         }
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(2000);
         this.manufaturesPartNumber = `MPN-${randomNumber}`;
 
         // Fill stock no and description and manufacturer's part no
@@ -284,7 +284,7 @@ export default class MaterialPage {
 
 
         // Wait briefly and read the header text directly
-        await fixture.page.waitForTimeout(2000);
+        await fixture.page.waitForTimeout(4000);
         const headerText = (await this.page.locator(this.Elements.headertitle).textContent());
         if (headerText && headerText.includes('Material |')) {
             // Extract the number after "Material | "
@@ -417,7 +417,7 @@ export default class MaterialPage {
         await newBtn.click();
         const newPage = await pagePromise;
         await newPage.waitForLoadState('networkidle');
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(2000);
 
         const url = newPage.url();
         // verify it's the add page for material
@@ -476,7 +476,7 @@ export default class MaterialPage {
         await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
         await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('10');
         await newPage.locator(this.Elements.productCode).click();
-        await newPage.getByText('OPX_AGV - Maintenance Parts - AGV').click();
+        await newPage.getByText('OPX_ACCESS_GATE_CONTROLLER - Maintenance Parts - Access Gate Controller').click();
         await fixture.page.waitForTimeout(1000);
         await newPage.locator(this.Elements.saveOnPurchaseOrderForm).click();
         await fixture.page.waitForTimeout(500);

@@ -1,6 +1,6 @@
 Feature: Vendor module
 
-  @Vendor @sanity
+  @Vendor @sanity @sysyemsettings
   Scenario: Verify Create/Edit Vendor functionality
     Given User logged into the application
     Then select Vendor from the system settings menu

@@ -1,6 +1,6 @@
 Feature: Change authority module
 
-  @changeAuthority @sanity
+  @changeAuthority @sanity @sysyemsettings
 
   Scenario: Add and Remove Interface Mapping for a User
     Given the admin user is logged into the application
