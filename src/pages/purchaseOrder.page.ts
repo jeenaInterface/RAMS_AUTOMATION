@@ -239,7 +239,7 @@ export default class PurchaseOrderPage {
         await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
         await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('10');
         await await this.page.locator(this.Elements.productCode).click();
-        await await this.page.getByText('OPX_AGV - Maintenance Parts - AGV').click();
+        await await this.page.getByText('OPX_AGV_BATTERY - Maintenance Parts - AGV Battery').click();
         await fixture.page.waitForTimeout(1000);
         await await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
         await fixture.page.waitForTimeout(500);
@@ -279,13 +279,14 @@ export default class PurchaseOrderPage {
     }
     async updatePurchaseOrder(): Promise<void> {
         const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(8000);
 
         const updatedDesc = `${this.description} - Updated ${currentDate}`;
-
-        await this.page.locator(this.Elements.instruction).fill(updatedDesc);
-        await await this.page.locator(this.Elements.createButton).click();
         await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.instruction).fill(updatedDesc);
+        await fixture.page.waitForTimeout(1000);
+        await await this.page.locator(this.Elements.createButton).click();
+        await fixture.page.waitForTimeout(1000);
         await await this.page.locator(this.Elements.stockDescription).fill(this.description);
         await this.page.getByRole('row', { name: '--Input Text or Look up--   --Select One--  --Select One--  Select  Select  Select  Select $0.00 0 ' }).locator('#vendorPartNo').getByRole('textbox').click();
         await this.page.getByRole('row', { name: '--Input Text or Look up--   --Select One--  --Select One--  Select  Select  Select  Select $0.00 0 ' }).locator('#vendorPartNo').getByRole('textbox').fill(this.description);
@@ -491,7 +492,7 @@ export default class PurchaseOrderPage {
         await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
         await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('5');
         await await this.page.locator(this.Elements.productCode).click();
-        await await this.page.getByText('OPX_AGV - Maintenance Parts - AGV').click();
+        await await this.page.getByText('OPX_AGV_BATTERY - Maintenance Parts - AGV Battery').click();
         await fixture.page.waitForTimeout(1000);
         await await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
         await fixture.page.waitForTimeout(500);

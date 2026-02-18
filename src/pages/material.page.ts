@@ -172,7 +172,7 @@ export default class MaterialPage {
         WorkOrderMenu: "//span[normalize-space()='Work Order']",
         createUnbillableOrder: "//span[normalize-space(text())='- Create Un-billable Work Order']",
         mechanicSearch: "//div[@class='select-lookup form-control']//i[1]",
-        userIDSearchBox: "(//span[normalize-space(text())='Lookup Mechanic']/following::input)[1]",
+        userIDSearchBox: "(//label[normalize-space(text())='User ID']/following::input)[1]",
         LOOKuPmechanicSearch: "//div[@class='el-dialog__wrapper']//span[contains(text(),'Search')]",
         lookUpMechanicOkButton: "(//span[contains(text(),'OK')])[1]",
         assetNumber: "(//input[@placeholder='-- Input Text --'])[1]",
@@ -1208,7 +1208,7 @@ export default class MaterialPage {
         await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
         await newPage.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('10');
         await newPage.locator(this.Elements.productCode).click();
-        await newPage.getByText('OPX_AGV - Maintenance Parts - AGV').click();
+        await newPage.getByText('OPX_AGV_BATTERY - Maintenance Parts - AGV Battery').click();
         await fixture.page.waitForTimeout(1000);
         await newPage.locator(this.Elements.saveOnPurchaseOrderForm).click();
         await fixture.page.waitForTimeout(500);
@@ -1487,10 +1487,12 @@ export default class MaterialPage {
 
     }
     async createUnbillableOrderToCheckOH(): Promise<void> {
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(3000);
         await this.page.locator(this.Elements.WorkOrderMenu).click();
         await this.page.locator(this.Elements.createUnbillableOrder).click();
         await this.page.locator(this.Elements.mechanicSearch).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.userIDSearchBox).click();
         await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
         await this.page.getByRole('button', { name: 'Search' }).click();
         await fixture.page.waitForTimeout(500);
@@ -1544,8 +1546,8 @@ export default class MaterialPage {
 
     }
     async clickonMaterialUsageButton(): Promise<void> {
-        await fixture.page.waitForTimeout(500);
-        await this.base.waitAndClick(this.Elements.materialUsageButton);
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.materialUsageButton).click();
         await fixture.page.waitForTimeout(500);
     }
     async VerifyMaterialUsagefunctionlity(): Promise<void> {
