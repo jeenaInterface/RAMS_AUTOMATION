@@ -127,7 +127,7 @@ export default class PurchaseOrderPage {
         okButtonOncancelPopup: "//html/body/div[3]/div/div[3]/button[2]/span",
         createUnbillableOrder: "//span[normalize-space(text())='- Create Un-billable Work Order']",
         mechanicSearch: "//div[@class='select-lookup form-control']//i[1]",
-        userIDSearchBox: "(//span[normalize-space(text())='Lookup Mechanic']/following::input)[1]",
+        userIDSearchBox: "(//label[normalize-space(text())='User ID']/following::input)[1]",
         LOOKuPmechanicSearch: "//div[@class='el-dialog__wrapper']//span[contains(text(),'Search')]",
         lookUpMechanicOkButton: "(//span[contains(text(),'OK')])[1]",
         assetNumber: "(//input[@placeholder='-- Input Text --'])[1]",
@@ -265,7 +265,7 @@ export default class PurchaseOrderPage {
         // await this.page.locator(this.Elements.purchaseOrderNoSearch).fill("325865");
         await await this.page.locator(this.Elements.searchButton).click();
         await await this.page.locator(this.Elements.orderNoSearchrESULT).click();
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(2000);
 
     }
     async selectExternalRebuildOrder(): Promise<void> {
@@ -273,7 +273,7 @@ export default class PurchaseOrderPage {
 
     }
     async selectInternalRebuildOrder(): Promise<void> {
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(1000);
         await await this.page.locator(this.Elements.internalRebildOrderCheckBox).click();
 
     }
@@ -515,7 +515,7 @@ export default class PurchaseOrderPage {
     }
     async updateExternalPurchaseOrder(): Promise<void> {
         const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(8000);
 
         const updatedDesc = `${this.description} - Updated ${currentDate}`;
 
@@ -567,7 +567,7 @@ export default class PurchaseOrderPage {
     }
     async CreateOnInternalRebuildOrder(): Promise<void> {
 
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(2000);
 
         await await this.page.locator(this.Elements.shop).click();
         await await this.page.getByText('Power - Power Equipment Maintenance').click();
@@ -585,7 +585,7 @@ export default class PurchaseOrderPage {
         await await this.page.locator(this.Elements.vendorNo).fill(randomJobNumber);
         await fixture.page.waitForTimeout(500);
         await await this.page.locator(this.Elements.productCode).click();
-        await await this.page.getByText('OPX_AGV - Maintenance Parts - AGV').click();
+        await await this.page.getByText('OPX_AGV_BATTERY - Maintenance Parts - AGV Battery').click();
         await fixture.page.waitForTimeout(1000);
         await await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
         await fixture.page.waitForTimeout(500);
@@ -608,7 +608,7 @@ export default class PurchaseOrderPage {
     }
     async UpdateInternalRebuildOrder(): Promise<void> {
 
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(4000);
 
 
         const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
@@ -880,7 +880,7 @@ export default class PurchaseOrderPage {
         await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
         await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('8');
         await await this.page.locator(this.Elements.productCode).click();
-        await await this.page.getByText('OPX_AGV - Maintenance Parts - AGV').click();
+        await await this.page.getByText('OPX_AGV_BATTERY - Maintenance Parts - AGV Battery').click();
         await fixture.page.waitForTimeout(1000);
         await await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
         await fixture.page.waitForTimeout(500);
@@ -937,7 +937,7 @@ export default class PurchaseOrderPage {
     async DoRejectOperation(): Promise<void> {
 
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
-        await this.page.locator(`(//span[@class='el-checkbox__inner'])[9]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
         await this.page.locator(this.Elements.batchRejectButton).click();
         await this.page.locator(`//form[position()=1]/div[position()=1]/div[position()=1]/div[position()=1]/textarea[position()=1]`).fill("Rejected")
         await this.page.locator(this.Elements.rejectOKButton).click();
@@ -946,7 +946,7 @@ export default class PurchaseOrderPage {
     }
     async DoApproveOperation(): Promise<void> {
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
-        await this.page.locator(`(//span[@class='el-checkbox__inner'])[9]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
         await this.page.locator(this.Elements.batchApproveButton).click();
         await this.page.locator(this.Elements.confirmButton).click();
         await this.page.locator(this.Elements.okUpdateButton).click();
@@ -954,7 +954,7 @@ export default class PurchaseOrderPage {
     }
     async verifyRedirection(): Promise<void> {
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
-        await this.page.locator(`(//span[@class='el-checkbox__inner'])[9]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
         const poLinkText = await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=3]/div[position()=1]/a[position()=1]`).textContent();
         await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=3]/div[position()=1]/a[position()=1]`).click();
 
@@ -1029,11 +1029,11 @@ export default class PurchaseOrderPage {
         const suggestion = this.page.getByRole('listitem').filter({ hasText: 'ASCRB' }).first();
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion.click();
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(4000);
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(1).type('1008');
         await fixture.page.waitForTimeout(1000);
         await this.page.getByText('1008 - 1000X20RCP - tire flexi van recap 10.00x20').click();
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(3000);
         await this.page.locator(this.Elements.internalRONumber).click();
         await this.page.locator(this.Elements.internalRONumber).fill(this.purchaseOrderNo);
         // await this.page.locator(this.Elements.internalRONumber).fill("325871");

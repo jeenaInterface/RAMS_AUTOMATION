@@ -287,7 +287,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.okDraftButton).click();
         await this.page.waitForLoadState('networkidle');
         //add delay
-        await fixture.page.waitForTimeout(5000);
+        await fixture.page.waitForTimeout(10000);
         await this.captureUnbillableOrderNumber();
         await this.captureUnbillableOrderStatus();
         //verify the status is Draft

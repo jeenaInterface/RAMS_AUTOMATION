@@ -58,84 +58,84 @@ Feature: Verify functionalities under Un-Billable Work Order
     When the admin clicks the complete and then close button
 
 
-  @firstShiftValidation @sanity @ubwo
+  @firstShiftValidation @sanity @ubwo @validations
   Scenario: Verify hour validation for first shift having two assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift
     Then Verify hour validation messages are displayed as expected
 
-  @secondShiftValidation @sanity @ubwo
+  @secondShiftValidation @sanity @ubwo @validations
   Scenario: Verify hour validation for second shift with two assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift
     Then Verify hour validation messages are displayed as expected
 
-  @thirdShiftValidation @sanity @ubwo
+  @thirdShiftValidation @sanity @ubwo @validations
   Scenario: Verify hour validation for third shift with two assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift
     Then Verify hour validation messages are displayed as expected for the third shift
 
-  @FirstShiftValidationSpecialShiftAsVesselSail @sanity @ubwo
+  @FirstShiftValidationSpecialShiftAsVesselSail @sanity @ubwo @validations
   Scenario: Verify hour validation for first shift (Vessel Sail) with two assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift and selects special shift as vessel sail
     Then Verify hour validation messages are displayed as expected for the first shift  for special shift as vessel sail
 
-  @secondShiftValidationSpecialShiftAsVesselSail @sanity @ubwo
+  @secondShiftValidationSpecialShiftAsVesselSail @sanity @ubwo @validations
   Scenario: Verify hour validation for second shift (Vessel Sail) with two assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as vessel sail
     Then Verify hour validation messages are displayed as expected for the second shift  for special shift as vessel sail
 
-  @thirdShiftValidationSpecialShiftAsVesselSail @sanity @ubwo
+  @thirdShiftValidationSpecialShiftAsVesselSail @sanity @ubwo @validations
   Scenario: Verify hour validation for third shift (Vessel Sail) with two assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift and selects special shift as vessel sail
     Then Verify hour validation messages are displayed as expected for the third shift  for special shift as vessel sail
 
-  @FirstShiftValidationSpecialShiftAs4AndGo @sanity @ubwo
+  @FirstShiftValidationSpecialShiftAs4AndGo @sanity @ubwo @validations
   Scenario: Verify hour validation for first shift (4 and Go) with two assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift and selects special shift as 4 and Go
     Then Verify hour validation messages are displayed as expected for the first shift  for special shift as four and Go
 
-  @secondShiftValidationSpecialShiftAs4AndGo @sanity @ubwo
+  @secondShiftValidationSpecialShiftAs4AndGo @sanity @ubwo @validations
   Scenario: Verify hour validation for second shift (4 and Go) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as 4 and Go
     Then Verify hour validation messages are displayed as expected for the second shift  for special shift as four and Go
 
-  @thirdShiftValidationSpecialShiftAs4AndGo @sanity @ubwo
+  @thirdShiftValidationSpecialShiftAs4AndGo @sanity @ubwo @validations
   Scenario: Verify hour validation for third shift (4 and Go) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the third shift and selects special shift as 4 and Go
     Then Verify hour validation messages are displayed as expected for the third shift  for special shift as four and Go
 
-  @FirstShiftValidationSpecialShiftAsPMATraining @sanity @ubwo
+  @FirstShiftValidationSpecialShiftAsPMATraining @sanity @ubwo @validations
   Scenario: Verify hour validation for first shift (PMA Training) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the first shift and selects special shift as PMA Training
     Then Verify hour validation messages are displayed as expected for the first shift  for special shift as PMA Training
 
-  @secondShiftValidationSpecialShiftAsPMATraining @sanity @ubwo
+  @secondShiftValidationSpecialShiftAsPMATraining @sanity @ubwo @validations
   Scenario: Verify hour validation for second shift (PMA Training) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And enters all the required fields for unbillable work order and adds two assets then clicks on the complete button for the second shift and selects special shift as PMA Training
     Then Verify hour validation messages are displayed as expected for the second shift  for special shift as PMA Training
 
-  @thirdShiftValidationSpecialShiftAsPMATraining @sanity @ubwo
+  @thirdShiftValidationSpecialShiftAsPMATraining @sanity @ubwo @validations
   Scenario: Verify hour validation for third shift (PMA Training) with three assets
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu

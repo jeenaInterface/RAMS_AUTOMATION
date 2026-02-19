@@ -1,8 +1,8 @@
 Feature: Verify Create Asset Report
 
+    @assetReport @sanity @report
   Scenario: Admin creates and runs an asset report
     Given the admin user is logged into the application
-    When the admin navigates to the report menu
     And selects create asset report
     And selects all the filters
     And clicks on the save button
