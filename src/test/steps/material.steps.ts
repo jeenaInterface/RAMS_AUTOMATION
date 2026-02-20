@@ -373,6 +373,9 @@ Then('go to batch review receiving screen', async () => {
 Then('partially receive the order', async () => {
   await materialPage.createPartialReceiveMaterialNotToReview();
 });
+Then('Fully receive the order', async () => {
+  await materialPage.createFullyReceiveMaterialNotToReview();
+});
 Then('search by Pack Slip No. and review the material', async () => {
   await materialPage.DoMaterialReview();
 });
@@ -489,6 +492,13 @@ Then('go to asset page and open the asset linked to the unbillable order', async
 });
 Then('Open repair asset and verify the material usage is recorded under the asset', async () => {
   await materialPage.clickOnReapirAsset();
+});
+
+Then('go to catture Invoice Matching', async () => {
+  await materialPage.clickOnCaptureInvoiceMenu();
+});
+Then('go to catture Invoice Matching', async () => {
+  await materialPage.clickOnCaptureInvoiceMenu();
 });
 
 

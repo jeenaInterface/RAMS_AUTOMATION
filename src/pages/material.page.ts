@@ -22,6 +22,9 @@ export default class MaterialPage {
     public workOrderNumber: string = '';
     public manufaturesPartNumber: string = '';
     public materialDescription: string = '';
+    public subTotal: string = '';
+    public tax: string = '';
+    public Freight: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -200,7 +203,21 @@ export default class MaterialPage {
         wonumberSearchRepairAsset: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
         woResultRepairOrder: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]",
         RepairOrderCloseButton: "(//button[@aria-label='Close']//i)[1]",
-        wosearchResult2:"xpath=/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/span[1]"
+        wosearchResult2: "xpath=/html[1]/body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[3]/div[1]/div[2]/div[1]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[1]/div[1]/span[1]",
+        subTotal: "//table[2]//tr[1]//td[2]//b[1]",
+        tax: "//table[2]//tr[2]//td[2]//b[1]",
+        Freight: "//table[2]//tr[3]//td[2]//b[1]",
+        ARAPMenu: "//span[normalize-space()='AR/AP']",
+        captureInvoiceMatchingMenu: "//span[normalize-space()='- Capture Invoice Matching']",
+        orderNoBox: "(//label[normalize-space(text())='Order No.']/following::input)[1]",
+        invoiceNumber: "(//label[normalize-space(text())='Invoice No.']/following::input)[1]",
+        invoiceDate: "(//label[normalize-space(text())='Invoice No.']/following::input)[2]",
+        remarks: "(//label[normalize-space(text())='Remarks']/following::textarea)[1]",
+        invoiceTotal: "(//label[normalize-space(text())='Remarks']/following::input)[1]",
+        taxAmount: "(//label[normalize-space(text())='Remarks']/following::input)[2]",
+        freightAmount: "(//label[normalize-space(text())='Remarks']/following::input)[3]",
+        calendarToday: "//td[@class='available today current']"
+
 
     };
     async clickOnAssetMenu(): Promise<void> {
@@ -494,6 +511,7 @@ export default class MaterialPage {
                 this.purchaseOrderNo = match[1];
                 fixture.logger?.info(`Extracted Purchase Order number: ${this.purchaseOrderNo}`);
             }
+
         }
         const orderQuantity = newPage.locator(this.Elements.totalOrderQuantity);
 
@@ -507,6 +525,12 @@ export default class MaterialPage {
         await totalOutStandingQuantity.waitFor({ state: 'visible', timeout: 5000 });
 
         this.outStandingQuantity = await totalOutStandingQuantity.textContent();
+        const totalAmount = await this.page.locator(this.Elements.subTotal).textContent();
+        this.subTotal = totalAmount.replace(/\$|,/g, '');
+        const tax = await this.page.locator(this.Elements.tax).textContent();
+        this.tax = tax.replace(/\$|,/g, '');
+        const freight = await this.page.locator(this.Elements.Freight).textContent();
+        this.Freight = freight.replace(/\$|,/g, '');
         fixture.page = originalPage;
         await newPage.close();
 
@@ -1591,6 +1615,77 @@ export default class MaterialPage {
 
         await this.base.waitAndClick(this.Elements.clickUsageLink);
         await fixture.page.waitForTimeout(500);
+    }
+    async createFullyReceiveMaterialNotToReview(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.ordermenu).click();
+        await this.page.locator(this.Elements.receiveMaterial).click();
+        await this.page.locator(this.Elements.orderNoTextBox).fill(this.purchaseOrderNo);
+        // await this.page.locator(this.Elements.orderNoTextBox).fill('325772');
+        await this.base.waitAndClick(this.Elements.RetrieveButton);
+        await fixture.page.waitForTimeout(1000);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        await this.page.locator(this.Elements.receivingDate).fill(formattedDate);
+        await this.page.locator(this.Elements.packSlipNumber).fill(`PSN-${getRandomInt(1000, 9999)}`);
+        await this.page.locator(this.Elements.receiveQuantityInput).fill('10');
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.getByPlaceholder('--Input Or Select One--').click();
+        await this.page.getByPlaceholder('--Input Or Select One--').type('TS-NS-General');
+        await this.page.locator('text=TS-NS-General').click();
+
+
+        await this.page.locator(this.Elements.masterCheckbox).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'Save' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(1000);
+
+        const headerText = await this.page.locator(this.Elements.receivingDocumentNumber).textContent();
+
+        if (headerText && headerText.includes('Receiving Doc. No.:')) {
+            // Extract the number after "Receiving Doc. No.:"
+            const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
+            if (match && match[1]) {
+                this.ReceivingDocumentNo = match[1];
+                fixture.logger.info(`Receiving document number: ${this.ReceivingDocumentNo}`);
+            }
+        }
+        await fixture.page.waitForTimeout(1000);
+        const locator = this.page.locator(this.Elements.payslipNumber);
+
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        // Get the value of the input field (the text inside the input)
+        this.payslipNumber = await locator.inputValue();
+
+        console.log('Payslip Number:', this.payslipNumber);
+    }
+
+    async clickOnCaptureInvoiceMenu(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.ARAPMenu);
+        await this.base.waitAndClick(this.Elements.captureInvoiceMatchingMenu);
+        await fixture.page.waitForTimeout(500);
+    }
+
+    async FillCaptureInvoice(): Promise<void> {
+
+        await this.page.locator(this.Elements.orderNoBox).fill(this.purchaseOrderNo);
+        //click outside
+        await this.page.mouse.click(0, 0);
+        const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
+
+        await this.page.locator(this.Elements.invoiceNumber).fill(randomJobNumber);
+        await this.page.locator(this.Elements.invoiceDate).click();
+        await this.page.locator(this.Elements.calendarToday).click();
+        await this.page.locator(this.Elements.invoiceTotal).fill(this.subTotal);
+        await this.page.locator(this.Elements.taxAmount).fill(this.tax);
+        await this.page.locator(this.Elements.freightAmount).fill(this.Freight);
+        await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
+        await this.page.locator(this.Elements.okButtonpurchaceOrder).click();
+
     }
 
 }

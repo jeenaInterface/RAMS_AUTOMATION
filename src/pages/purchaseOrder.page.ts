@@ -23,6 +23,10 @@ export default class PurchaseOrderPage {
     public receiveStatusInternalRO: string = '';
     public payslipNumber: string = '';
     public RMA: string = '';
+    public subTotal: string = '';
+    public tax: string = '';
+    public Freight: string = '';
+
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -174,7 +178,7 @@ export default class PurchaseOrderPage {
         stockNumberValidationMessage: "//p[contains(text(),'There is a Rebuild Stock Number entry without any ')]",
         hourValidationOkayButton: "//button[contains(@class,'el-button el-button--default el-button--primary')]//span[contains(text(),'OK')]",
 
-         PlusButtonAddAsset1: "(//i[@class='ivu-icon ivu-icon-plus'])[3]",
+        PlusButtonAddAsset1: "(//i[@class='ivu-icon ivu-icon-plus'])[3]",
         assetNumber2: "(//input[@placeholder='-- Input Text --'])[2]",
         componentCode2: "(//input[@placeholder='Component Code'])[2]",
         damageCode2: "(//input[@placeholder='Damage Code'])[2]",
@@ -183,7 +187,9 @@ export default class PurchaseOrderPage {
         actualHours2: "(//div[@class='el-input input-align']//input[@type='text'])[2]",
         stockQuantitywo2: "(//div[@class='el-input el-input-group el-input-group--append input-align']//input[@type='text'])[2]",
 
-
+        subTotal: "//table[2]//tr[1]//td[2]//b[1]",
+        tax: "//table[2]//tr[2]//td[2]//b[1]",
+        Freight: "//table[2]//tr[3]//td[2]//b[1]"
 
     }
     async clickOnCreateOrderMenu(): Promise<void> {
@@ -1315,7 +1321,7 @@ export default class PurchaseOrderPage {
         }
 
     }
-     async asst2Details(): Promise<void> {
+    async asst2Details(): Promise<void> {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.WorkOrderMenu).click();
         await this.page.locator(this.Elements.createUnbillableOrder).click();

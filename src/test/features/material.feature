@@ -317,3 +317,26 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then verifies that the material usage record is created successfully by click on the link on the inquire material
         Then go to asset page and open the asset linked to the unbillable order
         Then Open repair asset and verify the material usage is recorded under the asset
+
+
+    @captureInvoiceMatching   @sanity @material
+   Scenario: Verify Batch Review Receiving Module functionalities
+        Given the admin user is logged into the application
+        Then the admin navigates to the material creation page
+        When enters all required details to create a new material
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+
+        Then Fully receive the order
+        And track the receiving document number for further use
+
+
+        Then go to batch review receiving screen
+        Then search by Pack Slip No. and review the material
+
+        Then the user searches for the last created order in the inquiry list page
+        Then go to catture Invoice Matching
+        Then Paste the order number and click outside
+        Then Fill all the fields and click on save button
+        Then go to inquire invoice matching and verify the newly created entry
+        Then 
