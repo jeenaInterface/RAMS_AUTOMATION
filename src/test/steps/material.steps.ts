@@ -475,7 +475,7 @@ Then('the unbillable work order number is captured for further use', async funct
 });
 Then('click on the record material usage button and verify the record for unbillable orer is present', async () => {
   await materialPage.clickonMaterialUsageButton();
-   await materialPage.VerifyMaterialUsagefunctionlity();
+  await materialPage.VerifyMaterialUsagefunctionlity();
 });
 Then('verifies that the material OH quantity is updated accordingly after recording the material usage', async () => {
   await materialPage.verifyStockCountAfterReceive();
@@ -483,8 +483,8 @@ Then('verifies that the material OH quantity is updated accordingly after record
 Then('verifies that the material usage record is created successfully by click on the link on the inquire material', async () => {
   await materialPage.clickOnMaterialMenu();
   await materialPage.searchMaterialByStockNo1();
-   await materialPage.clickMaterialUsageLink();
-   await materialPage.VerifyMaterialUsagefunctionlityLink();
+  await materialPage.clickMaterialUsageLink();
+  await materialPage.VerifyMaterialUsagefunctionlityLink();
 
 });
 Then('go to asset page and open the asset linked to the unbillable order', async () => {
@@ -497,8 +497,45 @@ Then('Open repair asset and verify the material usage is recorded under the asse
 Then('go to catture Invoice Matching', async () => {
   await materialPage.clickOnCaptureInvoiceMenu();
 });
-Then('go to catture Invoice Matching', async () => {
-  await materialPage.clickOnCaptureInvoiceMenu();
+Then('Fill all the fields and click on save button', async () => {
+  await materialPage.FillCaptureInvoice();
+});
+Then('go to inquire invoice matching and verify the newly created entry', async () => {
+  await materialPage.inquireInvoice();
+  await materialPage.searchBySequecnBumber();
+
+});
+Then('verify suspend functionality', async () => {
+  await materialPage.suspend();
+});
+Then('verify unsuspend functionality', async () => {
+  await materialPage.Unsuspend();
+});
+Then('verify Action Log', async () => {
+  await materialPage.verifyActionLogInvoice();
+});
+Then('Verify suspend Log', async () => {
+  await materialPage.verifySuspendActionLogInvoice();
+});
+Then('verify approve functionality', async () => {
+  await materialPage.approveInvoice();
+});
+Then('verify cancel functionality', async () => {
+  await materialPage.CancelInvoice();
+});
+Then('click on new button', async () => {
+  await materialPage.NewInvoice();
+});
+Then('go to batch approve invoice credit note menu', async () => {
+  await materialPage.batchApproveScreen();
+});
+Then('suspend the order', async () => {
+  await materialPage.doBatchSuspend();
+});
+Then('do batch approve', async () => {
+  await materialPage.doBatchApprove();
 });
 
-
+Then('go to cature credit note menu', async () => {
+  await materialPage.creditNoteMenu();
+});

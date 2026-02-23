@@ -25,6 +25,7 @@ export default class MaterialPage {
     public subTotal: string = '';
     public tax: string = '';
     public Freight: string = '';
+    public sequenceMatch: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -216,7 +217,55 @@ export default class MaterialPage {
         invoiceTotal: "(//label[normalize-space(text())='Remarks']/following::input)[1]",
         taxAmount: "(//label[normalize-space(text())='Remarks']/following::input)[2]",
         freightAmount: "(//label[normalize-space(text())='Remarks']/following::input)[3]",
-        calendarToday: "//td[@class='available today current']"
+        calendarToday: "//td[@class='available today current']",
+        invoiceTitle: "(//span[@class='header-title font-size-title'])[1]",
+        inquireInvoice: "//span[normalize-space()='- Inquire Invoice/Credit Note']",
+        sequcenNumber: "(//label[normalize-space(text())='Sequence No.']/following::input)[1]",
+        invoiceLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[3]/div[1]/a[1]",
+        suspendButton: "(//span[normalize-space()='Suspend'])[1]",
+        suspendReason: "(//label[normalize-space(text())='Suspend Reason']/following::textarea)[1]",
+        suspendOkayButton: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[4]/div/div[2]/div/button[2]/span",
+        suspendSecondOkayButton: "xpath=/html/body/div[3]/div/div[3]/button[2]/span",
+        unsuspendMenu: "//span[normalize-space()='Un-suspend']",
+        unsuspendReason: "(//label[normalize-space(text())='Un-suspend Reason']/following::textarea)[1]",
+        unsuspendOkButton: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[5]/div/div[2]/div/button[2]/span",
+        unsuspendSecondOkButton: "/html/body/div[3]/div/div[3]/button[2]/span",
+        operationTextBox: "xpath=/html/body/div[1]/div[2]/div/div/div[3]/div[1]/div/div[2]/div/div[1]/div[2]/table/thead/tr[2]/th[1]/div/div/div/div/input",
+        suspendLog: "//button[@type='button']//span[contains(text(),'Suspend Log')]",
+        actionSearch: "xpath=/html/body/div[1]/div[2]/div/div/div[3]/div[2]/div/div[2]/div/div[1]/div[2]/table/thead/tr[2]/th[3]/div/div/div/div/input",
+        actionSearchResult: "//span[normalize-space(text())='Un-suspend']",
+        approveButton: "//span[normalize-space()='Approve']",
+        confirmButton: "(//span[normalize-space()='Confirm'])[1]",
+        approveOkButton: "xpath=/html/body/div[5]/div/div[3]/button[2]/span",
+        InvoicecancelButton: "//div[@class='app-footer']//div//span[contains(text(),'Cancel')]",
+        cancelReason: "(//label[normalize-space(text())='Cancel Reason']/following::textarea)[1]",
+        InvpoicecancelOk: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[3]/div/div[2]/div/button[2]/span",
+        InvpoicecancelSecondOkButton: "xpath=/html/body/div[5]/div/div[3]/button[2]/span",
+        InvoicenewButton: "//span[normalize-space()='New']",
+        batchApproveMenu: "//span[normalize-space(text())='- Batch Approve Invoice/Credit Note']",
+        sequnceNumberSearch: "(//input[@placeholder='--Input Text--'])[1]",
+        invoiceCheckBox: "(//span[@class='el-checkbox__inner'])[2]",
+        batchSuspendButton: "//span[normalize-space()='Batch Suspend']",
+        batchSuspendReson: "(//textarea[@placeholder='--Input Text--'])[1]",
+        batchSuspendOKbUTTON: "//button[@class='el-button el-button--primary']//span[contains(text(),'OK')]",
+        batchApproveInvoiceButton: "//span[normalize-space(text())='Batch Approve']",
+        creditNoteMenu:"//span[normalize-space()='- Capture Credit Note']",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     };
@@ -525,11 +574,16 @@ export default class MaterialPage {
         await totalOutStandingQuantity.waitFor({ state: 'visible', timeout: 5000 });
 
         this.outStandingQuantity = await totalOutStandingQuantity.textContent();
-        const totalAmount = await this.page.locator(this.Elements.subTotal).textContent();
+        await fixture.page.waitForTimeout(1000);
+        const totalAmount = await newPage.locator(this.Elements.subTotal).textContent();
         this.subTotal = totalAmount.replace(/\$|,/g, '');
-        const tax = await this.page.locator(this.Elements.tax).textContent();
+
+        const tax = await newPage.locator(this.Elements.tax).textContent();
         this.tax = tax.replace(/\$|,/g, '');
-        const freight = await this.page.locator(this.Elements.Freight).textContent();
+
+        await fixture.page.waitForTimeout(1000);
+
+        const freight = await newPage.locator(this.Elements.Freight).textContent();
         this.Freight = freight.replace(/\$|,/g, '');
         fixture.page = originalPage;
         await newPage.close();
@@ -1305,7 +1359,7 @@ export default class MaterialPage {
     async clickOnBatchReviewReceivingMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.ordermenu);
         await this.page.locator(this.Elements.batchReviewReceivingMenu).click();
-        await fixture.page.waitForTimeout(10000);
+        await fixture.page.waitForTimeout(15000);
     }
     async DoMaterialReview(): Promise<void> {
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[1]`).fill(this.payslipNumber);
@@ -1680,13 +1734,141 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.invoiceNumber).fill(randomJobNumber);
         await this.page.locator(this.Elements.invoiceDate).click();
         await this.page.locator(this.Elements.calendarToday).click();
+        await this.page.locator(this.Elements.remarks).fill("Remarks" + randomJobNumber);
         await this.page.locator(this.Elements.invoiceTotal).fill(this.subTotal);
         await this.page.locator(this.Elements.taxAmount).fill(this.tax);
         await this.page.locator(this.Elements.freightAmount).fill(this.Freight);
         await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
-        await this.page.locator(this.Elements.okButtonpurchaceOrder).click();
+        await this.page.locator('xpath=//html/body/div[6]/div/div[3]/button[2]/span').click();
+
+
+    }
+    async inquireInvoice(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.ARAPMenu);
+        await this.base.waitAndClick(this.Elements.inquireInvoice);
+        await fixture.page.waitForTimeout(500);
+
+    }
+    async searchBySequecnBumber(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        // await this.page.locator(this.Elements.sequcenNumber).fill(this.sequenceMatch);
+        await this.base.waitAndClick(this.Elements.searchButton);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.invoiceLink).click();
+        const headerText = await this.page.locator(this.Elements.invoiceTitle).textContent();
+
+        // Use regex to find the number after "Sequence No.:"
+        const sequenceMatchNumber = headerText.match(/Sequence No\.\:\s*(\d+)/);
+
+        let sequenceNumber;
+        if (sequenceMatchNumber) {
+            this.sequenceMatch = sequenceMatchNumber[1]; // captured number as string
+        } else {
+            sequenceNumber = null; // or handle absence of number as needed
+        }
+
+        console.log(this.sequenceMatch);
+        await fixture.page.waitForTimeout(5000);
+
+    }
+    async suspend(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.suspendButton);
+        await this.page.locator(this.Elements.suspendReason).fill("Suspended");
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.suspendOkayButton).click();
+        await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]').click();
+        await fixture.page.waitForTimeout(500);
+
+    }
+    async Unsuspend(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.unsuspendMenu);
+        await this.page.locator(this.Elements.unsuspendReason).fill("UN-Suspended");
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.unsuspendOkButton).click();
+        await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]').click();
+        await fixture.page.waitForTimeout(500);
+
+    }
+    async verifyActionLogInvoice(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLog);
+        await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
+        await this.page.locator(this.Elements.operationTextBox).fill('Un-suspend Invoice');
+        await fixture.page.waitForTimeout(500);
+        await expect(
+            this.page.locator("//div[@class='cell']//span[contains(text(),'Un-suspend Invoice')]")
+        ).toHaveText('Un-suspend Invoice');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator("//body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/button[1]/i[1]").click();
+    }
+    async verifySuspendActionLogInvoice(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.suspendLog);
+        await this.page.locator(this.Elements.actionSearch).fill('Un-suspend');
+        await fixture.page.waitForTimeout(500);
+        await expect(this.page.locator(`//span[normalize-space()='Un-suspend']`)).toHaveText('Un-suspend');
+
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator("//body[1]/div[1]/div[2]/div[1]/div[1]/div[3]/div[2]/div[1]/div[1]/button[1]/i[1]").click();
+    }
+    async approveInvoice(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.approveButton);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.confirmButton).click();
+        await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]/span').click();
+        await fixture.page.waitForTimeout(500);
+
+    }
+    async CancelInvoice(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.InvoicecancelButton);
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.cancelReason).fill("cancelled");
+        await this.page.locator(this.Elements.InvpoicecancelOk).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.InvpoicecancelSecondOkButton).click();
+        await fixture.page.waitForTimeout(2000);
+    }
+    async NewInvoice(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.InvoicenewButton);
+
+    }
+    async batchApproveScreen(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.ARAPMenu);
+        await this.base.waitAndClick(this.Elements.batchApproveMenu);
+    }
+    async doBatchSuspend(): Promise<void> {
+        await this.page.locator(this.Elements.sequnceNumberSearch).fill(this.sequenceMatch);
+        await this.page.locator(this.Elements.invoiceCheckBox).check();
+        await this.page.locator(this.Elements.batchSuspendButton).click();
+        await this.page.locator(this.Elements.batchSuspendReson).fill("suspended");
+        await this.page.locator("//button[@class='el-button el-button--primary']//span[contains(text(),'OK')]").first().click();
+        await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]/span').click();
+        await fixture.page.waitForTimeout(500);
+
+    }
+    async doBatchApprove(): Promise<void> {
+        await this.page.locator(this.Elements.sequnceNumberSearch).fill(this.sequenceMatch);
+        await this.page.locator(this.Elements.invoiceCheckBox).check();
+        await this.page.locator(this.Elements.batchApproveInvoiceButton).click();
+        await this.page.locator(this.Elements.confirmButton).click();
+        await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]/span').click();
+        await fixture.page.waitForTimeout(500);
 
     }
 
+    async creditNoteMenu(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.ARAPMenu);
+        await this.base.waitAndClick(this.Elements.creditNoteMenu);
+    }
+
 }
+
+
+
 
