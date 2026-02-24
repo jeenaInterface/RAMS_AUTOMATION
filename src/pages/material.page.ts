@@ -249,7 +249,13 @@ export default class MaterialPage {
         batchSuspendReson: "(//textarea[@placeholder='--Input Text--'])[1]",
         batchSuspendOKbUTTON: "//button[@class='el-button el-button--primary']//span[contains(text(),'OK')]",
         batchApproveInvoiceButton: "//span[normalize-space(text())='Batch Approve']",
-        creditNoteMenu:"//span[normalize-space()='- Capture Credit Note']",
+        creditNoteMenu: "//span[normalize-space()='- Capture Credit Note']",
+        batchAPPosting: "//span[normalize-space()='- Batch AP Posting']",
+        batchPostButton: "//span[normalize-space()='Batch Post']",
+        postButton: "//span[normalize-space()='Post']",
+        checkAPInterfaceStatus: "//span[normalize-space()='- Check AP Interface Result']",
+        sequenceNumberSearchOnAPInterface: "(//label[normalize-space(text())='Sequence No.']/following::input)[1]",
+
 
 
 
@@ -1866,7 +1872,54 @@ export default class MaterialPage {
         await this.base.waitAndClick(this.Elements.ARAPMenu);
         await this.base.waitAndClick(this.Elements.creditNoteMenu);
     }
+    async batchAPPostingMenu(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.ARAPMenu);
+        await this.base.waitAndClick(this.Elements.batchAPPosting);
+    }
+    async doBatchPost(): Promise<void> {
+        await this.page.locator(this.Elements.sequnceNumberSearch).fill(this.sequenceMatch);
+        await this.page.locator(this.Elements.invoiceCheckBox).check();
+        await this.page.locator(this.Elements.batchPostButton).click();
+        await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]/span').click();
+        await fixture.page.waitForTimeout(500);
 
+    }
+    async doPost(): Promise<void> {
+        await this.page.locator(this.Elements.postButton).click();
+        await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]/span').click();
+        await fixture.page.waitForTimeout(500);
+
+    }
+    async APInterfaceMenu(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.base.waitAndClick(this.Elements.ARAPMenu);
+        await this.base.waitAndClick(this.Elements.checkAPInterfaceStatus);
+    }
+    async CheckAPInterfaceMenu(): Promise<void> {
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.sequenceNumberSearchOnAPInterface).fill(this.sequenceMatch);
+        await this.base.waitAndClick(this.Elements.searchButton);
+    }
+    async FillCaptureCreditNote(): Promise<void> {
+
+        await this.page.locator(this.Elements.orderNoBox).fill(this.purchaseOrderNo);
+        //click outside
+        await this.page.mouse.click(0, 0);
+        const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
+
+        await this.page.locator(this.Elements.invoiceNumber).fill(randomJobNumber);
+        await this.page.locator(this.Elements.invoiceDate).click();
+        await this.page.locator(this.Elements.calendarToday).click();
+        await this.page.locator(this.Elements.remarks).fill("Remarks" + randomJobNumber);
+        await this.page.locator(this.Elements.invoiceTotal).fill(this.subTotal);
+        await this.page.locator(this.Elements.taxAmount).fill(this.tax);
+        await this.page.locator(this.Elements.freightAmount).fill(this.Freight);
+        await this.page.locator(this.Elements.saveOnPurchaseOrderForm).click();
+        await this.page.locator('xpath=//html/body/div[6]/div/div[3]/button[2]/span').click();
+
+
+    }
 }
 
 

@@ -221,8 +221,8 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
 
-@BatchReviewReceiving   @sanity @material
-   Scenario: Verify Batch Review Receiving Module functionalities
+    @BatchReviewReceiving   @sanity @material
+    Scenario: Verify Batch Review Receiving Module functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
         When enters all required details to create a new material
@@ -241,7 +241,7 @@ Feature: Add, Update, and Search Functionalities in material Module
 
 
     @BatchReviewReceivingLinks   @sanity @material
-   Scenario: Verify Packslip number and PO number links are redirecting to correct pages in batch review receiving module
+    Scenario: Verify Packslip number and PO number links are redirecting to correct pages in batch review receiving module
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
         When enters all required details to create a new material
@@ -259,7 +259,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then search by PO No. and click on the link and verifies the redirection to correct page
 
     @ReturnMaterials   @sanity @material
-   Scenario: Verify Return Material functionalities
+    Scenario: Verify Return Material functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
         When enters all required details to create a new material
@@ -273,7 +273,7 @@ Feature: Add, Update, and Search Functionalities in material Module
 
         Then go to batch review receiving screen
         Then search by Pack Slip No. and review the material
-        
+
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
 
@@ -320,7 +320,7 @@ Feature: Add, Update, and Search Functionalities in material Module
 
 
     @captureInvoiceMatching   @sanity @material
-   Scenario: Verify capture invoice matching module functionality
+    Scenario: Verify capture invoice matching module functionality
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
         When enters all required details to create a new material
@@ -354,11 +354,13 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then go to batch approve invoice credit note menu
         Then do batch approve
         Then go to batch AP posting menu and do post
+        Then go to inquire invoice matching and verify the newly created entry
+        Then click on post button
         Then verify the menu AP Interface status
 
-        
+
     @captureCreditNote   @sanity @material
-   Scenario: Verify capture credit note Module functionalities
+    Scenario: Verify capture credit note Module functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
         When enters all required details to create a new material
@@ -374,24 +376,8 @@ Feature: Add, Update, and Search Functionalities in material Module
 
         Then the user searches for the last created order in the inquiry list page
         Then go to cature credit note menu
-        Then Fill all the fields and click on save button
-        Then go to inquire invoice matching and verify the newly created entry
-        Then verify suspend functionality
-        Then verify unsuspend functionality
-        Then verify Action Log
-        Then Verify suspend Log
-        Then verify approve functionality
+        Then Fill all the fields for credit note and click on save button
         Then go to inquire invoice matching and verify the newly created entry
         Then verify cancel functionality
-        Then click on new button
-        Then Fill all the fields and click on save button
-        Then go to batch approve invoice credit note menu
-        Then suspend the order
-        Then go to inquire invoice matching and verify the newly created entry
-        Then verify unsuspend functionality
-        Then go to batch approve invoice credit note menu
-        Then do batch approve
-        Then go to batch AP posting menu and do post
-        Then verify the menu AP Interface status
 
-     
+

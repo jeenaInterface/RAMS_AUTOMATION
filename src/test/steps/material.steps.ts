@@ -539,3 +539,17 @@ Then('do batch approve', async () => {
 Then('go to cature credit note menu', async () => {
   await materialPage.creditNoteMenu();
 });
+Then('go to batch AP posting menu and do post', async () => {
+  await materialPage.batchAPPostingMenu();
+  await materialPage.doBatchPost();
+});
+Then('click on post button', async () => {
+  await materialPage.doPost();
+});
+Then('verify the menu AP Interface status', async () => {
+  await materialPage.APInterfaceMenu();
+  await materialPage.CheckAPInterfaceMenu();
+});
+Then('Fill all the fields for credit note and click on save button', async () => {
+  await materialPage.FillCaptureCreditNote();
+});
