@@ -197,19 +197,22 @@ export default class inventoryCountPage {
 
     }
     async downloadReport(): Promise<string> {
-        // const downloadPath = path.resolve(__dirname, 'downloads');
-            const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\RAMS Reports\\InventoryCount_Report.xlsx';
-
+        const downloadPath = path.resolve(__dirname, 'InventoryCountDownloads');
         if (!fs.existsSync(downloadPath)) {
             fs.mkdirSync(downloadPath, { recursive: true });
         }
         this.clearDownloadFolder(downloadPath);
+
+        // Handle the download event
         const [download] = await Promise.all([
-            this.page.waitForEvent('download'),
-            this.page.locator(this.Elements.downloadButton).click()
+            this.page.waitForEvent('download'), // Wait for the download to start
+            this.page.locator(this.Elements.downloadButton).click() // Perform the action that initiates download
         ]);
-        const downloadPathWithFileName = path.join(downloadPath, 'InventoryCount_Report.xlsx');
+
+        // Save the downloaded file to the specified folder as a text file
+        const downloadPathWithFileName = path.join(downloadPath, 'Asset.xlsx');
         await download.saveAs(downloadPathWithFileName);
+        console.log(`File downloaded to: ${downloadPathWithFileName}`);
         expect(fs.existsSync(downloadPathWithFileName)).toBeTruthy();
         return downloadPathWithFileName;
     }

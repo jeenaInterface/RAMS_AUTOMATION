@@ -61,6 +61,8 @@ After(async function ({ pickle, result }) {
         videoPath = await fixture.page.video().path();
     }
 
+    // // Add delay before closing for graceful shutdown
+    // await new Promise(res => setTimeout(res, 10000));
     await fixture.page.close();
     await context.close();
 
