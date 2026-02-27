@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import AssetManufacturePage from "../../pages/assetManufacture.page";
+import AssetManufacturePage from "../../pages/systemSettings_assetManufacture.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let manufacture: AssetManufacturePage;

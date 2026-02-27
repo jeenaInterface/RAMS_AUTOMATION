@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import InvoiceMatchingTolerancePage from "../../pages/invoiceMatchingTolerance.page";
+import InvoiceMatchingTolerancePage from "../../pages/systemSettings_invoiceMatchingTolerance.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let invoicePage: InvoiceMatchingTolerancePage;

@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import UOMConversionPage from "../../pages/uomConversionFactor.page";
+import UOMConversionPage from "../../pages/systemSettings_uomConversionFactor.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let UOMPage: UOMConversionPage;

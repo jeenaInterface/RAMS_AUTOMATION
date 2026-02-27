@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import SupportDataPage from "../../pages/supportData.page";
+import SupportDataPage from "../../pages/systemSettings_supportData.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let supportDataPage: SupportDataPage;

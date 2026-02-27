@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import StockLocationPage from "../../pages/stockLocation.page";
+import StockLocationPage from "../../pages/systemSettings_stockLocation.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let stockLocationPage: StockLocationPage;

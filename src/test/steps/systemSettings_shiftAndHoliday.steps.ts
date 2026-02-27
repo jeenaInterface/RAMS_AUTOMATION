@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import ShiftAndHolidayPage from "../../pages/shiftAndHoliday.page";
+import ShiftAndHolidayPage from "../../pages/systeSettings_shiftAndHoliday.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let shiftAndHolidayPage: ShiftAndHolidayPage;

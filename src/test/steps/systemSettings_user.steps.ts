@@ -1,6 +1,6 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import UserPage from '../../pages/user.page';
+import UserPage from '../../pages/systemSettings_user.page';
 import { fixture } from "../../hooks/pageFixture";
 
 

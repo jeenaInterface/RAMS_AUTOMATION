@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import InterfaceSetupPage from "../../pages/interfaceSetup.page";
+import InterfaceSetupPage from "../../pages/systemSettings_interfaceSetup.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let interfacePage: InterfaceSetupPage;

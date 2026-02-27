@@ -10,11 +10,9 @@ import * as fs from 'fs-extra';
 // import path from 'path';
 
 
-
-
 setDefaultTimeout(100 * 1000);
 
-export default class AssetReportPage {
+export default class PurchaseOrderReportPage {
     private base: PlaywrightWrapper;
     private page: Page;
 
@@ -24,6 +22,12 @@ export default class AssetReportPage {
     }
 
     private Elements = {
+        reportMenu: "//span[normalize-space()='Report']",
+         OrderReportMenu: "//span[normalize-space(text())='- Create Order Report']",
+         stockNo:"(//input[@class='el-input__inner'])[2]",
+         FOB:"(//label[normalize-space(text())='FOB']/following::input)[2]",
+         orderStatus:"(//label[normalize-space(text())='Order status']/following::input)[2]",
+         receiveStatus:"(//label[normalize-space(text())='Receive Status']/following::input)[2]",
         assetGroup: "(//label[normalize-space(text())='Asset Group']/following::input)[2]",
         assetStatus: "(//label[normalize-space(text())='Asset Status']/following::input)[2]",
         assetFields: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[3]/div[1]/div[1]/p[2]/label[1]/span[1]/span[1]",
@@ -32,8 +36,7 @@ export default class AssetReportPage {
         runButton: "//span[normalize-space()='Run']",
         saveButton: "//span[normalize-space()='Save']",
         saveAsButton: "//button[@type='button']//span[contains(text(),'Save As')]",
-        reportMenu: "//span[normalize-space()='Report']",
-        AssetReportMenu: "(//span[normalize-space()='- Create Asset Report'])[1]",
+
         rightArrow1: "(//i[@class='el-icon-arrow-right'])[1]",
         rightArrow2: "(//button[@type='button'])[7]",
         today: "//td[normalize-space(text())='Today']",
@@ -43,9 +46,9 @@ export default class AssetReportPage {
 
     }
 
-    async clickOnAssetReportMenu(): Promise<void> {
+    async clickOnOrderReportMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.reportMenu);
-        await this.base.waitAndClick(this.Elements.AssetReportMenu);
+        await this.base.waitAndClick(this.Elements.OrderReportMenu);
     }
     async selectFiltration(): Promise<void> {
         await this.page.locator(this.Elements.assetGroup).click();

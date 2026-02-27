@@ -1,5 +1,5 @@
 import { When, Then } from "@cucumber/cucumber";
-import AssetPage from "../../pages/asset.page";
+import AssetPage from "../../pages/systemSettings_asset.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let asset: AssetPage;

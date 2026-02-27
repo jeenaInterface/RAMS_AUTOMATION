@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import ActivityCodePage from "../../pages/activityCode.page";
+import ActivityCodePage from "../../pages/systemSettings_activityCode.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let ActivityPage: ActivityCodePage;

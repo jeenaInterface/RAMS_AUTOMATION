@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import VendorPage from "../../pages/vendor.page";
+import VendorPage from "../../pages/systemSettings_vendor.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let vendor: VendorPage;

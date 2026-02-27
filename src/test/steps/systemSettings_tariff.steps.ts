@@ -1,5 +1,5 @@
 import { When, Then } from "@cucumber/cucumber";
-import TariffPage from "../../pages/tariff.page";
+import TariffPage from "../../pages/systemSettings_tariff.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let tariffPage: TariffPage;

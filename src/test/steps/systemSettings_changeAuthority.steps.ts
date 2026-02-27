@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import ChangeAuthorityPage from "../../pages/changeAuthority.page";
+import ChangeAuthorityPage from "../../pages/systemSettings_changeAuthority.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let changeAuthorityPage: ChangeAuthorityPage;

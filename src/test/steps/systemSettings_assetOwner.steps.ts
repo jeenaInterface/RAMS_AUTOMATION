@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import AssetOwnerPage from "../../pages/assetOwner.page";
+import AssetOwnerPage from "../../pages/sytemSettings_assetOwner.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let assetOwner: AssetOwnerPage;

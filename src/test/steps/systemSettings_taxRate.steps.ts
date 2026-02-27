@@ -1,6 +1,6 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import TaxRatePage from '../../pages/taxRate.page';
+import TaxRatePage from '../../pages/systemSettings_taxRate.page';
 import { fixture } from '../../hooks/pageFixture';
 
 let taxRate: TaxRatePage;

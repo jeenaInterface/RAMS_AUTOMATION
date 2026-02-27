@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import AddressPage from "../../pages/address.page";
+import AddressPage from "../../pages/systemSettings_address.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let addressPage: AddressPage;

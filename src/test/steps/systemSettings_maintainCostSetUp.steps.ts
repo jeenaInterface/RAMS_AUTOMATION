@@ -1,5 +1,5 @@
 import { Given, When, Then } from "@cucumber/cucumber";
-import MaintainCostSetUpPage from "../../pages/maintainCostSetup.page";
+import MaintainCostSetUpPage from "../../pages/systeSettings_maintainCostSetup.page";
 import { fixture } from "../../hooks/pageFixture";
 
 let MaintainCostPage: MaintainCostSetUpPage;
