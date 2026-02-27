@@ -1,6 +1,6 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
-import InventoryReportPage from '../../pages/createInventoryReport.page';
+import InventoryReportPage from '../../pages/report_createInventoryReport.page';
 import { fixture } from '../../hooks/pageFixture';
 
 let InventoryPage: InventoryReportPage;
@@ -20,6 +20,11 @@ When('verifies save as functionality of inventory report', async function () {
   await InventoryPage.saveAsReport();
 });
 When('the admin clicks on the run button and the inventory report should be generated successfully', async function () {
-  await InventoryPage.downloadReport();
+  const filePath = await InventoryPage.downloadReport();
+  if (this.attach) {
+    // Attach as plain text or as HTML link if supported
+    const sharedFilePathText = `Report available at shared location: ${filePath}`;
+    await this.attach(sharedFilePathText, 'text/plain');
+  }
   
 });

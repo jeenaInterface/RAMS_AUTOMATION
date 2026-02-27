@@ -85,7 +85,7 @@ export default class AssetOwnerPage {
     }
 
 async downloadReport(): Promise<string> {
-    const downloadPath = path.resolve(__dirname, "downloads");
+    const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
 
     // Creates folder only if it does NOT exist – no EEXIST error
     await fs.ensureDir(downloadPath);
@@ -105,6 +105,7 @@ async downloadReport(): Promise<string> {
     console.log(`File downloaded to: ${outputFile}`);
 
     expect(fs.existsSync(outputFile)).toBeTruthy();
+     await new Promise(resolve => setTimeout(resolve, 5000));
     return outputFile;
 }
 

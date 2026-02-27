@@ -23,12 +23,12 @@ export default class InventoryPage {
     private Elements = {
         createInventoryReportMenu: "//span[normalize-space()='- Create Inventory Report']",
         reportMenu: "//span[normalize-space()='Report']",
-        materialCreationDate:"(//label[normalize-space(text())='Material Creation Date']/following::input)[1]",
-        StockNumber:"//input[@placeholder='--Input Text or Look up--']",
-        rcvUOM:"(//label[normalize-space(text())='Rcv. UOM']/following::input)[2]",
-        issueUOM:"(//label[normalize-space(text())='Issue UOM']/following::input)[2]",
-        status:"(//input[@placeholder='--Select One or More--'])[3]",
-        shop:"(//input[@placeholder='--Select One or More--'])[4]",
+        materialCreationDate: "(//label[normalize-space(text())='Material Creation Date']/following::input)[1]",
+        StockNumber: "//input[@placeholder='--Input Text or Look up--']",
+        rcvUOM: "(//label[normalize-space(text())='Rcv. UOM']/following::input)[2]",
+        issueUOM: "(//label[normalize-space(text())='Issue UOM']/following::input)[2]",
+        status: "(//input[@placeholder='--Select One or More--'])[3]",
+        shop: "(//input[@placeholder='--Select One or More--'])[4]",
         runButton: "//span[normalize-space()='Run']",
         saveButton: "//span[normalize-space()='Save']",
         saveAsButton: "//button[@type='button']//span[contains(text(),'Save As')]",
@@ -78,33 +78,33 @@ export default class InventoryPage {
 
     }
 
-async downloadReport(): Promise<void> {
-    const downloadPath = path.resolve(__dirname, "downloads");
+    async downloadReport(): Promise<string> {
+        const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
 
-    // Creates folder only if it does NOT exist – no EEXIST error
-    await fs.ensureDir(downloadPath);
+        // Creates folder only if it does NOT exist – no EEXIST error
+        await fs.ensureDir(downloadPath);
 
-    // Clean folder safely
-    await this.clearDownloadFolder(downloadPath);
+        // Clean folder safely
+        await this.clearDownloadFolder(downloadPath);
 
-    // Wait for the download event
-    const [download] = await Promise.all([
-        this.page.waitForEvent("download", { timeout: 60000 }),
-        this.page.locator(this.Elements.runButton).click({ timeout: 60000 }),
-    ]);
+        // Wait for the download event
+        const [download] = await Promise.all([
+            this.page.waitForEvent("download", { timeout: 60000 }),
+            this.page.locator(this.Elements.runButton).click({ timeout: 60000 }),
+        ]);
 
-    const outputFile = path.join(downloadPath, "Inventory.xlsx");
-    await download.saveAs(outputFile);
-    //add delay to ensure file is saved before checking existence
-    await this.page.waitForTimeout(5000);
+        const outputFile = path.join(downloadPath, "Inventory.xlsx");
+        await download.saveAs(outputFile);
+        //add delay to ensure file is saved before checking existence
+        await this.page.waitForTimeout(5000);
 
 
-    console.log(`File downloaded to: ${outputFile}`);
+        console.log(`File downloaded to: ${outputFile}`);
 
-    expect(fs.existsSync(outputFile)).toBeTruthy();
-    await this.page.waitForTimeout(5000);
-    // return outputFile;
-}
+        expect(fs.existsSync(outputFile)).toBeTruthy();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        return outputFile;
+    }
 
     clearDownloadFolder(downloadDir: string): void {
         fs.readdir(downloadDir, (err, files) => {

@@ -7,7 +7,7 @@ const options: LaunchOptions = {
 };
 
 export const invokeBrowser = () => {
-  const browserType = (process.env.npm_config_BROWSER || "edge").toLowerCase();
+  const browserType = (process.env.npm_config_BROWSER || "chrome").toLowerCase();
 
   switch (browserType) {
     case "chrome":

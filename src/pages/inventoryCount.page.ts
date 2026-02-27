@@ -197,7 +197,7 @@ export default class inventoryCountPage {
 
     }
     async downloadReport(): Promise<string> {
-        const downloadPath = path.resolve(__dirname, 'InventoryCountDownloads');
+        const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
         if (!fs.existsSync(downloadPath)) {
             fs.mkdirSync(downloadPath, { recursive: true });
         }
@@ -214,6 +214,7 @@ export default class inventoryCountPage {
         await download.saveAs(downloadPathWithFileName);
         console.log(`File downloaded to: ${downloadPathWithFileName}`);
         expect(fs.existsSync(downloadPathWithFileName)).toBeTruthy();
+         await new Promise(resolve => setTimeout(resolve, 5000));
         return downloadPathWithFileName;
     }
 
