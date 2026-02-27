@@ -8,3 +8,5 @@ Feature: Verify Create Asset Report
     And verifies save functionality
     Then verifies save as functionality
     Then the admin clicks on the run button and the report should be generated successfully
+    Then user click on logout button
+    
