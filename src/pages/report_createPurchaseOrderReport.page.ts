@@ -31,7 +31,7 @@ export default class PurchaseOrderReportPage {
         shop: "(//input[@placeholder='--Select One or More--'])[1]",
         terms: "(//label[normalize-space(text())='Terms']/following::input)[2]",
         vendorSearch: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/form[1]/div[4]/div[4]/div[1]/div[1]/div[1]/i[1]",
-        searchButton: "(//span[contains(text(),'Search')])[3]",
+        searchButton: "(//span[contains(text(),'Search')])[1]",
         okButtonOnVendorSearch: "(//span[contains(text(),'OK')])[3]",
         shipVia: "(//label[normalize-space(text())='Ship Via']/following::input)[2]",
         category: "(//label[normalize-space(text())='Category']/following::input)[2]",
@@ -55,6 +55,8 @@ export default class PurchaseOrderReportPage {
         okButton: "//span[text()='OK']",
         secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
         yearDate: "(//span[contains(text(),'Year To Date')])[3]",
+        vendorCheckList:"//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]",
+
 
     }
 
@@ -68,7 +70,7 @@ export default class PurchaseOrderReportPage {
         const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
         await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
         await this.page.locator(this.Elements.shop).click();
-        await this.page.getByText('AG - AGV').click();
+        await this.page.getByText('AGV - AGV').click();
         await this.page.locator(this.Elements.terms).click();
         await this.page.getByText('NET30 - Net 30 Days').click();
         await this.page.locator(this.Elements.FOB).click();
@@ -79,17 +81,18 @@ export default class PurchaseOrderReportPage {
         await this.page.getByText('Fully Received').click();
         await this.page.locator(this.Elements.vendorSearch).click();
         await this.page.locator(this.Elements.searchButton).click();
+        await this.page.locator(this.Elements.vendorCheckList).click();
         await this.page.locator(this.Elements.okButtonOnVendorSearch).click();
         await this.page.locator(this.Elements.shipVia).click();
         await this.page.getByText('BEST WAY - Best Available Shipping Option').click();
         await this.page.locator(this.Elements.category).click();
-        await this.page.getByText('Inventory').click();
+        await this.page.getByText('Inventory', { exact: true }).click();
         await this.page.locator(this.Elements.costCenter).click();
         await this.page.getByText('1216 - M&R Facility').click();
         await this.page.locator(this.Elements.matchedStatus).click();
         await this.page.getByText('Not Invoiced').click();
         await this.page.locator(this.Elements.orderType).click();
-        await this.page.getByText('PO').click();
+        await this.page.getByText('PO' , { exact: true }).click();
         await this.page.locator(this.Elements.orderCaptureDate).click();
         await this.page.locator(this.Elements.yearDate).click();
         await this.page.locator(this.Elements.orderDate).click();
@@ -140,7 +143,7 @@ export default class PurchaseOrderReportPage {
             this.page.locator(this.Elements.runButton).click({ timeout: 60000 }),
         ]);
 
-        const outputFile = path.join(downloadPath, "Asset.xlsx");
+        const outputFile = path.join(downloadPath, "PurchaseOrderReport.xlsx");
         await download.saveAs(outputFile);
 
         console.log(`File downloaded to: ${outputFile}`);

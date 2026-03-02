@@ -18,13 +18,16 @@ type ScenarioContext = {
 };
 
 export const fixture: {
-  page: Page | undefined;
+  page: Page; // always assigned in Before hook
   logger: Logger | undefined;
   context: ScenarioContext;
   // Optional: expose page objects for convenience in steps
   materialPage?: import("../pages/material.page").default;
   purchasePage?: import("../pages/purchaseOrder.page").default;
 } = {
+  // Page is set later by the hooks; use ts-ignore to satisfy initialization
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   page: undefined,
   logger: undefined,
   context: {},
