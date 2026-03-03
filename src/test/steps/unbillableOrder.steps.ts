@@ -856,5 +856,8 @@ Then('go to approve payroll screen and verify ST and OT for the created WO for f
   await unbillableOrderPage.STandOTForVesselApprovePayroll();
 
 });
+Then('Click on approve button for the created WO in approve payroll screen and confirm the success message', async () => {
+  await unbillableOrderPage.clickOnApproveButton();
+});
 
 

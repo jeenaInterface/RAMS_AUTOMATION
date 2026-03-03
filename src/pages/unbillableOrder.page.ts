@@ -212,7 +212,10 @@ export default class UnbillableOrderPage {
         approvePayrollMenu: "//span[normalize-space()='- Approve Payroll Records']",
         firstShiftCheckBox: "//label[contains(.,'1 - First Shift')]",
         secondShiftCheckBox: "//span[normalize-space()='2 - Second Shift']",
-        ThirdShiftCheckBox: "//span[normalize-space()='3 - Third Shift']"
+        ThirdShiftCheckBox: "//span[normalize-space()='3 - Third Shift']",
+        ApproveButton: "//span[normalize-space(text())='Approve']",
+        ApproveOkayButton: "/html/body/div[5]/div/div[3]/button[2]/span",
+        approveMessage: "//div[@class='el-message-box__message']//p[1]",
 
 
     };
@@ -313,7 +316,7 @@ export default class UnbillableOrderPage {
         expect(status).toBe('Completed');
     }
     async clickOnCompleteButtonNoStatus(): Promise<void> {
-        
+
         await this.page.locator(this.Elements.completeButton).click();
         await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
         await this.page.waitForLoadState('networkidle');
@@ -322,7 +325,7 @@ export default class UnbillableOrderPage {
         //add delay
         await fixture.page.waitForTimeout(5000);
     }
-        async clickOnCompleteButtonNoStatusOT(): Promise<void> {
+    async clickOnCompleteButtonNoStatusOT(): Promise<void> {
         await this.page.locator(this.Elements.hourType).click();
         await this.page.getByText('Over Time').click();
         await fixture.page.waitForTimeout(1000);
@@ -369,7 +372,7 @@ export default class UnbillableOrderPage {
         await this.page.waitForLoadState('networkidle');
 
     }
-        async clickOnCloseButtonNoStatusOT(): Promise<void> {
+    async clickOnCloseButtonNoStatusOT(): Promise<void> {
         await this.page.locator(this.Elements.hourType).click();
         await this.page.getByText('Over Time').click();
         await fixture.page.waitForTimeout(1000);
@@ -970,7 +973,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.lbctLeadCheckBox).check();
         await fixture.page.waitForTimeout(1000);
     }
-        async CreateNewOrderForFirstShiftToVerifyPayrollVesselSail(specialShift: string): Promise<void> {
+    async CreateNewOrderForFirstShiftToVerifyPayrollVesselSail(specialShift: string): Promise<void> {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.mechanicSearch).click();
         await this.page.locator(this.Elements.userIDSearchBox).fill('GABRIEL.ALEPE');
@@ -1119,7 +1122,7 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(3000);
 
     }
-        async clickonWObUttonInPayrollScreenThirdShiftNormalApproveScreen(): Promise<void> {
+    async clickonWObUttonInPayrollScreenThirdShiftNormalApproveScreen(): Promise<void> {
         await this.page.locator(this.Elements.showWODetailsThirdUser).click();
         await this.page.waitForLoadState('networkidle');
         await this.page.locator(this.Elements.WOLinkOnPopUp).click();
@@ -1746,7 +1749,7 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(1000);
 
     }
-        async thirdShiftCheckBox(): Promise<void> {
+    async thirdShiftCheckBox(): Promise<void> {
         await this.page.locator(this.Elements.ThirdShiftCheckBox).click();
         await fixture.page.waitForTimeout(1000);
 
@@ -1767,7 +1770,7 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(3000);
 
     }
-        async clickonWObUttonInPayroll_Third_ScreenApprovePayroll(): Promise<void> {
+    async clickonWObUttonInPayroll_Third_ScreenApprovePayroll(): Promise<void> {
         await this.page.locator("//table/tbody/tr[td[4][normalize-space()='ARNULFO.LOPEZ']]/td[11]/div/div/div/div/button/span/i").click();
         await this.page.waitForLoadState('networkidle');
         await this.page.locator(this.Elements.WOLinkOnPopUp).click();
@@ -1775,7 +1778,7 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(3000);
 
     }
-        async STandOTForVesselApprovePayroll(): Promise<void> {
+    async STandOTForVesselApprovePayroll(): Promise<void> {
 
         //verify ST=4 and OT=0
 
@@ -1811,5 +1814,16 @@ export default class UnbillableOrderPage {
             throw new Error(`Soft assertion failures:\n${errorMessages}`);
         }
         await fixture.page.waitForTimeout(1000);
+    }
+    async clickOnApproveButton(): Promise<void> {
+        await this.page.locator(this.Elements.ApproveButton).click();
+        await fixture.page.waitForTimeout(1000);
+        // Verify that the approval success message appears
+        await this.page.locator(this.Elements.approveMessage).waitFor({ state: 'visible' });
+        await this.page.locator(this.Elements.ApproveOkayButton).click();
+
+
+
+
     }
 }

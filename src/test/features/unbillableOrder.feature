@@ -694,8 +694,21 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then cancel the created unbillable work order
     # Then the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift after cancelling the WO
 
+# @approvePayrollWithoutSpecialShift @sanity @ubwo1
+# Scenario: Verify approve payroll functionality for weekday, straight time, third shift without selecting special shift
+#     Given the admin user is logged into the application
+#     When the admin navigates to the unbillable work order creation menu
+#     And Create a WO for weekday and select straight time in hour type for third shift and close the WO
+#     Then the unbillable work order number is captured for future reference
+#     When the admin navigates to the payroll screen and verify ST and OT for the created WO for third shift
+#     Then capture the ST and OT hours in payroll screen
+#     Then Select safty talk subject
+#     Then Click on review button and confirm the success message
+#     Then go to approve payroll screen and verify ST and OT for the created WO for third shift
+#     Then capture the ST and OT hours approve payroll screen
+#     Then Click on approve button for the created WO in approve payroll screen and confirm the success message
 
-#Scenario: Verify approve payroll functionality
+
 
 
 
