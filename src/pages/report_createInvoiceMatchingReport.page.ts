@@ -47,6 +47,9 @@ export default class CreateInvoiceMatchingReportPage {
         okButton: "//span[text()='OK']",
         secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
         yearDate: "(//span[contains(text(),'Year To Date')])[5]",
+        vendorSearch: "(//i[@class='el-input__icon el-icon-search is-clickable'])[1]",
+        searchButton: "(//span[contains(text(),'Search')])[1]",
+        okButtonOnVendorSearch: "//body[1]/div[1]/div[4]/div[1]/div[3]/div[1]/button[2]/span[1]",
 
     }
 
