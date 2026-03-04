@@ -104,8 +104,7 @@ export default class PurchaseOrderReportPage {
         //add delay
         await this.page.waitForTimeout(500);
         await this.page.locator(this.Elements.rightArrow1).click();
-        await this.page.locator(this.Elements.headerFieldsCheckBox).click();
-        //add delay
+         //add delay
         await this.page.waitForTimeout(500);
         await this.page.locator(this.Elements.itemFieldsCheckBox).click();
         await this.page.locator(this.Elements.rightArrow2).click();
