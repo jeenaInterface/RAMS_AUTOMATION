@@ -28,3 +28,15 @@ When('the admin clicks on the run button and the purchase order report should be
   }
 
   });
+  When('selects purchase order report with stock number filters', async function () {
+    await OrderReportPage.selectFiltrationWithStockNumber();
+  });
+  When('the admin clicks on the run button and the purchase order report should be generated successfully with applied stock number filters', async function () {
+    const filePath = await OrderReportPage.downloadReport();
+    await OrderReportPage.verifyExcelContent(filePath);
+    if (this.attach) {
+      // Attach as plain text or as HTML link if supported
+      const sharedFilePathText = `Report available at shared location: ${filePath}`;
+      await this.attach(sharedFilePathText, 'text/plain');
+    } 
+      });

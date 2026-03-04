@@ -7,7 +7,7 @@ import { fixture } from "../hooks/pageFixture";
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-// import path from 'path';
+import * as XLSX from 'xlsx';
 
 
 setDefaultTimeout(100 * 1000);
@@ -64,6 +64,23 @@ export default class PurchaseOrderReportPage {
         await this.base.waitAndClick(this.Elements.reportMenu);
         await this.base.waitAndClick(this.Elements.OrderReportMenu);
     }
+
+      async selectFiltrationWithStockNumber(): Promise<void> {
+        await this.page.locator(this.Elements.stockNo).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
+         await this.page.locator(this.Elements.headerFieldsCheckBox).click();
+
+        //add delay
+        await this.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.rightArrow1).click();
+         //add delay
+        await this.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.itemFieldsCheckBox).click();
+        await this.page.locator(this.Elements.rightArrow2).click();
+
+      }
     async selectFiltration(): Promise<void> {
         await this.page.locator(this.Elements.stockNo).type('1000');
         await fixture.page.waitForTimeout(1000);
@@ -162,5 +179,37 @@ export default class PurchaseOrderReportPage {
             }
         });
     }
+    async verifyExcelContent(filePath: string): Promise<void> {
+        // Read the workbook
+        const workbook = XLSX.readFile(filePath);
+
+        // Get the first sheet name
+        const sheetName = workbook.SheetNames[0];
+
+        // Get worksheet
+        const worksheet = workbook.Sheets[sheetName];
+
+        const stockNumberCellTitle = worksheet['AD6']; // 7th row, 1st column
+        const stockNumberValue = worksheet['AD7']; // 8th row, 1st column
+
+        // Extract cell values safely (checking for undefined)
+        const StockNumberValue = stockNumberCellTitle ? stockNumberCellTitle.v : undefined;
+        const StockNumberRealValue = stockNumberValue ? stockNumberValue.v : undefined;
+
+        console.log('Stock Number cell (AD6):', StockNumberValue);
+        console.log('Stock Real Value cell (AD7):', StockNumberRealValue);
+
+        // Verify the cells contain the expected values
+        if (StockNumberValue !== 'Stock No.') {
+            throw new Error(`Expected "Stock No." in cell AD6, but found "${StockNumberValue}"`);
+        }
+
+        if (StockNumberRealValue !== '1000 - Lamp Tail Light - Red') {
+            throw new Error(`Expected "1000 - Lamp Tail Light - Red" in cell AD7, but found "${StockNumberRealValue}"`);
+        }
+
+        console.log('Verification passed: Both Stock No. and 1000 found in expected cells.');
+    }
+
 
 }

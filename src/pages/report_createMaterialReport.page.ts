@@ -7,7 +7,8 @@ import { fixture } from "../hooks/pageFixture";
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-// import path from 'path';
+import * as XLSX from 'xlsx';
+
 
 setDefaultTimeout(100 * 1000);
 
@@ -51,6 +52,25 @@ export default class MaterialReportPage {
     async clickOnMaterialReportMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.reportMenu);
         await this.base.waitAndClick(this.Elements.createMaterialReportMenu);
+    }
+
+    async selectFiltrationStockNumber(): Promise<void> {
+
+        await this.page.locator("//input[@placeholder='--Input Text or Look up--']").first().type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
+        await this.page.locator(this.Elements.materialFieldsCheckBox).click();
+        //add delay
+        await this.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.rightArrow1).click();
+        await this.page.locator(this.Elements.summaryFieldsCheckBox).click();
+        //add delay
+        await this.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.rightArrow2).click();
+        await this.page.locator(this.Elements.dateRange).click();
+        await this.page.locator(this.Elements.today).click();
+        await this.page.locator(this.Elements.today).click();
     }
     async selectFiltration(): Promise<void> {
 
@@ -107,29 +127,29 @@ export default class MaterialReportPage {
     }
 
     async downloadReport(): Promise<string> {
-            const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
-        
-            // Creates folder only if it does NOT exist – no EEXIST error
-            await fs.ensureDir(downloadPath);
-        
-            // Clean folder safely
-            await this.clearDownloadFolder(downloadPath);
-        
-            // Wait for the download event
-            const [download] = await Promise.all([
-                this.page.waitForEvent("download", { timeout: 60000 }),
-                this.page.locator(this.Elements.runButton).click({ timeout: 60000 }),
-            ]);
-        
-            const outputFile = path.join(downloadPath, "Material.xlsx");
-            await download.saveAs(outputFile);
-        
-            console.log(`File downloaded to: ${outputFile}`);
-        
-            expect(fs.existsSync(outputFile)).toBeTruthy();
+        const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
+
+        // Creates folder only if it does NOT exist – no EEXIST error
+        await fs.ensureDir(downloadPath);
+
+        // Clean folder safely
+        await this.clearDownloadFolder(downloadPath);
+
+        // Wait for the download event
+        const [download] = await Promise.all([
+            this.page.waitForEvent("download", { timeout: 60000 }),
+            this.page.locator(this.Elements.runButton).click({ timeout: 60000 }),
+        ]);
+
+        const outputFile = path.join(downloadPath, "Material.xlsx");
+        await download.saveAs(outputFile);
+
+        console.log(`File downloaded to: ${outputFile}`);
+
+        expect(fs.existsSync(outputFile)).toBeTruthy();
         await new Promise(resolve => setTimeout(resolve, 5000));
         return outputFile;
-            
+
     }
 
     clearDownloadFolder(downloadDir: string): void {
@@ -141,6 +161,37 @@ export default class MaterialReportPage {
                 });
             }
         });
+    }
+    async verifyExcelContent(filePath: string): Promise<void> {
+        // Read the workbook
+        const workbook = XLSX.readFile(filePath);
+
+        // Get the first sheet name
+        const sheetName = workbook.SheetNames[0];
+
+        // Get worksheet
+        const worksheet = workbook.Sheets[sheetName];
+
+        const stockNumberCellTitle = worksheet['A7']; // 7th row, 1st column
+        const stockNumberValue = worksheet['A8']; // 8th row, 1st column
+
+        // Extract cell values safely (checking for undefined)
+        const StockNumberValue = stockNumberCellTitle ? stockNumberCellTitle.v : undefined;
+        const StockNumberRealValue = stockNumberValue ? stockNumberValue.v : undefined;
+
+        console.log('Stock Number cell (A7):', StockNumberValue);
+        console.log('Stock Real Value cell (A8):', StockNumberRealValue);
+
+        // Verify the cells contain the expected values
+        if (StockNumberValue !== 'Stock No.') {
+            throw new Error(`Expected "Stock No." in cell A7, but found "${StockNumberValue}"`);
+        }
+
+        if (String(StockNumberRealValue).trim() !== '1000') {
+            throw new Error(`Expected "1000" in cell A8, but found "${StockNumberRealValue}"`);
+        }
+
+        console.log('Verification passed: Both Stock No. and 1000 found in expected cells.');
     }
 
 }

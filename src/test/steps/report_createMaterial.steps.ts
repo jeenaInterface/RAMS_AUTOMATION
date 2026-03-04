@@ -28,4 +28,16 @@ When('the admin clicks on the run button and the material report should be gener
     await this.attach(sharedFilePathText, 'text/plain');
   }
 
-  });
+});
+When('selects material report with stock number filtration', async function () {
+  await InventoryPage.selectFiltrationStockNumber();
+});
+When('the admin clicks on the run button and the material report should be generated successfully with applied stock number filter', async function () {
+  const filePath = await InventoryPage.downloadReport();
+  await InventoryPage.verifyExcelContent(filePath);
+  if (this.attach) {
+    // Attach as plain text or as HTML link if supported
+    const sharedFilePathText = `Report available at shared location: ${filePath}`;
+    await this.attach(sharedFilePathText, 'text/plain');
+  }
+});

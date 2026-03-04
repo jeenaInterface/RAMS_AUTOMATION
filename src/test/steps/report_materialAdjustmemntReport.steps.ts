@@ -27,3 +27,15 @@ When('the admin clicks on the run button and the material adjustment report shou
     }
   
 });
+When('selects material adjustment report with filters', async function () {
+  await MaterialAdjustmentReportPageInstance.selectFiltrationwithFilters();
+});
+When('the admin clicks on the run button and the material adjustment report should be generated successfully with applied filters', async function () {
+    const filePath = await MaterialAdjustmentReportPageInstance.downloadReport();
+    await MaterialAdjustmentReportPageInstance.verifyExcelContent(filePath);
+    if (this.attach) {
+    // Attach as plain text or as HTML link if supported
+    const sharedFilePathText = `Report available at shared location: ${filePath}`;
+    await this.attach(sharedFilePathText, 'text/plain');
+    }
+});

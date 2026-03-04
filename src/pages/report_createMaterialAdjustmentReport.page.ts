@@ -7,7 +7,8 @@ import { fixture } from "../hooks/pageFixture";
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-// import path from 'path';
+import * as XLSX from 'xlsx';
+
 
 setDefaultTimeout(100 * 1000);
 
@@ -60,6 +61,19 @@ export default class MaterialAdjustmentReportPage {
 
 
     }
+        async selectFiltrationwithFilters(): Promise<void> {
+
+
+        await this.page.locator("//input[@placeholder='--Input Text or Look up--']").first().type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
+        await this.page.mouse.click(0, 0);
+        await this.page.locator(this.Elements.actionDate).click();
+        await this.page.locator(this.Elements.yearTextInMaterial).click();
+
+
+    }
     async saveReport(): Promise<void> {
         await this.page.locator(this.Elements.saveButton).click();
         const reportName = `Material Adjustment Report-${getRandomInt(1000, 9999)}`;
@@ -104,5 +118,36 @@ export default class MaterialAdjustmentReportPage {
             }
         });
     }
+        async verifyExcelContent(filePath: string): Promise<void> {
+            // Read the workbook
+            const workbook = XLSX.readFile(filePath);
+    
+            // Get the first sheet name
+            const sheetName = workbook.SheetNames[0];
+    
+            // Get worksheet
+            const worksheet = workbook.Sheets[sheetName];
+    
+            const stockNumberCellTitle = worksheet['A6']; // 6th row, 1st column
+            const stockNumberValue = worksheet['A7']; // 7th row, 1st column
+    
+            // Extract cell values safely (checking for undefined)
+            const StockNumberValue = stockNumberCellTitle ? stockNumberCellTitle.v : undefined;
+            const StockNumberRealValue = stockNumberValue ? stockNumberValue.v : undefined;
+    
+            console.log('Stock Number cell (A6):', StockNumberValue);
+            console.log('Stock Real Value cell (A7):', StockNumberRealValue);
+    
+            // Verify the cells contain the expected values
+            if (StockNumberValue !== 'Stock No.') {
+                throw new Error(`Expected "Stock No." in cell A6, but found "${StockNumberValue}"`);
+            }
+    
+            if (String(StockNumberRealValue).trim() !== '1000') {
+                throw new Error(`Expected "1000" in cell A7, but found "${StockNumberRealValue}"`);
+            }
+    
+            console.log('Verification passed: Both Stock No. and 1000 found in expected cells.');
+        }
 
 }
