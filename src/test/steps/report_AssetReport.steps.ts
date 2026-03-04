@@ -28,3 +28,17 @@ When('the admin clicks on the run button and the report should be generated succ
   }
   
 });
+When('the admin clicks on the run button and verifies the report is generated successfully with applied asset number filter', async function () {
+  const filePath = await assetReportPage.downloadReport();
+  await assetReportPage.verifyExcelContent(filePath);
+  if (this.attach) {
+    // Attach as plain text or as HTML link if supported
+    const sharedFilePathText = `Report available at shared location: ${filePath}`;
+    await this.attach(sharedFilePathText, 'text/plain');
+  }
+  
+});
+When('selects asset number filter for asset report', async function () {
+  await assetReportPage.selectAssetNumberFiltration();
+});
+

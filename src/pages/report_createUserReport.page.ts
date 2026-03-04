@@ -7,11 +7,12 @@ import { fixture } from "../hooks/pageFixture";
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-// import path from 'path';
+import * as XLSX from 'xlsx';
 
 setDefaultTimeout(100 * 1000);
 
 export default class userReportPage {
+    public downloadPathWithFileName: string = '';
     private base: PlaywrightWrapper;
     private page: Page;
 
@@ -33,11 +34,11 @@ export default class userReportPage {
         secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
         headerFieldsCheckBox: "//div[@class='el-transfer']//div[1]//p[2]//label[1]//span[1]//span[1]",
         rightArrow1: "(//i[@class='el-icon-arrow-right'])[1]",
-        craft:"(//label[normalize-space(text())='Craft']/following::input)[2]",
-        shop:"(//label[normalize-space(text())='Shop']/following::input)[2]",
-        shift:"(//label[normalize-space(text())='Shift']/following::input)[2]",
-        status:"(//label[normalize-space(text())='Status']/following::input)[2]",
-        authority:"(//label[normalize-space(text())='Authority']/following::input)[2]",
+        craft: "(//label[normalize-space(text())='Craft']/following::input)[2]",
+        shop: "(//label[normalize-space(text())='Shop']/following::input)[2]",
+        shift: "(//label[normalize-space(text())='Shift']/following::input)[2]",
+        status: "(//label[normalize-space(text())='Status']/following::input)[2]",
+        authority: "(//label[normalize-space(text())='Authority']/following::input)[2]",
 
 
 
@@ -100,11 +101,11 @@ export default class userReportPage {
             this.page.waitForEvent('download'),
             this.page.locator(this.Elements.runButton).click()
         ]);
-        const downloadPathWithFileName = path.join(downloadPath, 'Create_User_Report.xlsx');
-        await download.saveAs(downloadPathWithFileName);
-        expect(fs.existsSync(downloadPathWithFileName)).toBeTruthy();
+        this.downloadPathWithFileName = path.join(downloadPath, 'Create_User_Report.xlsx');
+        await download.saveAs(this.downloadPathWithFileName);
+        expect(fs.existsSync(this.downloadPathWithFileName)).toBeTruthy();
         await new Promise(resolve => setTimeout(resolve, 5000));
-        return downloadPathWithFileName;
+        return this.downloadPathWithFileName;
     }
 
     clearDownloadFolder(downloadDir: string): void {
@@ -116,6 +117,37 @@ export default class userReportPage {
                 });
             }
         });
+    }
+   async verifyExcelContent(filePath: string): Promise<void> {
+        // Read the workbook
+        const workbook = XLSX.readFile(filePath);
+
+        // Get the first sheet name
+        const sheetName = workbook.SheetNames[0];
+
+        // Get worksheet
+        const worksheet = workbook.Sheets[sheetName];
+
+        const userIdCell = worksheet['A6']; // 6th row, 1st column
+        const userNameCell = worksheet['A7']; // 7th row, 1st column
+
+        // Extract cell values safely (checking for undefined)
+        const userIdValue = userIdCell ? userIdCell.v : undefined;
+        const userNameValue = userNameCell ? userNameCell.v : undefined;
+
+        console.log('User ID cell (A6):', userIdValue);
+        console.log('Username cell (A7):', userNameValue);
+
+        // Verify the cells contain the expected values
+        if (userIdValue !== 'User ID') {
+            throw new Error(`Expected "User ID" in cell A6, but found "${userIdValue}"`);
+        }
+
+        if (userNameValue !== 'AARON.BARRIOS') {
+            throw new Error(`Expected "AARON.BARRIOS" in cell A7, but found "${userNameValue}"`);
+        }
+
+        console.log('Verification passed: Both User ID and AARON.BARRIOS found in expected cells.');
     }
 
 }

@@ -8,3 +8,13 @@ Feature: Verify Create Inventory Report
     And verifies save functionality of inventory report
     Then verifies save as functionality of inventory report
     Then the admin clicks on the run button and the inventory report should be generated successfully
+
+
+  @inventoryReportWithStockNumberFiltration @sanity @report
+  Scenario: Admin creates and runs an inventory report with stock number filter
+    Given the admin user is logged into the application
+    And selects create inventory report
+    And selects all the filters of inventory report with stock number filtration
+    And verifies save functionality of inventory report
+    Then verifies save as functionality of inventory report
+    Then the admin clicks on the run button and the inventory report should be generated successfully with applied stock number filter

@@ -7,7 +7,7 @@ import { fixture } from "../hooks/pageFixture";
 import * as path from 'path';
 
 import * as fs from 'fs-extra';
-// import path from 'path';
+import * as XLSX from 'xlsx';
 
 
 
@@ -39,7 +39,8 @@ export default class AssetReportPage {
         today: "//td[normalize-space(text())='Today']",
         reportName: "(//label[normalize-space(text())='Report Name']/following::textarea)[1]",
         okButton: "//span[text()='OK']",
-        secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]"
+        secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
+        assetNumber:"(//label[normalize-space(text())='Asset No.']/following::input)[1]",
 
     }
 
@@ -52,6 +53,23 @@ export default class AssetReportPage {
         await this.page.getByText('AG - AGV').click();
         await this.page.locator(this.Elements.assetStatus).click();
         await this.page.getByText('In Use').click();
+        await this.page.locator(this.Elements.assetFields).click();
+        //add delay
+        await this.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.rightArrow1).click();
+        await this.page.locator(this.Elements.summaryFields).click();
+        //add delay
+        await this.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.rightArrow2).click();
+        await this.page.locator(this.Elements.dateRange).click();
+        await this.page.locator(this.Elements.today).click();
+        await this.page.locator(this.Elements.today).click();
+
+
+
+    }
+        async selectAssetNumberFiltration(): Promise<void> {
+        await this.page.locator(this.Elements.assetNumber).fill('IYAG1');
         await this.page.locator(this.Elements.assetFields).click();
         //add delay
         await this.page.waitForTimeout(2000);
@@ -119,5 +137,36 @@ async downloadReport(): Promise<string> {
             }
         });
     }
+       async verifyExcelContent(filePath: string): Promise<void> {
+            // Read the workbook
+            const workbook = XLSX.readFile(filePath);
+    
+            // Get the first sheet name
+            const sheetName = workbook.SheetNames[0];
+    
+            // Get worksheet
+            const worksheet = workbook.Sheets[sheetName];
+    
+            const AssetNumberTitleCell = worksheet['A6']; // 6th row, 1st column
+            const AssetRealValueCell = worksheet['A7']; // 7th row, 1st column
+    
+            // Extract cell values safely (checking for undefined)
+            const AssetNumberValue = AssetNumberTitleCell ? AssetNumberTitleCell.v : undefined;
+            const AssetRealValue = AssetRealValueCell ? AssetRealValueCell.v : undefined;
+    
+            console.log('Asset Number cell (A6):', AssetNumberValue);
+            console.log('Asset Real Value cell (A7):', AssetRealValue);
+    
+            // Verify the cells contain the expected values
+            if (AssetNumberValue !== 'Asset No.') {
+                throw new Error(`Expected "Asset No." in cell A6, but found "${AssetNumberValue}"`);
+            }
+    
+            if (AssetRealValue !== 'IYAG1') {
+                throw new Error(`Expected "IYAG1" in cell A7, but found "${AssetRealValue}"`);
+            }
+    
+            console.log('Verification passed: Both Asset No. and IYAG1 found in expected cells.');
+        }
 
 }

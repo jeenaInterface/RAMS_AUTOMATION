@@ -20,6 +20,7 @@ When('verifies save as functionality for user report', async function () {
 });
 When('the admin clicks on the run button and the user report should be generated successfully', async function () {
     const filePath = await CreateUserReportPage.downloadReport();
+    await CreateUserReportPage.verifyExcelContent(filePath);  
     if (this.attach) {
         // Attach as plain text or as HTML link if supported
         const sharedFilePathText = `Report available at shared location: ${filePath}`;
@@ -27,3 +28,6 @@ When('the admin clicks on the run button and the user report should be generated
     }
 
 });
+   
+
+
