@@ -328,22 +328,7 @@ export default class PMPage {
         const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion.click();
-        await fixture.page.waitForTimeout(1000);
-        await this.page.locator(this.Elements.IsPMCheckBox).check();
-        await this.page.locator(this.Elements.PMGroupList).click();
-        if (!this.pmGroupname) {
-            throw new Error('pmGroupname is empty. Ensure a PM group was created before selecting PM details.');
-        }
-        await this.page.getByText(this.pmGroupname).click();
-        await this.page.locator(this.Elements.PMName).click();
-        if (!this.pmName1) {
-            throw new Error('pmName1 is empty. Ensure a PM was created before selecting PM details.');
-        }
-        await this.page.getByText(this.pmName1).click();
-        const pmHoursText = await this.page.locator(this.Elements.PMHours).textContent();
-        this.randomHour = pmHoursText ? pmHoursText.trim() : '';
-        await fixture.page.waitForTimeout(1000);
-
+        await fixture.page.waitForTimeout(3000);
         await this.page.locator(this.Elements.componentCode).click();
         await this.page.getByText('4MZ - Mechanical Misc').click();
         await this.page.locator(this.Elements.damageCode).click();
@@ -361,6 +346,21 @@ export default class PMPage {
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.IsPMCheckBox).check();
+        await this.page.locator(this.Elements.PMGroupList).click();
+        if (!this.pmGroupname) {
+            throw new Error('pmGroupname is empty. Ensure a PM group was created before selecting PM details.');
+        }
+        await this.page.getByText(this.pmGroupname).click();
+        await this.page.locator(this.Elements.PMName).click();
+        if (!this.pmName1) {
+            throw new Error('pmName1 is empty. Ensure a PM was created before selecting PM details.');
+        }
+        await this.page.getByText(this.pmName1).click();
+        const pmHoursText = await this.page.locator(this.Elements.PMHours).textContent();
+        this.randomHour = pmHoursText ? pmHoursText.trim() : '';
+        await fixture.page.waitForTimeout(1000);
     }
     async goToBatchUpdateAssetUsageScreen(): Promise<void> {
         fixture.logger.info("Navigating to Batch Update Asset Usage screen");
@@ -420,6 +420,23 @@ export default class PMPage {
         const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion.click();
+          await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('4MZ - Mechanical Misc').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('LK - Leak').click();
+        await this.page.locator(this.Elements.repairCode3).click();
+        await this.page.getByText('GS - Straighten').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('FRRT - FRRT - Front Right').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.IsPMCheckBox).check();
         await fixture.page.waitForTimeout(1000);

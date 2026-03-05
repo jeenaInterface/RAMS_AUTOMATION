@@ -210,7 +210,7 @@ export default class inventoryCountPage {
         ]);
 
         // Save the downloaded file to the specified folder as a text file
-        const downloadPathWithFileName = path.join(downloadPath, 'Asset.xlsx');
+        const downloadPathWithFileName = path.join(downloadPath, 'inventoryCount.xlsx');
         await download.saveAs(downloadPathWithFileName);
         console.log(`File downloaded to: ${downloadPathWithFileName}`);
         expect(fs.existsSync(downloadPathWithFileName)).toBeTruthy();

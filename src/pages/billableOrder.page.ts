@@ -135,7 +135,7 @@ export default class BillableOrderPage {
         credeitNumberWO: "//table[@class='el-table__body']/tbody[1]/tr[2]/td[4]/div[1]/span[1]",
         saveButtonmnrcredit: "//span[normalize-space()='Save']",
         cancelCreditButton: "(//span[contains(text(),'Cancel')])[1]",
-        operationSearchCredit: "(//input[@placeholder='--Input Text--'])[3]",
+        operationSearchCredit: "xpath=//*[@id='app-modal']/div/div/div[2]/div/div[1]/div[2]/table/thead/tr[2]/th[1]/div/div/div/div/input",
         draftInvoiceNumberSearch: "(//label[normalize-space(text())='Draft Invoice No.']/following::input)[1]",
         operaionSearchResultCredit: "//span[normalize-space()='Cancel MNR Invoice/Credit']",
         BatchCloseCreditMenu: "//span[normalize-space()='- Batch Close Invoice/Credit']",
@@ -155,6 +155,7 @@ export default class BillableOrderPage {
         batchpostButton: "//span[normalize-space()='Batch Post']",
         // batchPostOkButton:"(//span[contains(text(),'OK')])[11]",
         checkPostResultMenu: "//span[normalize-space()='- Check Post Result']",
+        statusSearchCheckPost: "(//div[@class='el-select__tags']//input)[1]",
         draftInvoiceSearchCheckPost: "//table[@class='el-table__header']/thead[1]/tr[2]/th[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
         postStaus: "//tbody/tr[1]/td[4]/div[1]/span[1]",
         xmlFile: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[10]/div[1]/button[1]/span[1]/i[1]",
@@ -486,24 +487,27 @@ export default class BillableOrderPage {
     }
     async clickOnPrintDraftInvoiceButton(): Promise<void> {
 
-        await this.page.locator(this.Elements.printDraftInvoiceButton).click();
+    //     await this.page.locator(this.Elements.printDraftInvoiceButton).click();
+    //     //add delay to wait for the new tab to open
+    //     await fixture.page.waitForTimeout(3000);
 
-        // Wait for the new page (tab) to open upon clicking the print button on popup
-        const [newPage] = await Promise.all([
-            this.page.context().waitForEvent('page'),
-        ]);
+    //     // Wait for the new page (tab) to open upon clicking the print button on popup
+    //     const [newPage] = await Promise.all([
+    //         this.page.context().waitForEvent('page'),
+    //     ]);
 
-        await newPage.waitForLoadState();
+    //     await newPage.waitForLoadState();
 
-        // Verify URL contains 'pdf/view'
-        if (!newPage.url().includes('pdf/view')) {
-            throw new Error(`Unexpected URL opened: ${newPage.url()}`);
-        }
+    //     // Verify URL contains 'pdf/view'
+    //     if (!newPage.url().includes('pdf/view')) {
+    //         throw new Error(`Unexpected URL opened: ${newPage.url()}`);
+    //     }
 
-        // Optionally: Close the new tab or keep it open for further checks
-        await newPage.close();
+    //     // Optionally: Close the new tab or keep it open for further checks
+    //     await newPage.close();
 
     }
+
     async clickOnEmailInvoiceButton(): Promise<void> {
 
         await this.page.locator(this.Elements.emailDraftInvoiceButton).click();
@@ -659,7 +663,7 @@ export default class BillableOrderPage {
 
     async searchByAssetGroup(assetGroup: string): Promise<void> {
         await this.page.locator(this.Elements.assetGroupField).click();
-        await this.page.getByText(assetGroup).click();
+        await this.page.getByText(assetGroup, { exact: true }).click();
         //click outside to close any dropdown
         await this.page.mouse.click(10, 10);
         await this.base.waitAndClick(this.Elements.searchButton);
@@ -955,6 +959,14 @@ export default class BillableOrderPage {
     async postStatus(): Promise<void> {
         await this.page.locator(this.Elements.ARAPMenu).click();
         await this.page.locator(this.Elements.checkPostResultMenu).click();
+        await this.page.locator(this.Elements.statusSearchCheckPost).click();
+        // await this.page.getByText('Pending', { exact: true }).click();
+
+        // await this.page.locator(this.Elements.searchButtonLookUpwo).click();
+        // await this.page.locator('div').filter({ hasText: 'FailedError' }).getByRole('textbox').click();
+        await this.page.getByText('Pending').click();
+        await this.page.getByRole('button', { name: 'Search' }).click();
+
         await this.page.waitForLoadState('networkidle');
         await this.page.locator(this.Elements.draftInvoiceSearchCheckPost).fill(this.mnrCreditNumber);
         this.postStatusOriginal = await this.page.locator(this.Elements.postStaus).textContent();

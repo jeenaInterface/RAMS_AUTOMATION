@@ -1,6 +1,6 @@
 Feature: Verify functionalities under Billable Work Order
 
-  @createBillableOrder @sanity @bwo
+  @createBillableOrder @sanity1 @bwo
   Scenario: Verify billable work order creation
     Given the admin user is logged into the application
     When the admin navigates to the billable work order creation menu

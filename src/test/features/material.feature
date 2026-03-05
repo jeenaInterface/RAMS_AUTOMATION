@@ -339,7 +339,9 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then Fill all the fields and click on save button
         Then go to inquire invoice matching and verify the newly created entry
         Then verify suspend functionality
+        Then go to inquire invoice matching and verify the newly created entry
         Then verify unsuspend functionality
+        Then go to inquire invoice matching and verify the newly created entry
         Then verify Action Log
         Then Verify suspend Log
         Then verify approve functionality

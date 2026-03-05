@@ -111,6 +111,7 @@ export default class MaterialPage {
         receivingDate: "//div[@class='el-date-editor el-input el-date-editor--date']//input[@placeholder='--Input Text--']",
         packSlipNumber: "(//input[@placeholder='--Input Text--'])[2]",
         receiveQuantityInput: "(//input[@type='text'])[5]",
+        receiveQuantityInput1: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr/td[10]/div/div/div/div/div/input",
         Location: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table[1]/tbody[1]/tr[1]/td[11]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/input[1]",
         masterCheckbox: "(//span[@class='el-radio__inner'])[1]",
         searchByPO: "(//input[@placeholder='--Input Text--'])[1]",
@@ -257,30 +258,16 @@ export default class MaterialPage {
         sequenceNumberSearchOnAPInterface: "(//label[normalize-space(text())='Sequence No.']/following::input)[1]",
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     };
     async clickOnAssetMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
         await this.base.waitAndClick(this.Elements.assetMenu);
+        //add delay
+        await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.inquireSearchBox).fill('IYAG6');
+        await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.firstRowEdit).click();
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(2000);
 
     }
     async clickOnReapirAsset(): Promise<void> {
@@ -746,7 +733,7 @@ export default class MaterialPage {
         const formattedDate = today.toISOString().split('T')[0];
         await this.page.locator(this.Elements.receivingDate).fill(formattedDate);
         await this.page.locator(this.Elements.packSlipNumber).fill(`PSN-${getRandomInt(1000, 9999)}`);
-        await this.page.locator(this.Elements.receiveQuantityInput).fill('1');
+        await this.page.locator(this.Elements.receiveQuantityInput1).fill('1');
 
 
         await this.page.getByPlaceholder('--Input Or Select One--').click();
@@ -1630,7 +1617,7 @@ export default class MaterialPage {
 
     }
     async clickonMaterialUsageButton(): Promise<void> {
-        await fixture.page.waitForTimeout(1000);
+        await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.materialUsageButton).click();
         await fixture.page.waitForTimeout(500);
     }
@@ -1785,11 +1772,11 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.suspendOkayButton).click();
         await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]').click();
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(2000);
 
     }
     async Unsuspend(): Promise<void> {
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(5000);
         await this.base.waitAndClick(this.Elements.unsuspendMenu);
         await this.page.locator(this.Elements.unsuspendReason).fill("UN-Suspended");
         await fixture.page.waitForTimeout(500);
@@ -1828,7 +1815,7 @@ export default class MaterialPage {
 
     }
     async CancelInvoice(): Promise<void> {
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(5000);
         await this.base.waitAndClick(this.Elements.InvoicecancelButton);
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.cancelReason).fill("cancelled");
@@ -1881,6 +1868,7 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.sequnceNumberSearch).fill(this.sequenceMatch);
         await this.page.locator(this.Elements.invoiceCheckBox).check();
         await this.page.locator(this.Elements.batchPostButton).click();
+        await fixture.page.waitForTimeout(5000);
         await this.page.locator('xpath=/html/body/div[5]/div/div[3]/button[2]/span').click();
         await fixture.page.waitForTimeout(500);
 

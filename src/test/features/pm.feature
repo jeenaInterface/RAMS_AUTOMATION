@@ -31,7 +31,7 @@ Scenario: Verify the last update usage of the asset
     Then go to create unbillable order and verify the updated pm hour is showing
 
     @downLoadUsage   @sanity
-Scenario: Verify the last update usage of the asset
+Scenario: Verify the download usage of the asset
     Given the admin user is logged into the application
     Then go to batch update asset usage screen
     Then Verify downloadUsage functionality
