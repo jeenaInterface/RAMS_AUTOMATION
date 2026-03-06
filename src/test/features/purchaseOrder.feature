@@ -144,7 +144,6 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the admin navigates to the order creation menu
         Then select internal rebuild option
         Then the purchase order number is captured
-        Then the user searches for the newly created order in the inquiry list page
         Then Go to unbillable order page and map the internal rebuild order
         Then the unbillable work order number is captured
         Then the user searches for the newly created order in the inquiry list page

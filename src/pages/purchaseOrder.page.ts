@@ -288,7 +288,7 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(8000);
 
         const updatedDesc = `${this.description} - Updated ${currentDate}`;
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(4000);
         await this.page.locator(this.Elements.instruction).fill(updatedDesc);
         await fixture.page.waitForTimeout(1000);
         await await this.page.locator(this.Elements.createButton).click();
@@ -521,7 +521,7 @@ export default class PurchaseOrderPage {
     }
     async updateExternalPurchaseOrder(): Promise<void> {
         const randomJobNumber = `JOB-${getRandomInt(1000, 9999)}`;
-        await fixture.page.waitForTimeout(8000);
+        await fixture.page.waitForTimeout(10000);
 
         const updatedDesc = `${this.description} - Updated ${currentDate}`;
 
@@ -607,6 +607,7 @@ export default class PurchaseOrderPage {
             const match = poHeaderText.match(/Internal Rebuild Order\s*\|\s*(\d+)/);
             if (match && match[1]) {
                 this.purchaseOrderNo = match[1];
+                console.log(`Extracted Internal Rebuild Order number: ${this.purchaseOrderNo}`);
                 fixture.logger?.info(`Extracted Purchase Order number: ${this.purchaseOrderNo}`);
             }
         }
@@ -1035,17 +1036,6 @@ export default class PurchaseOrderPage {
         const suggestion = this.page.getByRole('listitem').filter({ hasText: 'ASCRB' }).first();
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion.click();
-        await fixture.page.waitForTimeout(4000);
-        await this.page.getByPlaceholder('--Input Text or Look up--').nth(1).type('1008');
-        await fixture.page.waitForTimeout(1000);
-        await this.page.getByText('1008 - 1000X20RCP - tire flexi van recap 10.00x20').click();
-        await fixture.page.waitForTimeout(3000);
-        await this.page.locator(this.Elements.internalRONumber).click();
-        await this.page.locator(this.Elements.internalRONumber).fill(this.purchaseOrderNo);
-        // await this.page.locator(this.Elements.internalRONumber).fill("325871");
-        await this.page.getByText(this.purchaseOrderNo).click();
-        // await this.page.getByText("325871").click();
-        await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.componentCode).click();
         await this.page.getByText('2EL - Electrical').click();
         await this.page.locator(this.Elements.damageCode).click();
@@ -1058,10 +1048,39 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.actualHours).fill('8');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(3).type('1008');
         await fixture.page.waitForTimeout(1000);
-        await this.page.getByRole('listitem').filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' }).locator('span').click();
+        await this.page.getByRole('listitem').filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' }).first().locator('span').click();
+
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+        await fixture.page.waitForTimeout(2000);
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(1).type('1008');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator("(//span[contains(text(),'1008 - 1000X20RCP - tire flexi van recap 10.00x20')])[2]").click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.internalRONumber).click();
+        await fixture.page.waitForTimeout(3000);
+
+        // Ensure we have a valid Internal Rebuild Order number to map
+        if (!this.purchaseOrderNo) {
+            const headerText = (await fixture.page.locator(this.Elements.headertitle).textContent()) || '';
+            const match = headerText.match(/Internal Rebuild Order\s*\|\s*(\d+)/);
+            if (match && match[1]) {
+                this.purchaseOrderNo = match[1];
+                fixture.logger?.info(`Recovered Internal Rebuild Order number from header: ${this.purchaseOrderNo}`);
+            }
+        }
+
+        if (!this.purchaseOrderNo) {
+            throw new Error('Internal Rebuild Order number is not set; cannot map it in unbillable order.');
+        }
+
+        console.log(`Purchase Order Number: ${this.purchaseOrderNo}`);
+        await this.page.locator(this.Elements.internalRONumber).fill(this.purchaseOrderNo);
+        await this.page.waitForSelector(`text=${this.purchaseOrderNo}`);
+        await this.page.getByText(this.purchaseOrderNo).click();
+        await fixture.page.waitForTimeout(1000);
 
 
     }
@@ -1086,6 +1105,7 @@ export default class PurchaseOrderPage {
 
     }
     async verifyThePurchaseRate(): Promise<void> {
+        await fixture.page.waitForTimeout(15000);
         const locator = this.page.locator(this.Elements.WOOrderRate);
         await locator.waitFor({ state: 'visible', timeout: 5000 });
         const text = (await locator.textContent())?.trim() || '';
@@ -1142,7 +1162,7 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.purchaseOrderNoSearch).fill(this.purchaseOrderNo);
         await this.page.locator(this.Elements.searchButton).click();
         await this.page.locator(this.Elements.orderNoSearchrESULT).click();
-        await this.page.waitForTimeout(5000);
+        await this.page.waitForTimeout(15000);
 
         const locator = this.page.locator(this.Elements.receiveStatusInternalRO);
         await locator.waitFor({ state: 'visible', timeout: 5000 });
@@ -1227,7 +1247,6 @@ export default class PurchaseOrderPage {
         await assetInput.type('ASCRB');
         //await assetInput.press('Enter');
         await fixture.page.waitForTimeout(1000);
-
 
         const suggestion = this.page.getByRole('listitem').filter({ hasText: 'ASCRB' }).first();
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });

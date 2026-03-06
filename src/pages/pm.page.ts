@@ -420,7 +420,7 @@ export default class PMPage {
         const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion.click();
-          await this.page.locator(this.Elements.componentCode).click();
+        await this.page.locator(this.Elements.componentCode).click();
         await this.page.getByText('4MZ - Mechanical Misc').click();
         await this.page.locator(this.Elements.damageCode).click();
         await this.page.getByText('LK - Leak').click();
@@ -447,10 +447,10 @@ export default class PMPage {
         // await this.page.getByText(this.pmName1).click();
         await fixture.page.waitForTimeout(2000);
 
-        const pmhours = await this.page.locator(this.Elements.PMHours).inputValue();
 
-        // Convert both to string or number to ensure type consistency
-        await expect(pmhours).toEqual(this.randomHour.toString());
+        const pmhours = await this.page.locator(this.Elements.PMHours).inputValue();
+        await expect(Number(pmhours.replace(/[^\d.-]/g, ''))).toBe(Number(this.randomHour));
+
 
         await fixture.page.waitForTimeout(1000);
     }

@@ -28,6 +28,10 @@ Then('the purchase order number is captured', async function (this: any) {
         const headerText = (await fixture.page.locator("(//span[@class='header-title font-size-title'])[1]").textContent()) || '';
         po = headerText.match(/\|\s*(\d+)\s*\(/)?.[1] || headerText.match(/(\d+)/)?.[1] || '';
     }
+
+    // Persist the captured number on the page object for later steps
+    purchasePage.purchaseOrderNo = po;
+
     // Attach PO number to Cucumber report so it appears in HTML report
     if (this && typeof this.attach === 'function') {
         await this.attach(`Purchase Order: ${po}`);
