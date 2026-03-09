@@ -69,8 +69,6 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the admin searches by Shop
         And verifies that the search results display based on the Shop
 
-
-
     @VerifyBatchRejectOrder @sanity @po
     Scenario: Verify batch reject functionality
         Given the admin user is logged into the application
@@ -180,5 +178,3 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the user searches for the newly created order in the inquiry list page
         Then Go to unbillable order page and add normal order and internal RO
         Then the unbillable work order number is captured
-
-
