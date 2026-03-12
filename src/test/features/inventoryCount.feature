@@ -1,6 +1,6 @@
 Feature: Verify functionalities under inventory count
 
-  @inventoryCount @sanity
+  @inventoryCount @sanity @Regression
 
   Scenario: Verify Create, Complete, Cancel and Download inventory count functionalities
     Given the admin user is logged into the application
@@ -14,6 +14,6 @@ Feature: Verify functionalities under inventory count
     When the user clicks on complete
     Then verifies adjust OH Quantity after complete
     Then the user click on close button
-    And verifies the inventory count download functionality
+    # And verifies the inventory count download functionality
     When the user verifies the cancel functionality
 

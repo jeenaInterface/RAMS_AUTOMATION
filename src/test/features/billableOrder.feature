@@ -13,7 +13,7 @@ Feature: Verify functionalities under Billable Work Order
     Then Go to Batch close billable work order and close the created billable work order after review
     Then Go to Inquire billable work order and verify the status is Closed
 
-  @AllBO @sanity @bwo
+  @AllBO @sanity @bwo @Regression
   Scenario: Verify billable work order copy, cancel, new, print, email and save functionalities
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
@@ -39,7 +39,7 @@ Feature: Verify functionalities under Billable Work Order
     Then Verify New button functionality
 
 
-  @ReviewBO @sanity @bwo
+  @ReviewBO @sanity @bwo @Regression
   Scenario: Verify billable work order batch review and batch close functionalities
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
@@ -55,7 +55,7 @@ Feature: Verify functionalities under Billable Work Order
     Then Go to Batch close billable work order and close the created billable work order
     Then Go to Inquire billable work order and verify the status is Closed
 
-  @OpenReview_CloseTabFromDashboard @sanity @bwo
+  @OpenReview_CloseTabFromDashboard @sanity @bwo @Regression
   Scenario: Verify billable work order batch review and batch close access from dashboard tab section
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
@@ -71,7 +71,7 @@ Feature: Verify functionalities under Billable Work Order
     Then Go to Batch close billable work order from dashboard and close the created billable work order
     Then Go to Inquire billable work order and verify the status is Closed
 
-  @mnr @sanity @bwo
+  @mnr @sanity @bwo @Regression
   Scenario: Verify MNR invoice is created from closed billable work order
 
     Given the admin user is logged into the application
@@ -84,7 +84,7 @@ Feature: Verify functionalities under Billable Work Order
     Then verify mnr invoice is generated from the closed billable work order
     Then go to inquire mnr invoice and verify the created mnr invoice from the closed billable work order
 
-  @searchInquireBO @sanity @bwo
+  @searchInquireBO @sanity @bwo @Regression
   Scenario: Verify search functionality in inquire billiable order
     Given the admin user is logged into the application
     And searches for a billable work order using the asset 'GACZ401537' and verifies the search results
@@ -97,7 +97,7 @@ Feature: Verify functionalities under Billable Work Order
     Then searches for a billable work order using repair date range and verifies the search results
 
 
-  @MNRCredit   @sanity @bwo
+  @MNRCredit   @sanity @bwo @Regression
   Scenario: Create mnr credit after close a billable work order
 
     Given the admin user is logged into the application
@@ -111,7 +111,7 @@ Feature: Verify functionalities under Billable Work Order
     Then capture the MNR credit number
     Then go to inquire billable work order and verify an entry is created for the created mnr credit
 
-  @MNRCreditCancel   @sanity @bwo
+  @MNRCreditCancel   @sanity @bwo @Regression
   Scenario: Verify save, cancel and action log functionalities in MNR credit creation
 
     Given the admin user is logged into the application
@@ -127,7 +127,7 @@ Feature: Verify functionalities under Billable Work Order
     Then verify action log is created for MNR credit creation
 
 
-    @batchCloseInvoiceCredit   @sanity @bwo
+    @batchCloseInvoiceCredit   @sanity @bwo @Regression
   Scenario: Verify batch close MNR invoice credit functionality
 
     Given the admin user is logged into the application
@@ -143,7 +143,7 @@ Feature: Verify functionalities under Billable Work Order
     Then go to inquire MNR invoice credit and verify the status is Closed
   
 
-    @BatchPost   @sanity @bwo
+    @BatchPost   @sanity @bwo @Regression
   Scenario: From the dashboard tab, navigate to the Batch Open/Close Invoice/Credit menu, close the MNR credit, and perform the post operation.
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
@@ -159,21 +159,21 @@ Feature: Verify functionalities under Billable Work Order
     Then verify xml generation for the posted MNR credit
 
 
-  @verifyTheLinksUnderInvoiceCredit   @sanity @bwo
+  @verifyTheLinksUnderInvoiceCredit   @sanity @bwo @Regression
   Scenario: Verify draft invoice number and WO number links under Inquire invoice/Credit menu
 
     Given the admin user is logged into the application
     Then search for an existing MNR invoice credit and verify the draft invoice number link under Inquire invoice Credit menu
     Then search for an existing MNR invoice credit and verify the WO number link under Inquire invoice Credit menu
 
-  @verifyTheLinksUnderBatchCloseInvoiceCredit   @sanity @bwo
+  @verifyTheLinksUnderBatchCloseInvoiceCredit   @sanity @bwo @Regression
   Scenario: Verify draft invoice number and WO number links under Batch close invoice/Credit menu
 
     Given the admin user is logged into the application
     Then search for an existing MNR invoice credit and verify the draft invoice number link under Batch close invoice Credit menu
     Then search for an existing MNR invoice credit and verify the WO number link under Batch close invoice Credit menu
 
-      @verifyTheLinksUnderBatchPost  @sanity @bwo
+      @verifyTheLinksUnderBatchPost  @sanity @bwo @Regression
   Scenario: Verify draft invoice number and WO number links under Batch Post menu
 
     Given the admin user is logged into the application

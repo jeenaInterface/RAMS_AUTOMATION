@@ -109,6 +109,7 @@ export default class AssetPage {
     }
 
     async clickOnEditButton(): Promise<void> {
+        await fixture.page.waitForTimeout(8000);
         await this.page.locator(this.Elements.firstRowEdit).click();
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.assetStatus).click();

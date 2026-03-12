@@ -1,8 +1,8 @@
 import { LaunchOptions, chromium, firefox, webkit } from "playwright-core";
 
 const options: LaunchOptions = {
-  headless: false, // set true to run headless
-  // headless: true,
+  // headless: false, // set true to run headless
+  headless: true,
   args: ['--ignore-certificate-errors'],
 };
 

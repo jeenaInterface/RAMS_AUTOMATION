@@ -1,5 +1,5 @@
 Feature:  Invoice Matching Tolerance module
-    @invoice @sanity @sysyemsettings
+    @invoice @sanity @sysyemsettings @RegressionSuit1
 
     Scenario: Verify Edit/Reset/ActionLog functionalities in Invoice Matching Tolerance
 

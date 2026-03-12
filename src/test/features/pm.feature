@@ -1,6 +1,6 @@
 Feature: Add, Update, and Search Functionalities in Preventive Maintance Module
 
-@MaintainPM   @sanity
+@MaintainPM   @sanity @Regression
 Scenario: Create, update, delete and action log functionalities under pm module
 
     Given the admin user is logged into the application
@@ -13,7 +13,7 @@ Scenario: Create, update, delete and action log functionalities under pm module
     Then delete the entry created for per usage
     Then delete the entry created for per calendar
 
-@createWOWithLatestPM   @sanity
+@createWOWithLatestPM   @sanity @Regression
 Scenario: Verify whether its able to create an unbillable order with a latest created pm
     Given the admin user is logged into the application
     When the admin navigates to the maintain PM
@@ -23,7 +23,7 @@ Scenario: Verify whether its able to create an unbillable order with a latest cr
     Then go to inquire unbillable order page and cancel the unbillable order created for pm
     Then go to maintain pm page and delete the entry created for per usage
 
-    @assetUsageScreen   @sanity
+    @assetUsageScreen   @sanity @Regression
 Scenario: Verify the last update usage of the asset
     Given the admin user is logged into the application
     Then go to batch update asset usage screen
@@ -38,7 +38,7 @@ Scenario: Verify the download usage of the asset
     Then user click on logout button
 
 
-@pmScheduleDashBoard   @sanity
+@pmScheduleDashBoard   @sanity @Regression
 Scenario: Verify pm schedule dashboard
         Given the admin user is logged into the application
         When the admin navigates to the maintain PM
@@ -50,7 +50,7 @@ Scenario: Verify pm schedule dashboard
         Then go to maintain pm page and delete the entry created for per usage
 
 
-@pmScheduleDashBoardPerCalendar   @sanity
+@pmScheduleDashBoardPerCalendar   @sanity @Regression
 Scenario: Verify pm schedule dashboard for per calendar entry
         Given the admin user is logged into the application
         When the admin navigates to the maintain PM

@@ -1,6 +1,6 @@
 Feature: Add, Update, and Search Functionalities in Tariff Module
 
-  @Tariff @sanity @sysyemsettings
+  @Tariff @sanity @sysyemsettings @RegressionSuit1
 
   Scenario: Manage Tariffs
     Given the admin user is logged into the application

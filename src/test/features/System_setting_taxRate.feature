@@ -1,5 +1,5 @@
 Feature: Tax rate module
-    @taxRate @sanity @sysyemsettings
+    @taxRate @sanity @sysyemsettings @RegressionSuit1
 
 Scenario: Validate search, reset, create and delete functionalities in tax rate module
 

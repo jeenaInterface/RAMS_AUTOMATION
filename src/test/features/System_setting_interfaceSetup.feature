@@ -1,5 +1,5 @@
 Feature:  Interface setup module
-    @Interfacesetup @sanity @sysyemsettings
+    @Interfacesetup @sanity @sysyemsettings @RegressionSuit1
 
 Scenario: Validate Edit and Action Log functionalities in Interface Setup
 

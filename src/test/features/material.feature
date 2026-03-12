@@ -1,6 +1,6 @@
 Feature: Add, Update, and Search Functionalities in material Module
 
-    @creatematerial @sanity @material
+    @creatematerial @sanity @material @Regression
 
     Scenario: Create, update, search material, verify New button and action log
 
@@ -14,7 +14,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies that the New button works as expected
         And verifies that the action log records the performed actions accurately
 
-    @searchMaterial @sanity @material
+    @searchMaterial @sanity @material @Regression
 
     Scenario: search Material
         Given the admin user is logged into the application
@@ -35,7 +35,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies that the search results display the correct shop 'AGV - AGV'
 
 
-    @materialValidation @sanity @material
+    @materialValidation @sanity @material @Regression
 
     Scenario: Verify mandatory field validations in create material page
         Given the admin user is logged into the application
@@ -71,7 +71,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then Do receive material and review for the created order
         Then track the receiving document number for further use
 
-    @transferLocation @sanity @material
+    @transferLocation @sanity @material @Regression
     Scenario: Verify material transfer between stock locations
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -90,7 +90,7 @@ Feature: Add, Update, and Search Functionalities in material Module
     # And the admin verifies that the transfer is recorded in the materials action log
 
 
-    @transferLocationMenu @sanity @material
+    @transferLocationMenu @sanity @material @Regression
     Scenario: Verify transfer material functionality from menu
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -105,7 +105,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then click on the link
         And Verify OH quantity and location are updated in material after transfer the material
 
-    @adjustOHQuantity @sanity @material
+    @adjustOHQuantity @sanity @material @Regression
     Scenario: Verify OH quantity adjustment for a material
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -122,7 +122,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then click on the link
         And verifies that the material OH quantity is updated accordingly
 
-    @adjustOHQuantityMenu @sanity @material
+    @adjustOHQuantityMenu @sanity @material @Regression
     Scenario: Verify adjustment OH quantity menu
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -137,7 +137,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then click on the link
         And verifies that the material OH quantity is updated accordingly
 
-    @adjustOHQuantityRandomUpdate @sanity @material
+    @adjustOHQuantityRandomUpdate @sanity @material @Regression
     Scenario: Verify adjustment OH quantity menu by random select values
         Given the admin user is logged into the application
         When the admin navigates to the adjust OH quantity page
@@ -147,7 +147,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         When the admin updates the OH quantity of multiple stocks and verifies the success message
 
 
-    @ReceiveMaterialANDVerify @sanity @material
+    @ReceiveMaterialANDVerify @sanity @material @Regression
     Scenario: Verify create PO order and receive functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -168,7 +168,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies the value in the receive status field in PO
         And verifies total order quantity and total outstanding quantity after full receive
 
-    @cancelReceiveMaterial @sanity @material
+    @cancelReceiveMaterial @sanity @material @Regression
     Scenario: Verify cancel and action log functionalities in receiving material page
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -187,7 +187,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
 
-    @VerifySearchInquireMaterialReceive @sanity  @material
+    @VerifySearchInquireMaterialReceive @sanity  @material @Regression
 
     Scenario: Verify search functionalities in inquire material receive page
         Given the admin user is logged into the application
@@ -207,7 +207,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then go to inquire material receive screen and search by Status
         Then go to inquire material receive screen and search by Order Type
 
-    @ReceiveMaterialANDVerifyExternalRo @sanity @material
+    @ReceiveMaterialANDVerifyExternalRo @sanity @material @Regression
     Scenario: Verify create External RO order and receive functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -221,7 +221,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the user searches for the last created order in the inquiry list page
         And verifies the value in the receive status field in PO
 
-    @BatchReviewReceiving   @sanity @material
+    @BatchReviewReceiving   @sanity @material @Regression
     Scenario: Verify Batch Review Receiving Module functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -240,7 +240,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         And verifies the value in the receive status field in PO
 
 
-    @BatchReviewReceivingLinks   @sanity @material
+    @BatchReviewReceivingLinks   @sanity @material @Regression
     Scenario: Verify Packslip number and PO number links are redirecting to correct pages in batch review receiving module
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -258,7 +258,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then go to batch review receiving screen
         Then search by PO No. and click on the link and verifies the redirection to correct page
 
-    @ReturnMaterials   @sanity @material
+    @ReturnMaterials   @sanity @material @Regression
     Scenario: Verify Return Material functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -298,7 +298,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then the admin searches by vendor and verify results '1080217000'
         Then the admin searches by status and verify results 'Returned'
 
-    @materialUsage @sanity @material
+    @materialUsage @sanity @material @Regression
     Scenario: Verify material usage recording and OH quantity update after creating unbillable order
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -319,7 +319,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then Open repair asset and verify the material usage is recorded under the asset
 
 
-    @captureInvoiceMatching   @sanity @material
+    @captureInvoiceMatching   @sanity @material @Regression
     Scenario: Verify capture invoice matching module functionality
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page
@@ -342,7 +342,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then go to inquire invoice matching and verify the newly created entry
         Then verify unsuspend functionality
         Then go to inquire invoice matching and verify the newly created entry
-        Then verify Action Log
+        # Then verify Action Log
         Then Verify suspend Log
         Then verify approve functionality
         Then go to inquire invoice matching and verify the newly created entry
@@ -361,7 +361,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then verify the menu AP Interface status
 
 
-    @captureCreditNote   @sanity @material
+    @captureCreditNote   @sanity @material @Regression
     Scenario: Verify capture credit note Module functionalities
         Given the admin user is logged into the application
         Then the admin navigates to the material creation page

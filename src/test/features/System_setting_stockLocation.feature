@@ -1,6 +1,6 @@
 Feature: Stock Location module
 
-    @StockLocation @sanity @sysyemsettings
+    @StockLocation @sanity @sysyemsettings @RegressionSuit1
 
     Scenario: Verify Create/Edit/delete stock location functionality
 

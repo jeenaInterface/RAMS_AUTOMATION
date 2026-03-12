@@ -1,6 +1,6 @@
 Feature: Asset manufature module
 
-  @AssetManufacture @sanity @sysyemsettings
+  @AssetManufacture @sanity @sysyemsettings @RegressionSuit1
     Scenario: Verify Create/Edit Asset Manufacturer functionality
       Given User logged into the application
       Then select Asset Manufacturer from the system settings menu

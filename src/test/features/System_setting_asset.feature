@@ -1,6 +1,6 @@
 Feature: Asset module
 
-  @Asset @sanity @sysyemsettings
+  @Asset @sanity @sysyemsettings @RegressionSuit1
   Scenario: Verify Create/Edit asset functionality
     Given User logged into the application
     Then select asset from the system settings menu
@@ -13,11 +13,3 @@ Feature: Asset module
 
 
 
-#   Scenario: Verify repair asset functionality
-#     Given User logged into the application
-#     Then create an unbillable order
-#     Then select asset from the system settings menu
-#     When Search the asset in the inquire list that used to create the order
-#     And Click on the repair button in asset form
-#     Then Search with a mechanic in the repair form
-#     When Verify the entry is existing in the grid

@@ -1,6 +1,6 @@
 Feature: Add, Update, and Search Functionalities in order Module
 
-    @createPurchaseOrder @sanity @po
+    @createPurchaseOrder @sanity @po @Regression
     Scenario: Verify create and update purchase order functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -14,7 +14,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then Verify Cancel functionality
         Then verifies the action log in the purchase order
 
-    @createexternalRebuildOrder @sanity @po
+    @createexternalRebuildOrder @sanity @po @Regression
     Scenario: Verify create and update external rebuild order functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -28,7 +28,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then Verify Cancel functionality in external RO
         Then verifies the action log in the external purchase order
 
-    @createInternalRebuildOrder @sanity @po
+    @createInternalRebuildOrder @sanity @po @Regression
     Scenario: Verify create and update internal rebuild order functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -42,7 +42,7 @@ Feature: Add, Update, and Search Functionalities in order Module
 
 
     @searchPO @sanity @po
-    Scenario: Search purchase orders
+    Scenario: Search purchase orders @Regression
         Given the admin user is logged into the application
         When the admin navigates to the inquire order page
 
@@ -69,7 +69,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the admin searches by Shop
         And verifies that the search results display based on the Shop
 
-    @VerifyBatchRejectOrder @sanity @po
+    @VerifyBatchRejectOrder @sanity @po @Regression
     Scenario: Verify batch reject functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -78,7 +78,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         And performs batch reject
         Then verify the status of the po
 
-    @VerifyBatchApproveOrder @sanity @po
+    @VerifyBatchApproveOrder @sanity @po @Regression
     Scenario: Verify batch approve functionality
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -87,7 +87,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         And performs batch approve
         Then verify the status of the po
 
-    @VerifyBatchRejectOrderFromForm @sanity @po
+    @VerifyBatchRejectOrderFromForm @sanity @po @Regression
     Scenario: Verify batch reject functionality for orders
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu
@@ -99,7 +99,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         And the user searches for the newly created order in the inquiry list page
         Then verify the status of the po
 
-    @VerifyBatchApproveOrderFromForm @sanity @po
+    @VerifyBatchApproveOrderFromForm @sanity @po @Regression
     Scenario: Verify batch approve functionality for orders
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu
@@ -112,7 +112,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then verify the status of the po
 
 
-    @VerifyOrderLinkInBatch @sanity @po
+    @VerifyOrderLinkInBatch @sanity @po @Regression
     Scenario: Verify navigation on clicking purchase order number link
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu
@@ -122,7 +122,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         When the admin navigates to the batch approve order page
         Then the system verifies navigation to the corresponding purchase order screen once click on the link
 
-    @VerifyMultipleOrderApproval @sanity @po
+    @VerifyMultipleOrderApproval @sanity @po @Regression
     Scenario: Verify multiple purchase order approval functionality
         Given the admin user is logged into the application
         When the admin navigates to the order creation menu

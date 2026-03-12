@@ -1,6 +1,6 @@
 Feature: Change authority module
 
-  @changeAuthority @sanity @sysyemsettings
+  @changeAuthority @sanity @sysyemsettings @RegressionSuit1
 
   Scenario: Add and Remove Interface Mapping for a User
     Given the admin user is logged into the application

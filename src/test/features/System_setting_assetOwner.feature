@@ -1,6 +1,6 @@
 Feature: Asset Owner module
 
-  @assetOwner @sanity @sysyemsettings
+  @assetOwner @sanity @sysyemsettings @RegressionSuit1
   Scenario: Verify Create/Edit Asset Owner functionality
     Given User logged into the application
     Then select Asset Owner from the system settings menu

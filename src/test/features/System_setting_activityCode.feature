@@ -1,6 +1,6 @@
 Feature: UOM Conversion Factor module
 
-    @activityCode @sanity @sysyemsettings
+    @activityCode @sanity @sysyemsettings @RegressionSuit1
 
     Scenario: Verify Create/Edit/Delete Activity Code functionality
 

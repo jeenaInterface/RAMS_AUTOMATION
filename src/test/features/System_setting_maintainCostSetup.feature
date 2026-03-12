@@ -1,6 +1,6 @@
 Feature: Maintain cost setup module
 
-    @cost @sanity @sysyemsettings
+    @cost @sanity @sysyemsettings @RegressionSuit1
 
     Scenario: Verify Edit/Delete Maintain cost setup functionality
 

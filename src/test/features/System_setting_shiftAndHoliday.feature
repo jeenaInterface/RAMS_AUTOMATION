@@ -1,7 +1,7 @@
 Feature: Shift and Holiday module
-    @Shift @sanity @sysyemsettings
+    @Shift @sanity @sysyemsettings @RegressionSuit1
 
-    Scenario: Verify Edit/ActionLog functionalities
+    Scenario: Verify Edit/ActionLog functionalities 
 
         Given User logged into the application
         Then select shift and holiday module from the system settings menu

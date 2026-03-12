@@ -1,6 +1,6 @@
 Feature: Support Data module
 
-    @supportData @sanity @sysyemsettings
+    @supportData @sanity @sysyemsettings @RegressionSuit1
 
     Scenario: Verify Create/Edit Support Data - Asset Group functionality
 
@@ -12,7 +12,7 @@ Feature: Support Data module
         Then open the Asset form and confirm that the newly added Asset Group is available in the dropdown when creating a new asset
         And verify the edit functionality by selecting the created Asset Group in the Support Data form
 
-    @supportData @sanity @sysyemsettings
+    @supportData @sanity @sysyemsettings @RegressionSuit1
 
     Scenario: Verify Create/Edit Support Data - wareHouse functionality
 
@@ -24,7 +24,7 @@ Feature: Support Data module
         Then open the stock location and confirm that the newly added wareHouse is available in the warehouse dropdown
         And verify the edit functionality by selecting the created warehouse in the Support Data form by changing its status
 
-        @supportData @sanity @sysyemsettings
+        @supportData @sanity @sysyemsettings @RegressionSuit1
 
     Scenario: Verify Create/Edit Support Data - vendorType functionality
 

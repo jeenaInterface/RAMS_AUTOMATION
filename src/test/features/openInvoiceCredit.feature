@@ -1,6 +1,6 @@
 Feature: Verify functionalities under Open Invoice/Credit menu
 
-  @createOpenCredit @sanity @bwo
+  @createOpenCredit @sanity @bwo @Regression
   Scenario: Verify create open Credit functionality under Open Invoice/Credit menu
 
     Given the admin user is logged into the application
@@ -13,7 +13,7 @@ Feature: Verify functionalities under Open Invoice/Credit menu
     Then verify cancel functionality for open credit
     Then verify action log functionality for open credit
 
-  @createOpenCreditPost @sanity @bwo
+  @createOpenCreditPost @sanity @bwo @Regression
   Scenario: Verify post functionality of open Credit
 
     Given the admin user is logged into the application
@@ -27,7 +27,7 @@ Feature: Verify functionalities under Open Invoice/Credit menu
     Then check post result of open credit
 
 
-  @createOpenInvoicePost @sanity @bwo
+  @createOpenInvoicePost @sanity @bwo @Regression
   Scenario: Verify post functionality of open invoice
 
     Given the admin user is logged into the application
