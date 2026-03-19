@@ -55,7 +55,7 @@ export default class AssetReportPage {
         saveButtonInSchedule:"//span[normalize-space(text())='Save']",
         okButtonInSchedule:"xpath=/html/body/div[4]/div/div[3]/button[2]/span",
         yesButton:"//span[normalize-space(text())='Yes']",
-        deleteOkButton:"/html/body/div[3]/div/div[3]/button[2]/span"
+        deleteOkButton:"xpath=/html/body/div[3]/div/div[3]/button[2]/span"
 
 
     }
