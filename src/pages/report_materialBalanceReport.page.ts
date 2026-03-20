@@ -14,6 +14,7 @@ setDefaultTimeout(100 * 1000);
 export default class MaterialBalanceReportPage {
     private base: PlaywrightWrapper;
     private page: Page;
+    public NewReportName: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -32,6 +33,22 @@ export default class MaterialBalanceReportPage {
         okButton: "//span[text()='OK']",
         secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
         yearTextInMaterial: "//span[normalize-space(text())='Year To Date']",
+        
+          myReportTemplateMenu: "//span[normalize-space(text())='- My Report Template']",
+        reportNameSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        searchIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[1]/span[1]/i[1]",
+        downloadIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[2]/span[1]/i[1]",
+        scheduleIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[3]/span[1]/i[1]",
+        deleteIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[4]/span[1]/i[1]",
+        reportHeader: "//span[@class='header-title font-size-title']",
+        scheduleddl:"(//label[normalize-space(text())='Schedule:']/following::input)[1]",
+        time:"//label[normalize-space(text())='Time:']/following::input[1]",
+        to:"(//div[@class='el-textarea']//textarea)[1]",
+        saveButtonInSchedule:"//span[normalize-space(text())='Save']",
+        okButtonInSchedule:"xpath=/html/body/div[4]/div/div[3]/button[2]/span",
+        yesButton:"//span[normalize-space(text())='Yes']",
+        deleteOkButton:"xpath=/html/body/div[3]/div/div[3]/button[2]/span"
+
         
 
     }
@@ -59,8 +76,8 @@ export default class MaterialBalanceReportPage {
     }
     async saveAsReport(): Promise<void> {
         await this.page.locator(this.Elements.saveAsButton).click();
-        const reportName = `Material Balance Report-${getRandomInt(1000, 9999)}`;
-        await this.page.locator(this.Elements.reportName).fill(reportName);
+        this.NewReportName = `Material Balance Report-${getRandomInt(1000, 9999)}`;
+        await this.page.locator(this.Elements.reportName).fill(this.NewReportName);
         await this.page.locator(this.Elements.okButton).click();
         await this.page.locator(this.Elements.secondOkButton).click();
 
@@ -93,5 +110,74 @@ export default class MaterialBalanceReportPage {
             }
         });
     }
+            async clickOnmyReportTemplateMenu(): Promise<void> {
+                await this.page.setViewportSize({ width: 1600, height: 1000 });
+                await this.base.waitAndClick(this.Elements.reportMenu);
+                await this.base.waitAndClick(this.Elements.myReportTemplateMenu);
+            }
+        
+            async SearchWithReportName(): Promise<void> {
+                await this.base.waitAndClick(this.Elements.reportNameSearchBox);
+                await this.page.locator(this.Elements.reportNameSearchBox).fill(this.NewReportName);
+                //add delay
+                await this.page.waitForTimeout(2000);
+            }
+            async VerifySearchFunctionality(): Promise<void> {
+                await this.base.waitAndClick(this.Elements.searchIcon);
+        
+                //add delay
+                await this.page.waitForTimeout(2000);
+                //verify reportheader contains report name
+                const headerText = await this.page.locator(this.Elements.reportHeader).textContent();
+                console.log('Report Header Text:', headerText);
+                if (!headerText || !headerText.includes(this.NewReportName)) {
+                    throw new Error(`Expected report header to contain "${this.NewReportName}", but got "${headerText}"`);
+                }
+            }
+            async verifyDownloadFunctionality(): Promise<string> {
+                const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
+        
+                // Creates folder only if it does NOT exist – no EEXIST error
+                await fs.ensureDir(downloadPath);
+        
+                // Clean folder safely
+                await this.clearDownloadFolder(downloadPath);
+        
+                // Wait for the download event
+                const [download] = await Promise.all([
+                    this.page.waitForEvent("download", { timeout: 60000 }),
+                    this.page.locator(this.Elements.downloadIcon).click({ timeout: 60000 }),
+                ]);
+        
+                const outputFile = path.join(downloadPath, "Asset.xlsx");
+                await download.saveAs(outputFile);
+        
+                console.log(`File downloaded to: ${outputFile}`);
+        
+                expect(fs.existsSync(outputFile)).toBeTruthy();
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                return outputFile;
+            }
+        
+            async verifyScheduleFunctionality(): Promise<void> {
+                await this.base.waitAndClick(this.Elements.scheduleIcon);
+                await this.page.locator(this.Elements.scheduleddl).click();
+                await this.page.getByText('Run Later').click();
+                await this.page.locator(this.Elements.to).fill('jeena.manuel@milstone.tech');
+                await this.page.locator(this.Elements.saveButtonInSchedule).click();
+                await this.page.locator(this.Elements.okButtonInSchedule).click();
+        
+                //add delay
+                await this.page.waitForTimeout(2000);
+            }
+        
+            
+            async verifyDeleteFuctionlity(): Promise<void> {
+                await this.base.waitAndClick(this.Elements.deleteIcon);
+                await this.page.locator(this.Elements.yesButton).click();
+                await this.page.locator(this.Elements.deleteOkButton).click();
+        
+        
+            }
 
 }

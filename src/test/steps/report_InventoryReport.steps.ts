@@ -41,3 +41,31 @@ When('the admin clicks on the run button and the inventory report should be gene
   }
 
 });
+Then('go to report template and verifies the created inventory report template is displayed in the list', async function () {
+  await InventoryPage.clickOnmyReportTemplateMenu();
+  await InventoryPage.SearchWithReportName();
+
+});
+Then('click on the search icon and verifies the page is redirect to inventory report details page', async function () {
+  await InventoryPage.VerifySearchFunctionality();
+});
+Then('click on download icon and verifies the inventory report is downloaded successfully', async function () {
+  await InventoryPage.clickOnmyReportTemplateMenu();
+  await InventoryPage.SearchWithReportName();
+  const filePath = await InventoryPage.verifyDownloadFunctionality();
+  if (this.attach) {
+    // Attach as plain text or as HTML link if supported
+    const sharedFilePathText = `Report available at shared location: ${filePath}`;
+    await this.attach(sharedFilePathText, 'text/plain');
+  }
+});
+When('click on schedule icon and verifies the inventory report is scheduled successfully', async function () {
+  await InventoryPage.clickOnmyReportTemplateMenu();
+  await InventoryPage.SearchWithReportName();
+  await InventoryPage.verifyScheduleFunctionality();
+});
+When('click on delete icon and verifies the inventory report is deleted successfully', async function () {
+  await InventoryPage.clickOnmyReportTemplateMenu();
+  await InventoryPage.SearchWithReportName();
+  await InventoryPage.verifyDeleteFuctionlity();
+});
