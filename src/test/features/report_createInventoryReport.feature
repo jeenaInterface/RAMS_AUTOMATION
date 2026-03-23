@@ -20,7 +20,7 @@ Feature: Verify Create Inventory Report
     Then the admin clicks on the run button and the inventory report should be generated successfully with applied stock number filter
 
   @inventoryReportTemplate @sanity @report
-  Scenario: Verify created report template in my report template section
+  Scenario: Verify inventory report template in my report template section
     Given the admin user is logged into the application
     And selects create inventory report
     And selects all the filters of inventory report

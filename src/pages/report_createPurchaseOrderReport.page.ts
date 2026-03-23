@@ -15,6 +15,7 @@ setDefaultTimeout(100 * 1000);
 export default class PurchaseOrderReportPage {
     private base: PlaywrightWrapper;
     private page: Page;
+    public NewReportName: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -55,7 +56,10 @@ export default class PurchaseOrderReportPage {
         okButton: "//span[text()='OK']",
         secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
         yearDate: "(//span[contains(text(),'Year To Date')])[3]",
-        vendorCheckList:"//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]",
+        vendorCheckList: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]",
+
+        reportNameSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+
 
 
     }
@@ -65,22 +69,22 @@ export default class PurchaseOrderReportPage {
         await this.base.waitAndClick(this.Elements.OrderReportMenu);
     }
 
-      async selectFiltrationWithStockNumber(): Promise<void> {
+    async selectFiltrationWithStockNumber(): Promise<void> {
         await this.page.locator(this.Elements.stockNo).type('1000');
         await fixture.page.waitForTimeout(1000);
         const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
         await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
-         await this.page.locator(this.Elements.headerFieldsCheckBox).click();
+        await this.page.locator(this.Elements.headerFieldsCheckBox).click();
 
         //add delay
         await this.page.waitForTimeout(500);
         await this.page.locator(this.Elements.rightArrow1).click();
-         //add delay
+        //add delay
         await this.page.waitForTimeout(500);
         await this.page.locator(this.Elements.itemFieldsCheckBox).click();
         await this.page.locator(this.Elements.rightArrow2).click();
 
-      }
+    }
     async selectFiltration(): Promise<void> {
         await this.page.locator(this.Elements.stockNo).type('1000');
         await fixture.page.waitForTimeout(1000);
@@ -109,7 +113,7 @@ export default class PurchaseOrderReportPage {
         await this.page.locator(this.Elements.matchedStatus).click();
         await this.page.getByText('Not Invoiced').click();
         await this.page.locator(this.Elements.orderType).click();
-        await this.page.getByText('PO' , { exact: true }).click();
+        await this.page.getByText('PO', { exact: true }).click();
         await this.page.locator(this.Elements.orderCaptureDate).click();
         await this.page.locator(this.Elements.yearDate).click();
         await this.page.locator(this.Elements.orderDate).click();
@@ -121,7 +125,7 @@ export default class PurchaseOrderReportPage {
         //add delay
         await this.page.waitForTimeout(500);
         await this.page.locator(this.Elements.rightArrow1).click();
-         //add delay
+        //add delay
         await this.page.waitForTimeout(500);
         await this.page.locator(this.Elements.itemFieldsCheckBox).click();
         await this.page.locator(this.Elements.rightArrow2).click();
@@ -137,8 +141,8 @@ export default class PurchaseOrderReportPage {
     }
     async saveAsReport(): Promise<void> {
         await this.page.locator(this.Elements.saveAsButton).click();
-        const reportName = `Order Report-${getRandomInt(1000, 9999)}`;
-        await this.page.locator(this.Elements.reportName).fill(reportName);
+        this.NewReportName = `Order Report-${getRandomInt(1000, 9999)}`;
+        await this.page.locator(this.Elements.reportName).fill(this.NewReportName);
         await this.page.locator(this.Elements.okButton).click();
         await this.page.locator(this.Elements.secondOkButton).click();
 
@@ -210,6 +214,11 @@ export default class PurchaseOrderReportPage {
 
         console.log('Verification passed: Both Stock No. and 1000 found in expected cells.');
     }
-
+    async SearchWithReportName(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.reportNameSearchBox);
+        await this.page.locator(this.Elements.reportNameSearchBox).fill(this.NewReportName);
+        //add delay
+        await this.page.waitForTimeout(2000);
+    }
 
 }

@@ -15,6 +15,7 @@ setDefaultTimeout(100 * 1000);
 export default class CreateInvoiceMatchingReportPage {
     private base: PlaywrightWrapper;
     private page: Page;
+     public NewReportName: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -50,6 +51,21 @@ export default class CreateInvoiceMatchingReportPage {
         vendorSearch: "(//i[@class='el-input__icon el-icon-search is-clickable'])[1]",
         searchButton: "(//span[contains(text(),'Search')])[1]",
         okButtonOnVendorSearch: "//body[1]/div[1]/div[4]/div[1]/div[3]/div[1]/button[2]/span[1]",
+
+        myReportTemplateMenu: "//span[normalize-space(text())='- My Report Template']",
+        reportNameSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        searchIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[1]/span[1]/i[1]",
+        downloadIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[2]/span[1]/i[1]",
+        scheduleIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[3]/span[1]/i[1]",
+        deleteIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[4]/span[1]/i[1]",
+        reportHeader: "//span[@class='header-title font-size-title']",
+        scheduleddl: "(//label[normalize-space(text())='Schedule:']/following::input)[1]",
+        time: "//label[normalize-space(text())='Time:']/following::input[1]",
+        to: "(//div[@class='el-textarea']//textarea)[1]",
+        saveButtonInSchedule: "//span[normalize-space(text())='Save']",
+        okButtonInSchedule: "xpath=/html/body/div[4]/div/div[3]/button[2]/span",
+        yesButton: "//span[normalize-space(text())='Yes']",
+        deleteOkButton: "xpath=/html/body/div[3]/div/div[3]/button[2]/span"
 
     }
 
@@ -90,8 +106,8 @@ export default class CreateInvoiceMatchingReportPage {
     }
     async saveAsReport(): Promise<void> {
         await this.page.locator(this.Elements.saveAsButton).click();
-        const reportName = `Create Invoice matching Report-${getRandomInt(1000, 9999)}`;
-        await this.page.locator(this.Elements.reportName).fill(reportName);
+        this.NewReportName = `Create Invoice matching Report-${getRandomInt(1000, 9999)}`;
+        await this.page.locator(this.Elements.reportName).fill(this.NewReportName);
         await this.page.locator(this.Elements.okButton).click();
         await this.page.locator(this.Elements.secondOkButton).click();
 
@@ -132,5 +148,13 @@ export default class CreateInvoiceMatchingReportPage {
             }
         });
     }
+
+    
+        async SearchWithReportName(): Promise<void> {
+            await this.base.waitAndClick(this.Elements.reportNameSearchBox);
+            await this.page.locator(this.Elements.reportNameSearchBox).fill(this.NewReportName);
+            //add delay
+            await this.page.waitForTimeout(2000);
+        }
 
 }

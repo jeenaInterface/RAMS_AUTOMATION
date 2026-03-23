@@ -15,6 +15,7 @@ setDefaultTimeout(100 * 1000);
 export default class CreateTimesheetReportPage {
     private base: PlaywrightWrapper;
     private page: Page;
+    public NewReportName: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -24,11 +25,11 @@ export default class CreateTimesheetReportPage {
     private Elements = {
         reportMenu: "//span[normalize-space()='Report']",
         TimesheetReportMenu: "//span[normalize-space()='- Create Time Sheet Report']",
-        shop:"//input[@name='shop']",
-        craft:"//input[@name='craft']",
-        shift:"//input[@name='shift']",
-        mechanic:"//input[@placeholder='--Input Text or Look up--']",
-        workOrderRepairDate:"(//label[normalize-space(text())='Work Order Repair Date']/following::input)[1]",
+        shop: "//input[@name='shop']",
+        craft: "//input[@name='craft']",
+        shift: "//input[@name='shift']",
+        mechanic: "//input[@placeholder='--Input Text or Look up--']",
+        workOrderRepairDate: "(//label[normalize-space(text())='Work Order Repair Date']/following::input)[1]",
 
         runButton: "//span[normalize-space()='Run']",
         saveButton: "//span[normalize-space()='Save']",
@@ -38,6 +39,8 @@ export default class CreateTimesheetReportPage {
         okButton: "//span[text()='OK']",
         secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
         yearDate: "(//span[normalize-space()='Year To Date'])[1]",
+        reportNameSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+
 
 
 
@@ -64,7 +67,7 @@ export default class CreateTimesheetReportPage {
         await this.page.getByText('2 - Second Shift').click();
 
         await this.page.locator(this.Elements.workOrderRepairDate).click();
-        await this.page.locator(this.Elements.yearDate).click();       
+        await this.page.locator(this.Elements.yearDate).click();
 
     }
     async saveReport(): Promise<void> {
@@ -77,8 +80,8 @@ export default class CreateTimesheetReportPage {
     }
     async saveAsReport(): Promise<void> {
         await this.page.locator(this.Elements.saveAsButton).click();
-        const reportName = `Timesheet Report-${getRandomInt(1000, 9999)}`;
-        await this.page.locator(this.Elements.reportName).fill(reportName);
+        this.NewReportName = `Timesheet Report-${getRandomInt(1000, 9999)}`;
+        await this.page.locator(this.Elements.reportName).fill(this.NewReportName);
         await this.page.locator(this.Elements.okButton).click();
         await this.page.locator(this.Elements.secondOkButton).click();
 
@@ -119,5 +122,10 @@ export default class CreateTimesheetReportPage {
             }
         });
     }
-
+    async SearchWithReportName(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.reportNameSearchBox);
+        await this.page.locator(this.Elements.reportNameSearchBox).fill(this.NewReportName);
+        //add delay
+        await this.page.waitForTimeout(2000);
+    }
 }

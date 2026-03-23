@@ -14,6 +14,7 @@ setDefaultTimeout(100 * 1000);
 export default class tariffDiscrepancyReportPage {
     private base: PlaywrightWrapper;
     private page: Page;
+    public NewReportName: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -23,15 +24,18 @@ export default class tariffDiscrepancyReportPage {
     private Elements = {
         createTariffDiscrepancyReportMenu: "//span[normalize-space(text())='- Create Tariff Discrepancy Report']",
         reportMenu: "//span[normalize-space()='Report']",
-         runButton: "//span[normalize-space()='Run']",
+        runButton: "//span[normalize-space()='Run']",
         saveButton: "//span[normalize-space()='Save']",
         saveAsButton: "//button[@type='button']//span[contains(text(),'Save As')]",
         reportName: "(//label[normalize-space(text())='Report Name']/following::textarea)[1]",
         okButton: "//span[text()='OK']",
         secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
-        tariff:"(//label[normalize-space(text())='Tariff:']/following::input)[1]",
-        repairDate:"(//label[normalize-space(text())='Repair Date:']/following::input)[1]",
-        todayInCalendar:"//td[normalize-space(text())='Today']",
+        tariff: "(//label[normalize-space(text())='Tariff:']/following::input)[1]",
+        repairDate: "(//label[normalize-space(text())='Repair Date:']/following::input)[1]",
+        todayInCalendar: "//td[normalize-space(text())='Today']",
+
+        reportNameSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+
 
     }
 
@@ -46,7 +50,7 @@ export default class tariffDiscrepancyReportPage {
         await this.page.locator(this.Elements.todayInCalendar).click();
         await this.page.locator(this.Elements.todayInCalendar).click();
         await fixture.page.waitForTimeout(1000);
-      
+
     }
 
     async saveReport(): Promise<void> {
@@ -59,8 +63,8 @@ export default class tariffDiscrepancyReportPage {
     }
     async saveAsReport(): Promise<void> {
         await this.page.locator(this.Elements.saveAsButton).click();
-        const reportName = `Tariff Discrepancy Report-${getRandomInt(1000, 9999)}`;
-        await this.page.locator(this.Elements.reportName).fill(reportName);
+        this.NewReportName = `Tariff Discrepancy Report-${getRandomInt(1000, 9999)}`;
+        await this.page.locator(this.Elements.reportName).fill(this.NewReportName);
         await this.page.locator(this.Elements.okButton).click();
         await this.page.locator(this.Elements.secondOkButton).click();
 
@@ -92,6 +96,12 @@ export default class tariffDiscrepancyReportPage {
                 });
             }
         });
+    }
+    async SearchWithReportName(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.reportNameSearchBox);
+        await this.page.locator(this.Elements.reportNameSearchBox).fill(this.NewReportName);
+        //add delay
+        await this.page.waitForTimeout(2000);
     }
 
 }

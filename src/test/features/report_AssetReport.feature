@@ -22,7 +22,7 @@ Feature: Verify Create Asset Report
     
 
   @myReportTemplate @sanity @report
-  Scenario: Verify created report template in my report template section
+  Scenario: Verify asset report template in my report template section
     Given the admin user is logged into the application
     And selects create asset report
     And selects asset number filter for asset report

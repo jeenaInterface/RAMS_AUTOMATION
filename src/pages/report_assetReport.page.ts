@@ -184,11 +184,6 @@ export default class AssetReportPage {
 
         console.log('Verification passed: Both Asset No. and IYAG1 found in expected cells.');
     }
-    async clickOnmyReportTemplateMenu(): Promise<void> {
-        await this.page.setViewportSize({ width: 1600, height: 1000 });
-        await this.base.waitAndClick(this.Elements.reportMenu);
-        await this.base.waitAndClick(this.Elements.myReportTemplateMenu);
-    }
 
     async SearchWithReportName(): Promise<void> {
         await this.base.waitAndClick(this.Elements.reportNameSearchBox);
@@ -196,62 +191,7 @@ export default class AssetReportPage {
         //add delay
         await this.page.waitForTimeout(2000);
     }
-    async VerifySearchFunctionality(): Promise<void> {
-        await this.base.waitAndClick(this.Elements.searchIcon);
 
-        //add delay
-        await this.page.waitForTimeout(2000);
-        //verify reportheader contains report name
-        const headerText = await this.page.locator(this.Elements.reportHeader).textContent();
-        console.log('Report Header Text:', headerText);
-        if (!headerText || !headerText.includes(this.NewReportName)) {
-            throw new Error(`Expected report header to contain "${this.NewReportName}", but got "${headerText}"`);
-        }
-    }
-    async verifyDownloadFunctionality(): Promise<string> {
-        const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
-
-        // Creates folder only if it does NOT exist – no EEXIST error
-        await fs.ensureDir(downloadPath);
-
-        // Clean folder safely
-        await this.clearDownloadFolder(downloadPath);
-
-        // Wait for the download event
-        const [download] = await Promise.all([
-            this.page.waitForEvent("download", { timeout: 60000 }),
-            this.page.locator(this.Elements.downloadIcon).click({ timeout: 60000 }),
-        ]);
-
-        const outputFile = path.join(downloadPath, "Asset.xlsx");
-        await download.saveAs(outputFile);
-
-        console.log(`File downloaded to: ${outputFile}`);
-
-        expect(fs.existsSync(outputFile)).toBeTruthy();
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        return outputFile;
-    }
-
-    async verifyScheduleFunctionality(): Promise<void> {
-        await this.base.waitAndClick(this.Elements.scheduleIcon);
-        await this.page.locator(this.Elements.scheduleddl).click();
-        await this.page.getByText('Run Later').click();
-        await this.page.locator(this.Elements.to).fill('jeena.manuel@milstone.tech');
-        await this.page.locator(this.Elements.saveButtonInSchedule).click();
-        await this.page.locator(this.Elements.okButtonInSchedule).click();
-
-        //add delay
-        await this.page.waitForTimeout(2000);
-    }
-
-    
-    async verifyDeleteFuctionlity(): Promise<void> {
-        await this.base.waitAndClick(this.Elements.deleteIcon);
-        await this.page.locator(this.Elements.yesButton).click();
-        await this.page.locator(this.Elements.deleteOkButton).click();
-
-
-    }
+ 
 
 }

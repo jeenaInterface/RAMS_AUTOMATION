@@ -11,7 +11,7 @@ Feature: Verify Create Material balance Report
 
 
     @materialbalanceReportNewTemplate @sanity @report
-  Scenario: Verify created report template in my report template section 
+  Scenario: Verify Material balance report template in my report template section
     Given the admin user is logged into the application
     And selects create material balance report
     And selects all the filters of material balance report

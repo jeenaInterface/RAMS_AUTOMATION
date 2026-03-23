@@ -15,6 +15,7 @@ export default class userReportPage {
     public downloadPathWithFileName: string = '';
     private base: PlaywrightWrapper;
     private page: Page;
+    public NewReportName: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -39,6 +40,9 @@ export default class userReportPage {
         shift: "(//label[normalize-space(text())='Shift']/following::input)[2]",
         status: "(//label[normalize-space(text())='Status']/following::input)[2]",
         authority: "(//label[normalize-space(text())='Authority']/following::input)[2]",
+        reportNameSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
+
+
 
 
 
@@ -84,8 +88,8 @@ export default class userReportPage {
     }
     async saveAsReport(): Promise<void> {
         await this.page.locator(this.Elements.saveAsButton).click();
-        const reportName = `Create User Report-${getRandomInt(1000, 9999)}`;
-        await this.page.locator(this.Elements.reportName).fill(reportName);
+        this.NewReportName = `Create User Report-${getRandomInt(1000, 9999)}`;
+        await this.page.locator(this.Elements.reportName).fill(this.NewReportName);
         await this.page.locator(this.Elements.okButton).click();
         await this.page.locator(this.Elements.secondOkButton).click();
 
@@ -118,7 +122,7 @@ export default class userReportPage {
             }
         });
     }
-   async verifyExcelContent(filePath: string): Promise<void> {
+    async verifyExcelContent(filePath: string): Promise<void> {
         // Read the workbook
         const workbook = XLSX.readFile(filePath);
 
@@ -148,6 +152,12 @@ export default class userReportPage {
         }
 
         console.log('Verification passed: Both User ID and AARON.BARRIOS found in expected cells.');
+    }
+    async SearchWithReportName(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.reportNameSearchBox);
+        await this.page.locator(this.Elements.reportNameSearchBox).fill(this.NewReportName);
+        //add delay
+        await this.page.waitForTimeout(2000);
     }
 
 }

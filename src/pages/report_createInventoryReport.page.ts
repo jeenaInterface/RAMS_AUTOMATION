@@ -51,7 +51,13 @@ export default class InventoryPage {
         saveButtonInSchedule:"//span[normalize-space(text())='Save']",
         okButtonInSchedule:"xpath=/html/body/div[4]/div/div[3]/button[2]/span",
         yesButton:"//span[normalize-space(text())='Yes']",
-        deleteOkButton:"xpath=/html/body/div[3]/div/div[3]/button[2]/span"
+        deleteOkButton:"xpath=/html/body/div[3]/div/div[3]/button[2]/span",
+        MonCheckBox:"(//span[@class='el-checkbox__input']//span)[2]",
+        TueCheckBox:"(//span[@class='el-checkbox__input']//span)[3]",
+        WedCheckBox:"(//span[@class='el-checkbox__input']//span)[4]",
+        endOfTheMonthCheckBox:"//span[@class='el-checkbox__input']//span[1]",
+
+
 
     }
 
@@ -230,7 +236,34 @@ export default class InventoryPage {
             await this.page.locator(this.Elements.okButtonInSchedule).click();
     
             //add delay
+            await this.page.waitForTimeout(1000);
+            await this.base.waitAndClick(this.Elements.scheduleIcon);
+            await this.page.locator(this.Elements.scheduleddl).click();
+            await this.page.getByText('Daily').click();
+            await this.page.locator(this.Elements.time).click();
+            await this.page.locator(this.Elements.time).fill('00:01:01');
+            await this.page.locator(this.Elements.saveButtonInSchedule).click();
+            await this.page.locator(this.Elements.okButtonInSchedule).click();
+
+            await this.page.waitForTimeout(1000);
+            await this.base.waitAndClick(this.Elements.scheduleIcon);
+            await this.page.locator(this.Elements.scheduleddl).click();
+            await this.page.getByText('Weekly').click();
+            await this.page.locator(this.Elements.time).fill('00:01:01');
+            await this.page.locator(this.Elements.MonCheckBox).click();
+            await this.page.locator(this.Elements.TueCheckBox).click();
+            await this.page.locator(this.Elements.WedCheckBox).click();
+            await this.page.locator(this.Elements.saveButtonInSchedule).click();
+            await this.page.locator(this.Elements.okButtonInSchedule).click();
+
+            await this.page.waitForTimeout(500);
+            await this.base.waitAndClick(this.Elements.scheduleIcon);
+            await this.page.locator(this.Elements.scheduleddl).click();
+            await this.page.getByText('Monthly').click();
             await this.page.waitForTimeout(2000);
+            await this.page.locator(this.Elements.endOfTheMonthCheckBox).nth(0).click();
+            await this.page.locator(this.Elements.saveButtonInSchedule).click();
+            await this.page.locator(this.Elements.okButtonInSchedule).click();
         }
     
         
