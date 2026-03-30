@@ -606,7 +606,7 @@ export default class PMPage {
 
         const lastUpdate = new Date(this.lastUpdateDate);
         const expectedDate = new Date(lastUpdate);
-        expectedDate.setDate(lastUpdate.getDate() + 9);
+        expectedDate.setDate(lastUpdate.getDate() + 10);
 
         const year = expectedDate.getFullYear();
         const month = months[expectedDate.getMonth()];

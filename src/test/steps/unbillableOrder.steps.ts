@@ -442,7 +442,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
   await unbillableOrderPage.navigateToPayrollReviewScreen();
   await unbillableOrderPage.verifyShopInPayrollScreen();
   await unbillableOrderPage.verifyShiftInPayrollScreen('1 - First Shift');
-  await unbillableOrderPage.STandOTForVessel();
+  await unbillableOrderPage.STandOTForVessel1();
 });
 When('Create a WO for weekday and select straight time in hour type for second shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('2 - Vessel Sail');
@@ -502,7 +502,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
   await unbillableOrderPage.navigateToPayrollReviewScreen();
   await unbillableOrderPage.verifyShopInPayrollScreen();
   await unbillableOrderPage.verifyShiftInPayrollScreen('1 - First Shift');
-  await unbillableOrderPage.STandOTForVessel();
+  await unbillableOrderPage.STandOTForVessel1();
 });
 When('Create a WO for weekday and select straight time in hour type for second shift with special shift as four and Go and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('3 - 4 and Go');
@@ -563,7 +563,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
   await unbillableOrderPage.navigateToPayrollReviewScreen();
   await unbillableOrderPage.verifyShopInPayrollScreen();
   await unbillableOrderPage.verifyShiftInPayrollScreen('1 - First Shift');
-  await unbillableOrderPage.STandOTForVessel();
+  await unbillableOrderPage.STandOTForVessel1();
 });
 When('Create a WO for weekday and select straight time in hour type for second shift with special shift as PMA Training and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('4 - PMA Training');

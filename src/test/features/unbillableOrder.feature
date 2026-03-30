@@ -143,27 +143,27 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then Verify hour validation messages are displayed as expected for the third shift  for special shift as PMA Training
 
 
-  # @BatchClose @sanity @ubwo @RegressionSuit1
-  # Scenario: Verify Batch close screen functionalities for unbillable work order
-  #   Given the admin user is logged into the application
-  #   When the admin navigates to the unbillable work order creation menu
-  #   And enters all the required fields for unbillable work order and selects special shift as vessel sail and clicks on the Draft button
-  #   When the admin clicks the complete button and verify the status of the unbillable work order is Completed
-  #   Then the unbillable work order number is captured for future reference
-  #   When the admin navigates to the Batch close menu and perform batch close operation for the recently created unbillable work order
-  #   Then Search for the recently created unbillable work order using the captured work order number
-  #   Then verify the status of the unbillable work order is Closed
+  @BatchClose @sanity @ubwo @RegressionSuit1
+  Scenario: Verify Batch close screen functionalities for unbillable work order
+    Given the admin user is logged into the application
+    When the admin navigates to the unbillable work order creation menu
+    And enters all the required fields for unbillable work order and selects special shift as vessel sail and clicks on the Draft button
+    When the admin clicks the complete button and verify the status of the unbillable work order is Completed
+    Then the unbillable work order number is captured for future reference
+    When the admin navigates to the Batch close menu and perform batch close operation for the recently created unbillable work order
+    Then Search for the recently created unbillable work order using the captured work order number
+    Then verify the status of the unbillable work order is Closed
 
-  # @BatchCloseFromToDoList @sanity @ubwo @RegressionSuit1
-  # Scenario: Verify Batch close screen functionalities for unbillable work order by select from todo list
-  #   Given the admin user is logged into the application
-  #   When the admin navigates to the unbillable work order creation menu
-  #   And enters all the required fields for unbillable work order and selects special shift as vessel sail and clicks on the Draft button
-  #   When the admin clicks the complete button and verify the status of the unbillable work order is Completed
-  #   Then the unbillable work order number is captured for future reference
-  #   When the admin navigates to the Batch close menu from to do list and perform batch close operation for the recently created unbillable work order
-  #   Then Search for the recently created unbillable work order using the captured work order number
-  #   Then verify the status of the unbillable work order is Closed
+  @BatchCloseFromToDoList @sanity @ubwo @RegressionSuit1
+  Scenario: Verify Batch close screen functionalities for unbillable work order by select from todo list
+    Given the admin user is logged into the application
+    When the admin navigates to the unbillable work order creation menu
+    And enters all the required fields for unbillable work order and selects special shift as vessel sail and clicks on the Draft button
+    When the admin clicks the complete button and verify the status of the unbillable work order is Completed
+    Then the unbillable work order number is captured for future reference
+    When the admin navigates to the Batch close menu from to do list and perform batch close operation for the recently created unbillable work order
+    Then Search for the recently created unbillable work order using the captured work order number
+    Then verify the status of the unbillable work order is Closed
 
   @unBillableSearch @sanity @ubwo @RegressionSuit1
   Scenario: Search functionality in Inquire Un-billable Work Order screen

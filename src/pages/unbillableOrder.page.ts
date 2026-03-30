@@ -214,7 +214,7 @@ export default class UnbillableOrderPage {
         secondShiftCheckBox: "//span[normalize-space()='2 - Second Shift']",
         ThirdShiftCheckBox: "//span[normalize-space()='3 - Third Shift']",
         ApproveButton: "//span[normalize-space(text())='Approve']",
-        ApproveOkayButton: "/html/body/div[5]/div/div[3]/button[2]/span",
+        ApproveOkayButton: "xpath=/html/body/div[5]/div/div[3]/button[2]/span",
         approveMessage: "//div[@class='el-message-box__message']//p[1]",
 
 
@@ -1410,6 +1410,21 @@ export default class UnbillableOrderPage {
         ).inputValue();
         this.OT = await this.page.locator(
             "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='GABRIEL.ALEPE']/td[6]//input"
+        ).inputValue();
+        const IsConsistantWithWO = await this.page.locator("xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='GABRIEL.ALEPE']/td[7]").textContent();
+        expect(IsConsistantWithWO).toBe('YES');
+        expect(this.ST).toBe('4.00');
+        expect(this.OT).toBe('0.00');
+        await fixture.page.waitForTimeout(1000);
+    }
+        async STandOTForVessel1(): Promise<void> {
+        //verify ST=8 and OT=2
+
+        this.ST = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[5]//input"
+        ).inputValue();
+        this.OT = await this.page.locator(
+            "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[6]//input"
         ).inputValue();
         const IsConsistantWithWO = await this.page.locator("xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='GABRIEL.ALEPE']/td[7]").textContent();
         expect(IsConsistantWithWO).toBe('YES');
