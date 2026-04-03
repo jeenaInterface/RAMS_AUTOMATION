@@ -156,15 +156,15 @@ When('Go to Batch review billable work order and review the created billable wor
 When('Go to Batch close billable work order and close the created billable work order after review', async () => {
   await billableOrderPage.doBatchCloseAfterEwview();
 });
-Then('verify mnr invoice is generated from the closed billable work order', async function (this: any) {
+Then('verify aot invoice is generated from the closed billable work order', async function (this: any) {
 
   await billableOrderPage.mnrInvoice();
   let mnr = billableOrderPage.mnrInvoiceNumber || '';
   // Attach BWO status to Cucumber report
   if (this && typeof this.attach === 'function') {
-    await this.attach(`MNR INVOICE NUMBER: ${mnr}`, 'text/plain');
+    await this.attach(`AOT INVOICE NUMBER: ${mnr}`, 'text/plain');
   } else {
-    fixture.logger?.info(`MNR INVOICE NUMBER: ${mnr}`);
+    fixture.logger?.info(`AOT INVOICE NUMBER: ${mnr}`);
   }
 });
 Then('the admin click on complete, review and close the order', async () => {
@@ -217,7 +217,7 @@ Then('searches for a billable work order using repair date range and verifies th
   await billableOrderPage.searchByRepairDateRange();
 });
 
-Then('go to inquire mnr invoice and verify the created mnr invoice from the closed billable work order', async () => {
+Then('go to inquire aot invoice and verify the created aot invoice from the closed billable work order', async () => {
   await billableOrderPage.verifyMNRInvoice();
 });
 

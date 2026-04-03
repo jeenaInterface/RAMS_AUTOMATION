@@ -67,7 +67,7 @@ export default class CreateInvoiceCreditReportPage {
     }
     async selectFiltration(): Promise<void> {
         await this.page.locator(this.Elements.invoiceType).click();
-        await this.page.getByText('MNR Invoice', { exact: true }).click();
+        await this.page.getByText('AOT Invoice', { exact: true }).click();
         await this.page.locator(this.Elements.status).click();
         await this.page.getByText('Draft', { exact: true }).click();
 

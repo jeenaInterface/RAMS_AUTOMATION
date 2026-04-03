@@ -71,8 +71,8 @@ Feature: Verify functionalities under Billable Work Order
     Then Go to Batch close billable work order from dashboard and close the created billable work order
     Then Go to Inquire billable work order and verify the status is Closed
 
-  @mnr @sanity @bwo @Regression
-  Scenario: Verify MNR invoice is created from closed billable work order
+  @AOT @sanity @bwo @Regression
+  Scenario: Verify AOT invoice is created from closed billable work order
 
     Given the admin user is logged into the application
     When the admin navigates to the Inquire Billable Work Order menu
@@ -81,8 +81,8 @@ Feature: Verify functionalities under Billable Work Order
     And enters all the required fields for billable work order after copy and clicks on the Draft button
     When the admin click on complete, review and close the order
     Then the billable work order number is captured
-    Then verify mnr invoice is generated from the closed billable work order
-    Then go to inquire mnr invoice and verify the created mnr invoice from the closed billable work order
+    Then verify aot invoice is generated from the closed billable work order
+    Then go to inquire aot invoice and verify the created aot invoice from the closed billable work order
 
   @searchInquireBO @sanity @bwo @Regression
   Scenario: Verify search functionality in inquire billiable order

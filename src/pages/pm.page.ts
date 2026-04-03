@@ -325,7 +325,7 @@ export default class PMPage {
         await fixture.page.waitForTimeout(1000);
 
 
-        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        const suggestion = this.page.getByText('BC001', { exact: true });
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion.click();
         await fixture.page.waitForTimeout(3000);
@@ -416,8 +416,7 @@ export default class PMPage {
         //await assetInput.press('Enter');
         await fixture.page.waitForTimeout(1000);
 
-
-        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        const suggestion = this.page.getByText('BC001', { exact: true });
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion.click();
         await this.page.locator(this.Elements.componentCode).click();

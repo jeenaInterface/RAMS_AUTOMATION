@@ -650,7 +650,7 @@ export default class UnbillableOrderPage {
         const assetInput3 = this.page.locator(this.Elements.assetNumber5);
         await assetInput3.type('BC001');
         await fixture.page.waitForTimeout(1000);
-        const suggestion3 = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        const suggestion3 = this.page.getByText('BC001', { exact: true });
         await suggestion3.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion3.click();
         await fixture.page.waitForTimeout(1000);
@@ -1689,8 +1689,7 @@ export default class UnbillableOrderPage {
         //await assetInput.press('Enter');
         await fixture.page.waitForTimeout(1000);
 
-
-        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        const suggestion = this.page.getByText('BC001', { exact: true });
         await suggestion.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion.click();
         await fixture.page.waitForTimeout(1000);

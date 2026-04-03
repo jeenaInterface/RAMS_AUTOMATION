@@ -98,7 +98,7 @@ export default class BillableOrderPage {
         completeOkButton: "(//span[contains(text(),'OK')])[15]",
         actualHours2: "(//input[@type='text'])[36]",
         stockQuantitywo2: "(//input[@type='text'])[40]",
-        mnrInvoiceLabel: "//span[normalize-space()='MNR Invoice']",
+        mnrInvoiceLabel: "//span[normalize-space()='AOT Invoice']",
         draftInvoiceNumber: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]",
         // Search filter locators
         assetSearchField: "(//label[normalize-space(text())='Asset No.']/following::input)[1]",
@@ -122,7 +122,7 @@ export default class BillableOrderPage {
         WONumberSearchInvoice: "(//label[normalize-space(text())='Work Order No.']/following::input)[1]",
         draftInvoiceNumberLink: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
         wonumberLabel: "(//input[@class='el-input__inner'])[1]",
-        createMNRCreditMenu: "//span[normalize-space()='- Create MNR Invoice/Credit']",
+        createMNRCreditMenu: "//span[normalize-space()='- Create AOT Invoice/Credit']",
         woNumberMNRCreditSearch: "(//div[@class='el-input']//input)[1]",
         RetrieveButton: "//span[normalize-space()='Retrieve']",
         changedQuantityInput: "//tbody/tr[2]/td[4]/div[1]/div[1]/input[1]",
@@ -137,7 +137,7 @@ export default class BillableOrderPage {
         cancelCreditButton: "(//span[contains(text(),'Cancel')])[1]",
         operationSearchCredit: "xpath=//*[@id='app-modal']/div/div/div[2]/div/div[1]/div[2]/table/thead/tr[2]/th[1]/div/div/div/div/input",
         draftInvoiceNumberSearch: "(//label[normalize-space(text())='Draft Invoice No.']/following::input)[1]",
-        operaionSearchResultCredit: "//span[normalize-space()='Cancel MNR Invoice/Credit']",
+        operaionSearchResultCredit: "//span[normalize-space()='Cancel Open Invoice/Credit']",
         BatchCloseCreditMenu: "//span[normalize-space()='- Batch Close Invoice/Credit']",
         draftInvoiceNoSearchBatchClose: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
         checkBoxDraftInvoiceBatchClose: "(//span[@class='el-checkbox__inner'])[2]",
@@ -631,7 +631,7 @@ export default class BillableOrderPage {
     }
 
     async mnrInvoice(): Promise<void> {
-        //verify MNR Invoice label is present
+        //verify AOT Invoice label is present
         await expect.soft(this.page.locator(this.Elements.mnrInvoiceLabel)).toBeVisible();
         this.mnrInvoiceNumber = await this.page.locator(this.Elements.draftInvoiceNumber).textContent();
         ok(this.mnrInvoiceNumber && this.mnrInvoiceNumber.trim() !== '', 'Draft Invoice Number is empty');
@@ -779,7 +779,7 @@ export default class BillableOrderPage {
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
             if (match && match[1]) {
                 this.mnrCreditNumber = match[1];
-                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('AOT Credit Number:', this.mnrCreditNumber);
                 // Use billableOrderNumber as needed
             }
 
@@ -825,7 +825,7 @@ export default class BillableOrderPage {
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
             if (match && match[1]) {
                 this.mnrCreditNumber = match[1];
-                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('AOT Credit Number:', this.mnrCreditNumber);
                 // Use billableOrderNumber as needed
             }
 
@@ -850,10 +850,10 @@ export default class BillableOrderPage {
         await this.base.waitAndClick(this.Elements.actionLog);
         await expect(this.page.locator(this.Elements.headerTitleActionLog)).toBeVisible();
         await fixture.page.waitForTimeout(500);
-        await this.page.locator(this.Elements.operationSearchCredit).fill('Cancel MNR Invoice/Credit');
+        await this.page.locator(this.Elements.operationSearchCredit).fill('Cancel Open Invoice/Credit');
         await fixture.page.waitForTimeout(500);
         const errorText = await this.page.locator(this.Elements.operaionSearchResultCredit).textContent();
-        expect(errorText).toContain('Cancel MNR Invoice/Credit');
+        expect(errorText).toContain('Cancel Open Invoice/Credit');
         await fixture.page.waitForTimeout(500);
     }
     async BatchCloseCredit(): Promise<void> {
@@ -897,13 +897,13 @@ export default class BillableOrderPage {
         const text = element ? element.toString() : '';
 
         if (text) {
-            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            // Example text: "AOT Invoice/Credit | 00101886(Draft)"
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
 
             if (match && match[1] && match[2]) {
                 this.mnrCreditNumber = match[1];  // e.g., "00101886"
                 this.creditStatus = match[2];            // e.g., "Draft"
-                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('AOT Credit Number:', this.mnrCreditNumber);
                 console.log('Status:', this.creditStatus);
             }
         }
@@ -1024,13 +1024,13 @@ export default class BillableOrderPage {
         const text = element ? element.toString() : '';
 
         if (text) {
-            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            // Example text: "AOT Invoice/Credit | 00101886(Draft)"
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
 
             if (match && match[1] && match[2]) {
                 this.mnrCreditNumber = match[1];  // e.g., "00101886"
                 this.creditStatus = match[2];            // e.g., "Draft"
-                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('AOT Credit Number:', this.mnrCreditNumber);
                 console.log('Status:', this.creditStatus);
             }
         }
@@ -1077,12 +1077,12 @@ export default class BillableOrderPage {
         const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
         const text = element ? element.toString() : '';
         if (text) {
-            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            // Example text: "AOT Invoice/Credit | 00101886(Draft)"
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
             if (match && match[1] && match[2]) {
                 this.mnrCreditNumber = match[1];
                 this.creditStatus = match[2];
-                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('AOT Credit Number:', this.mnrCreditNumber);
                 console.log('Status:', this.creditStatus);
             }
         }
@@ -1118,12 +1118,12 @@ export default class BillableOrderPage {
         const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
         const text = element ? element.toString() : '';
         if (text) {
-            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            // Example text: "AOT Invoice/Credit | 00101886(Draft)"
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
             if (match && match[1] && match[2]) {
                 this.mnrCreditNumber = match[1];
                 this.creditStatus = match[2];
-                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('AOT Credit Number:', this.mnrCreditNumber);
                 console.log('Status:', this.creditStatus);
             }
         }
@@ -1176,12 +1176,12 @@ export default class BillableOrderPage {
         const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
         const text = element ? element.toString() : '';
         if (text) {
-            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            // Example text: "AOT Invoice/Credit | 00101886(Draft)"
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
             if (match && match[1] && match[2]) {
                 this.mnrCreditNumber = match[1];
                 this.creditStatus = match[2];
-                console.log('MNR Credit Number:', this.mnrCreditNumber);
+                console.log('AOT Credit Number:', this.mnrCreditNumber);
                 console.log('Status:', this.creditStatus);
             }
         }
@@ -1245,7 +1245,7 @@ export default class BillableOrderPage {
         const element = await fixture.page.locator(this.Elements.headerTitleMNRCredit).textContent();
         const text = element ? element.toString() : '';
         if (text) {
-            // Example text: "MNR Invoice/Credit | 00101886(Draft)"
+            // Example text: "AOT Invoice/Credit | 00101886(Draft)"
             const match = text.match(/\|\s*([A-Z0-9]+)\s*\(([^)]+)\)/i);
             if (match && match[1] && match[2]) {
                 this.mnrCreditNumber = match[1];

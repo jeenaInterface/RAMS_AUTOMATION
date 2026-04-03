@@ -50,7 +50,7 @@ Scenario: Verify pm schedule dashboard
         Then go to maintain pm page and delete the entry created for per usage
 
 
-@MaintainPM1   @sanity @Regression
+@MaintainPM  @sanity @Regression
 Scenario: Verify pm schedule dashboard for per calendar entry
         Given the admin user is logged into the application
         When the admin navigates to the maintain PM
