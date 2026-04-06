@@ -263,7 +263,7 @@ Feature: Verify functionalities under Un-Billable Work Order
     Then the unbillable work order number is captured for future reference
     When the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift for Vessel Sail
     Then capture the ST and OT hours in payroll screen
-    Then Open the Show Detail of WOs in payroll screen for the created WO and click on the WO link
+    Then Open the Show Detail of WOs in payroll screen for the created WO and click on the WO link for first shift
     Then cancel the created unbillable work order
     Then the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift after cancelling the WO
 

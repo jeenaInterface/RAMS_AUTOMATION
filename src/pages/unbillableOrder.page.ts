@@ -187,6 +187,7 @@ export default class UnbillableOrderPage {
         IsConsistantWithWO: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[7]",
         IsConsistantWithWOApprovePayroll: "//table/tbody/tr[td[4][normalize-space()='ANDY.REYES']]/td[10]",
         showWODetails: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='ANDY.REYES']/td[8]/div/div/div/div/button/span/i",
+        showWODetails1: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div[1]/div[3]/table/tbody/tr[td[1]='GABRIEL.ALEPE']/td[8]/div/div/div/div/button/span/i",
         WOLinkOnPopUp: "(//div[@class='cell']//a)[1]",
         refreshButton: "//span[normalize-space()='Refresh']",
         cancelokButton1: "(//button[contains(@class,'el-button el-button--default el-button--primary')])[1]",
@@ -650,8 +651,8 @@ export default class UnbillableOrderPage {
         const assetInput3 = this.page.locator(this.Elements.assetNumber5);
         await assetInput3.type('BC001');
         await fixture.page.waitForTimeout(1000);
-        const suggestion3 = this.page.getByText('BC001', { exact: true });
-        await suggestion3.waitFor({ state: 'visible', timeout: 1500 });
+        const suggestion3 = this.page.getByRole('listitem').filter({ hasText: 'BC001' }).first();
+        await suggestion3.waitFor({ state: 'visible', timeout: 5000 });
         await suggestion3.click();
         await fixture.page.waitForTimeout(1000);
 
@@ -1101,6 +1102,14 @@ export default class UnbillableOrderPage {
     }
     async clickonWObUttonInPayrollScreen(): Promise<void> {
         await this.page.locator(this.Elements.showWODetails).click();
+        await this.page.waitForLoadState('networkidle');
+        await this.page.locator(this.Elements.WOLinkOnPopUp).click();
+        //add delay
+        await fixture.page.waitForTimeout(8000);
+
+    }
+        async clickonWObUttonInPayrollScreen1(): Promise<void> {
+        await this.page.locator(this.Elements.showWODetails1).click();
         await this.page.waitForLoadState('networkidle');
         await this.page.locator(this.Elements.WOLinkOnPopUp).click();
         //add delay
@@ -1836,7 +1845,7 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(1000);
         // Verify that the approval success message appears
         await this.page.locator(this.Elements.approveMessage).waitFor({ state: 'visible' });
-        await this.page.locator(this.Elements.ApproveOkayButton).click();
+        // await this.page.locator(this.Elements.ApproveOkayButton).click();
 
 
 

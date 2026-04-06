@@ -347,6 +347,9 @@ Then('Open the Show Detail of WOs for the created WO and click on the WO link in
 Then('Open the Show Detail of WOs in payroll screen for the created WO and click on the WO link', async () => {
   await unbillableOrderPage.clickonWObUttonInPayrollScreen();
 });
+Then('Open the Show Detail of WOs in payroll screen for the created WO and click on the WO link for first shift', async () => {
+  await unbillableOrderPage.clickonWObUttonInPayrollScreen1();
+});
 
 Then('cancel the created unbillable work order', async () => {
   await unbillableOrderPage.clickOnCancelButtonAfterVerifyPayroll();
@@ -442,7 +445,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
   await unbillableOrderPage.navigateToPayrollReviewScreen();
   await unbillableOrderPage.verifyShopInPayrollScreen();
   await unbillableOrderPage.verifyShiftInPayrollScreen('1 - First Shift');
-  await unbillableOrderPage.STandOTForVessel1();
+  await unbillableOrderPage.STandOTForVessel();
 });
 When('Create a WO for weekday and select straight time in hour type for second shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('2 - Vessel Sail');
