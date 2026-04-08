@@ -1,6 +1,6 @@
 Feature: Verify Create Timesheet Report
 
-  @timesheetReport @sanity @report
+  @timesheetReport @sanity @report @Regression
   Scenario: Admin creates and runs timesheet report
     Given the admin user is logged into the application
     And selects create timesheet report
@@ -10,7 +10,7 @@ Feature: Verify Create Timesheet Report
     Then the admin clicks on the run button and the timesheet report should be generated successfully
     Then user click on logout button
 
-  @timesheetReportTemplate @sanity @report
+  @timesheetReportTemplate @sanity @report @Regression
   Scenario: Verify timesheet report template in my report template section
     Given the admin user is logged into the application
     And selects create timesheet report

@@ -1,6 +1,6 @@
 Feature: Verify Create invoice matching Report
 
-  @invoiceMatchingReport @sanity @report
+  @invoiceMatchingReport @sanity @report @Regression
   Scenario: Admin creates and runs create invoice matching report
     Given the admin user is logged into the application
     And selects create invoice matching report
@@ -10,7 +10,7 @@ Feature: Verify Create invoice matching Report
     Then the admin clicks on the run button and the invoice matching report should be generated successfully
 
 
-  @invoiceMatchingReportNewTemplate @sanity @report
+  @invoiceMatchingReportNewTemplate @sanity @report @Regression
   Scenario: Verify invoice matching report template in my report template section
     Given the admin user is logged into the application
     And selects create invoice matching report

@@ -1,6 +1,6 @@
 Feature: Verify Create Inventory Report
 
-    @inventoryReport @sanity @report
+    @inventoryReport @sanity @report @Regression
   Scenario: Admin creates and runs an inventory report
     Given the admin user is logged into the application
     And selects create inventory report
@@ -10,7 +10,7 @@ Feature: Verify Create Inventory Report
     Then the admin clicks on the run button and the inventory report should be generated successfully
 
 
-  @inventoryReportWithStockNumberFiltration @sanity @report
+  @inventoryReportWithStockNumberFiltration @sanity @report @Regression
   Scenario: Admin creates and runs an inventory report with stock number filter
     Given the admin user is logged into the application
     And selects create inventory report
@@ -19,7 +19,7 @@ Feature: Verify Create Inventory Report
     Then verifies save as functionality of inventory report
     Then the admin clicks on the run button and the inventory report should be generated successfully with applied stock number filter
 
-  @inventoryReportTemplate @sanity @report
+  @inventoryReportTemplate @sanity @report @Regression
   Scenario: Verify inventory report template in my report template section
     Given the admin user is logged into the application
     And selects create inventory report

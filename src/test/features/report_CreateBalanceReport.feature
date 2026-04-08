@@ -1,6 +1,6 @@
 Feature: Verify Create Material balance Report
 
-    @materialbalanceReport @sanity @report
+    @materialbalanceReport @sanity @report @Regression
   Scenario: Admin creates and runs create material balance report
     Given the admin user is logged into the application
     And selects create material balance report
@@ -10,7 +10,7 @@ Feature: Verify Create Material balance Report
     Then the admin clicks on the run button and the material balance report should be generated successfully
 
 
-    @materialbalanceReportNewTemplate @sanity @report
+    @materialbalanceReportNewTemplate @sanity @report @Regression
   Scenario: Verify Material balance report template in my report template section
     Given the admin user is logged into the application
     And selects create material balance report

@@ -1,6 +1,6 @@
 Feature: Verify Create Material Adjustment Report
 
-    @materialAdjustmentReport @sanity @report
+    @materialAdjustmentReport @sanity @report @Regression
   Scenario: Admin creates and runs create material adjustment report
     Given the admin user is logged into the application
     And selects create material adjustment report
@@ -9,7 +9,7 @@ Feature: Verify Create Material Adjustment Report
     Then verifies save as functionality of material adjustment report
     Then the admin clicks on the run button and the material adjustment report should be generated successfully
 
-    @materialAdjustmentReportwithFilters @sanity @report
+    @materialAdjustmentReportwithFilters @sanity @report @Regression
   Scenario: Admin creates and runs create material adjustment report
     Given the admin user is logged into the application
     And selects create material adjustment report
@@ -18,7 +18,7 @@ Feature: Verify Create Material Adjustment Report
     Then verifies save as functionality of material adjustment report
     Then the admin clicks on the run button and the material adjustment report should be generated successfully with applied filters
 
-    @materialAdjustmentReportNewTemplate @sanity @report
+    @materialAdjustmentReportNewTemplate @sanity @report @Regression
   Scenario: Verify Material Adjustment report template in my report template section
     Given the admin user is logged into the application
     And selects create material adjustment report

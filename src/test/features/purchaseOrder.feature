@@ -41,7 +41,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then verifies the action log in the Internal purchase order
 
 
-    @searchPO @sanity @po
+    @searchPO @sanity @po @Regression
     Scenario: Search purchase orders @Regression
         Given the admin user is logged into the application
         When the admin navigates to the inquire order page
@@ -136,7 +136,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         
 
 
-    @createInternalRebuildOrderUnbillableOrder @sanity @po
+    @createInternalRebuildOrderUnbillableOrder @sanity @po @Regression
     Scenario: Verify create internal rebuild order and map to unbillable order
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -155,7 +155,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then go to material return page and do the material return for the internal rebuild order
 
 
-    @verifyInternalRebuildOrderUnbillableOrderValidations @sanity @po
+    @verifyInternalRebuildOrderUnbillableOrderValidations @sanity @po @Regression
     Scenario: Verify internalRebuild order validations in unbillable order
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu
@@ -169,7 +169,7 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then Finally, select a stock number and click Complete
         Then the unbillable work order number is captured
 
-    @CreateUnbillableOrderHavingNormalOrderAndInternalRO @sanity @po
+    @CreateUnbillableOrderHavingNormalOrderAndInternalRO @sanity @po @Regression
     Scenario: Create unbillable order having normal order and internal RO
         Given the admin user is logged into the application
         Then the admin navigates to the order creation menu

@@ -1,6 +1,6 @@
 Feature: Verify Create Asset Report
 
-  @assetReport @sanity @report
+  @assetReport @sanity @report @Regression
   Scenario: Admin creates and runs an asset report
     Given the admin user is logged into the application
     And selects create asset report
@@ -10,7 +10,7 @@ Feature: Verify Create Asset Report
     Then the admin clicks on the run button and the report should be generated successfully
     Then user click on logout button
 
-  @assetReportWithAssetNumberFilter @sanity @report
+  @assetReportWithAssetNumberFilter @sanity @report @Regression
   Scenario: Admin creates and runs an asset report with asset number filter
     Given the admin user is logged into the application
     And selects create asset report
@@ -21,7 +21,7 @@ Feature: Verify Create Asset Report
     Then user click on logout button
     
 
-  @myReportTemplate @sanity @report
+  @myReportTemplate @sanity @report @Regression
   Scenario: Verify asset report template in my report template section
     Given the admin user is logged into the application
     And selects create asset report

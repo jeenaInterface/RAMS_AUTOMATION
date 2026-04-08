@@ -1,6 +1,6 @@
 Feature: Verify Create material Report
 
-    @materialReport @sanity @report
+    @materialReport @sanity @report @Regression
   Scenario: Admin creates and runs create material report
     Given the admin user is logged into the application
     And selects create material report
@@ -9,7 +9,7 @@ Feature: Verify Create material Report
     Then verifies save as functionality of material report
     Then the admin clicks on the run button and the material report should be generated successfully
 
-    @materialReportStockNumber @sanity @report
+    @materialReportStockNumber @sanity @report @Regression
   Scenario: Admin creates and runs create material report
     Given the admin user is logged into the application
     And selects create material report
@@ -18,7 +18,7 @@ Feature: Verify Create material Report
     Then verifies save as functionality of material report
     Then the admin clicks on the run button and the material report should be generated successfully with applied stock number filter
 
-  @materialReportNewTemplate @sanity @report
+  @materialReportNewTemplate @sanity @report @Regression
   Scenario: Verify material report template in my report template section
     Given the admin user is logged into the application
     And selects create material report

@@ -1,6 +1,6 @@
 Feature: Verify Create purchase Order Report
 
-    @purchaseOrderReport @sanity @report
+    @purchaseOrderReport @sanity @report @Regression
   Scenario: Admin creates and runs an purchase order report
     Given the admin user is logged into the application
     And selects create purchase order report
@@ -10,7 +10,7 @@ Feature: Verify Create purchase Order Report
     Then the admin clicks on the run button and the purchase order report should be generated successfully
     Then user click on logout button
     
-    @purchaseOrderReportwithFilters @sanity @report
+    @purchaseOrderReportwithFilters @sanity @report @Regression
   Scenario: Admin creates and runs an purchase order report
     Given the admin user is logged into the application
     And selects create purchase order report
@@ -21,7 +21,7 @@ Feature: Verify Create purchase Order Report
     Then user click on logout button
 
 
-    @purchaseOrderReportNewTemplate @sanity @report
+    @purchaseOrderReportNewTemplate @sanity @report @Regression
   Scenario: Verify purchase order report template in my report template section
     Given the admin user is logged into the application
     And selects create purchase order report

@@ -1,6 +1,6 @@
 Feature: Verify Create Payroll Report
 
-    @payrollReport @sanity @report
+    @payrollReport @sanity @report @Regression
   Scenario: Admin creates and runs create payroll report
     Given the admin user is logged into the application
     And selects create payroll report

@@ -1,6 +1,6 @@
 Feature: Verify Create receiving Report
 
-  @receivingReport @sanity @report
+  @receivingReport @sanity @report @Regression
   Scenario: Admin creates and runs receiving report
     Given the admin user is logged into the application
     And selects create receiving report

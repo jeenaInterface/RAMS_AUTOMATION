@@ -1,7 +1,7 @@
 
 Feature: Verify work order Report   
 
-  @workOrderReport @sanity @report
+  @workOrderReport @sanity @report @Regression
   Scenario: Admin creates and runs work order report
     Given the admin user is logged into the application
     And selects create work order report

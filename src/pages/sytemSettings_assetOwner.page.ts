@@ -62,7 +62,6 @@ export default class AssetOwnerPage {
         // generate a random ID and basic details
         this.assetOwnerData = { ownerId: getRandomInt(3000, 9999).toString() };
         await this.page.locator(this.Elements.assetOwner).fill(this.assetOwnerData.ownerId!);
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.assetOwnerName).fill(randomName);
         await this.page.locator(this.Elements.SAPCustomerCode).fill(this.assetOwnerData.ownerId!);
@@ -88,7 +87,6 @@ export default class AssetOwnerPage {
     }
 
     async submit(): Promise<void> {
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.saveButton).click();
         await this.page.locator(this.Elements.okButton).click();
@@ -103,7 +101,6 @@ export default class AssetOwnerPage {
 
     async clickOnEditButton(): Promise<void> {
         await this.page.locator(this.Elements.firstRowEdit).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.status).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Inactive' }).click();

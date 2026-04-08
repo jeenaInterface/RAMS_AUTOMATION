@@ -1,6 +1,6 @@
 Feature: Verify Create user Report
 
-  @userReport @sanity @report
+  @userReport @sanity @report @Regression
   Scenario: Admin creates and runs user report
     Given the admin user is logged into the application
     And selects create user report
@@ -10,7 +10,7 @@ Feature: Verify Create user Report
     Then the admin clicks on the run button and the user report should be generated successfully
     Then user click on logout button
 
-  @userReporttEMPLATE @sanity @report
+  @userReporttEMPLATE @sanity @report @Regression
   Scenario: Verify USER report template in my report template section
     Given the admin user is logged into the application
     And selects create user report

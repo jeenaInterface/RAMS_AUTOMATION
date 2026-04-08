@@ -1,7 +1,7 @@
 
 Feature: Verify Tariff Discrepancy Report
 
-  @tariffDiscrepancyReport @sanity @report
+  @tariffDiscrepancyReport @sanity @report @Regression
   Scenario: Admin creates and runs tariff discrepancy report
     Given the admin user is logged into the application
     And selects create tariff discrepancy report
@@ -12,7 +12,7 @@ Feature: Verify Tariff Discrepancy Report
     Then user click on logout button
 
 
-  @tariffDiscrepancyReportNewTemplate @sanity @report
+  @tariffDiscrepancyReportNewTemplate @sanity @report @Regression
   Scenario: Admin creates and runs tariff discrepancy report
     Given the admin user is logged into the application
     And selects create tariff discrepancy report
