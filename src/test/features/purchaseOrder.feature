@@ -178,3 +178,12 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the user searches for the newly created order in the inquiry list page
         Then Go to unbillable order page and add normal order and internal RO
         Then the unbillable work order number is captured
+
+    @POReportContent @sanity @po @Regression
+    Scenario: Verify the created PO is displayed in the PO report
+        Given the admin user is logged into the application
+        Then the admin navigates to the order creation menu
+        And enters all the required fields and clicks on the save button
+        Then the purchase order number is captured
+        Then the user navigates to the PO report and searches for the created PO
+        Then verifies that the created PO is displayed in the search results of the PO report

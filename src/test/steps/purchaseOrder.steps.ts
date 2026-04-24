@@ -314,5 +314,12 @@ Then('Go to unbillable order page and add normal order and internal RO', async (
     await purchasePage.asst2Details();
     await purchasePage.clickCloseCompleteButton();
 
-
+});
+Then('the user navigates to the PO report and searches for the created PO', async () => {
+    await purchasePage.clickOnOrderReportMenu();
+    await purchasePage.FillOrderNoInReportSearchBox();
+});
+Then('verifies that the created PO is displayed in the search results of the PO report', async () => {
+    const downloadPath = await purchasePage.downloadReport();
+    await purchasePage.verifyExcelContent(downloadPath);
 });

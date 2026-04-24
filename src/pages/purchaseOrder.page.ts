@@ -7,6 +7,9 @@ import { fixture } from "../hooks/pageFixture";
 import { table } from "console";
 import { ok } from "assert";
 
+import * as fs from 'fs-extra';
+import * as XLSX from 'xlsx';
+
 setDefaultTimeout(100 * 1000);
 
 export default class PurchaseOrderPage {
@@ -189,7 +192,16 @@ export default class PurchaseOrderPage {
 
         subTotal: "//table[2]//tr[1]//td[2]//b[1]",
         tax: "//table[2]//tr[2]//td[2]//b[1]",
-        Freight: "//table[2]//tr[3]//td[2]//b[1]"
+        Freight: "//table[2]//tr[3]//td[2]//b[1]",
+
+        reportMenu: "//span[normalize-space()='Report']",
+        OrderReportMenu: "//span[normalize-space(text())='- Create Order Report']",
+        orderNoInReportSearchBox: "(//label[normalize-space(text())='Order No.']/following::input)[1]",
+        runButton: "//span[normalize-space()='Run']",
+        rightArrow1: "(//i[@class='el-icon-arrow-right'])[1]",
+        rightArrow2: "(//button[@type='button'])[7]",
+        headerFieldsCheckBox: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[3]/div[1]/div[1]/p[2]/label[1]/span[1]/span[1]",
+        itemFieldsCheckBox: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[4]/div[1]/div[1]/p[2]/label[1]/span[1]/span[1]",
 
     }
     async clickOnCreateOrderMenu(): Promise<void> {
@@ -334,7 +346,7 @@ export default class PurchaseOrderPage {
         // Wait for both elements to be visible before getting their content
         await orderQuantity.waitFor({ state: 'visible', timeout: 5000 });
 
-        this.orderQtyuantity = await orderQuantity.textContent();
+        this.orderQtyuantity = await orderQuantity.textContent() || '';
         return this.orderQtyuantity;
     }
     async totaloutStandingQuantity(): Promise<string | null> {
@@ -343,7 +355,7 @@ export default class PurchaseOrderPage {
         // Wait for both elements to be visible before getting their content
         await totalOutStandingQuantity.waitFor({ state: 'visible', timeout: 5000 });
 
-        this.outStandingQuantity = await totalOutStandingQuantity.textContent();
+        this.outStandingQuantity = await totalOutStandingQuantity.textContent() || '';
         return this.outStandingQuantity;
 
     }
@@ -976,6 +988,10 @@ export default class PurchaseOrderPage {
             }
         }
 
+        if (!poLinkText) {
+            throw new Error('Link text not found');
+        }
+
         const normalizedLinkText = poLinkText.trim();
         const normalizedPurchaseOrderNo = this.purchaseOrderNo.trim();
 
@@ -1142,7 +1158,6 @@ export default class PurchaseOrderPage {
             const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
             if (match && match[1]) {
                 this.ReceivingDocumentNo = match[1];
-                fixture.logger.info(`Auto-generated stock number: ${this.ReceivingDocumentNo}`);
             }
         }
         await fixture.page.waitForTimeout(1000);
@@ -1409,6 +1424,88 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.actualHours2).click();
         await this.page.locator(this.Elements.actualHours2).fill('5');
         await fixture.page.waitForTimeout(1000);
+    }
+    async clickOnOrderReportMenu(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.reportMenu);
+        await this.base.waitAndClick(this.Elements.OrderReportMenu);
+    }
+    async FillOrderNoInReportSearchBox(): Promise<void> {
+        await this.page.locator(this.Elements.orderNoInReportSearchBox).fill(this.purchaseOrderNo);
+        await this.page.locator(this.Elements.headerFieldsCheckBox).click();
+
+        //add delay
+        await this.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.rightArrow1).click();
+        //add delay
+        await this.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.itemFieldsCheckBox).click();
+        await this.page.locator(this.Elements.rightArrow2).click();
+    }
+async downloadReport(): Promise<string> {
+        const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
+
+        // Creates folder only if it does NOT exist – no EEXIST error
+        await fs.ensureDir(downloadPath);
+
+        // Clean folder safely
+        await this.clearDownloadFolder(downloadPath);
+
+        // Wait for the download event
+        const [download] = await Promise.all([
+            this.page.waitForEvent("download", { timeout: 60000 }),
+            this.page.locator(this.Elements.runButton).click({ timeout: 60000 }),
+        ]);
+
+        const outputFile = path.join(downloadPath, "PurchaseOrderReport.xlsx");
+        await download.saveAs(outputFile);
+
+        console.log(`File downloaded to: ${outputFile}`);
+
+        expect(fs.existsSync(outputFile)).toBeTruthy();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        return outputFile;
+    }
+
+    clearDownloadFolder(downloadDir: string): void {
+        fs.readdir(downloadDir, (err, files) => {
+            if (err) throw err;
+            for (const file of files) {
+                fs.unlink(path.join(downloadDir, file), err => {
+                    if (err) throw err;
+                });
+            }
+        });
+    }
+    async verifyExcelContent(filePath: string): Promise<void> {
+        // Read the workbook
+        const workbook = XLSX.readFile(filePath);
+
+        // Get the first sheet name
+        const sheetName = workbook.SheetNames[0];
+
+        // Get worksheet
+        const worksheet = workbook.Sheets[sheetName];
+
+        const OrderNumberCellTitle = worksheet['A6']; // 7th row, 1st column
+        const OrderNumberValue = worksheet['A7']; // 8th row, 1st column
+
+        // Extract cell values safely (checking for undefined)
+        const orderNumberValue = OrderNumberCellTitle ? OrderNumberCellTitle.v : undefined;
+        const OrderNumberRealValue = OrderNumberValue ? OrderNumberValue.v : undefined;
+
+        console.log('Order Number cell (A6):', orderNumberValue);
+        console.log('Order Real Value cell (A7):', OrderNumberRealValue);
+
+        // Verify the cells contain the expected values
+        if (orderNumberValue !== 'Order No.') {
+            throw new Error(`Expected "Order No." in cell A6, but found "${orderNumberValue}"`);
+        }
+
+        if (OrderNumberRealValue !== this.purchaseOrderNo) {
+            throw new Error(`Order number verification failed: "${OrderNumberRealValue}" does not match expected purchase order number "${this.purchaseOrderNo}"`);
+        }
+
+        console.log('Verification passed: Both Order No. and purchase order number found in expected cells.');
     }
 
 }
