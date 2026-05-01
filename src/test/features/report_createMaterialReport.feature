@@ -10,7 +10,7 @@ Feature: Verify Create material Report
     Then the admin clicks on the run button and the material report should be generated successfully
 
     @materialReportStockNumber @sanity @report @Regression
-  Scenario: Admin creates and runs create material report
+  Scenario: Admin creates and runs create material report with stock number filtration
     Given the admin user is logged into the application
     And selects create material report
     And selects material report with stock number filtration

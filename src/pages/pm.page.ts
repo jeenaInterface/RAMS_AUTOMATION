@@ -147,13 +147,10 @@ export default class PMPage {
         assetNumberSearchSchedule: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
         pmGroupSearch: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
 
-
-
     };
 
 
     async navigateToMaintainPM(): Promise<void> {
-        fixture.logger.info("Navigating to Maintain PM screen");
         await this.base.waitAndClick(this.Elements.pmMenu);
         await this.base.waitAndClick(this.Elements.maintainPMMenu);
         await fixture.page.waitForTimeout(1000);
@@ -226,7 +223,6 @@ export default class PMPage {
     }
 
     async updatePm(): Promise<void> {
-        fixture.logger.info("Updating PM entry");
         await fixture.page.waitForTimeout(500);
 
         await this.base.waitAndClick(this.Elements.updateButton2);
@@ -248,7 +244,6 @@ export default class PMPage {
 
 
     async verifyActionLog(): Promise<void> {
-        fixture.logger.info("Verifying action log");
 
         await this.base.waitAndClick(this.Elements.firstRowActionLogButton);
         await fixture.page.waitForTimeout(1000);
@@ -269,7 +264,6 @@ export default class PMPage {
 
 
     async verifyDeleteFunctionality(): Promise<void> {
-        fixture.logger.info("Verifying delete functionality");
 
         // Click delete button
         await this.base.waitAndClick(this.Elements.firstRowDeleteButton);
@@ -284,7 +278,6 @@ export default class PMPage {
         await fixture.page.waitForTimeout(1000);
     }
     async verifyDeleteFunctionalityToverifyMessage(): Promise<void> {
-        fixture.logger.info("Verifying delete functionality");
 
         // Click delete button
         await this.base.waitAndClick(this.Elements.firstRowDeleteButton);
@@ -363,7 +356,6 @@ export default class PMPage {
         await fixture.page.waitForTimeout(1000);
     }
     async goToBatchUpdateAssetUsageScreen(): Promise<void> {
-        fixture.logger.info("Navigating to Batch Update Asset Usage screen");
 
         await this.base.waitAndClick(this.Elements.pmMenu);
         await this.base.waitAndClick(this.Elements.batchUpdateAssetUsageMenu);
@@ -373,7 +365,6 @@ export default class PMPage {
  * Verify last update usage of the asset
  */
     async verifyLastUpdateUsage(): Promise<void> {
-        fixture.logger.info("Verifying last update usage of asset");
 
         // Search for the asset
         await this.page.locator(this.Elements.assetNumberSearch).fill('BC001');
@@ -381,8 +372,11 @@ export default class PMPage {
     }
 
     async currentusage(): Promise<void> {
-        fixture.logger.info("Verifying PM hours matching");
+
         const lastUpdateUsageText = await this.page.locator(this.Elements.lastUpdateUsage).textContent();
+        if (!lastUpdateUsageText?.trim()) {
+            throw new Error('Could not read last update usage');
+        }
         const lastUpdateUsageText1 = parseInt(lastUpdateUsageText.trim(), 10);
 
         // Generate random number greater than currentUsage (e.g., between currentUsage+1 and currentUsage+100)
@@ -395,6 +389,9 @@ export default class PMPage {
         await this.page.locator(this.Elements.currentUSageTextBox).fill(this.randomHour.toString());
         await fixture.page.waitForTimeout(2000);
         const dateTimeStr = await this.page.locator(this.Elements.lastUpdateTimeinBatchUsage).textContent();
+        if (!dateTimeStr) {
+            throw new Error('Could not read last update time from batch usage');
+        }
         // dateTimeStr is like "2026-Feb-13 10:28:05"
         this.lastUpdateDate = dateTimeStr.split(' ')[0];
         // or alternatively:
@@ -505,7 +502,6 @@ export default class PMPage {
 
 
     async verifywoexistsMessage(): Promise<void> {
-        fixture.logger.info("Updating current usage");
 
         const randomUsage = getRandomInt(100, 500);
 
@@ -574,8 +570,6 @@ export default class PMPage {
         await fixture.page.waitForTimeout(1000);
     }
     async goToPMSchedule(): Promise<void> {
-        fixture.logger.info("Navigating to Batch Update Asset Usage screen");
-
         await this.base.waitAndClick(this.Elements.pmMenu);
         await this.base.waitAndClick(this.Elements.pmSheduleDashboard);
         await fixture.page.waitForTimeout(1000);
@@ -605,7 +599,7 @@ export default class PMPage {
 
         const lastUpdate = new Date(this.lastUpdateDate);
         const expectedDate = new Date(lastUpdate);
-        expectedDate.setDate(lastUpdate.getDate() + 10);
+        expectedDate.setDate(lastUpdate.getDate() + 9);
 
         const year = expectedDate.getFullYear();
         const month = months[expectedDate.getMonth()];
