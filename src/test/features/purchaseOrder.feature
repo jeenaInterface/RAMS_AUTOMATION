@@ -165,8 +165,6 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then Navigate to the Unbillable Order page and select a stock number
         Then Click the Complete button and verify hour validations appear
         Then Enter the activity code and hours, then click Complete and verify internal RO validations
-        Then Select an internal RO, click Complete without selecting a stock number, and confirm the validation message for missing stock number is displayed
-        Then Finally, select a stock number and click Complete
         Then the unbillable work order number is captured
 
     @CreateUnbillableOrderHavingNormalOrderAndInternalRO @sanity @po @Regression

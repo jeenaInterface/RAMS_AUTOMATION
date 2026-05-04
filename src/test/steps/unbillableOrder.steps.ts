@@ -447,6 +447,12 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
   await unbillableOrderPage.verifyShiftInPayrollScreen('1 - First Shift');
   await unbillableOrderPage.STandOTForVessel1();
 });
+Then('the admin navigates to the payroll screen and verify ST and OT for the created WO for first shift for Vessel Sail for weekday', async () => {
+  await unbillableOrderPage.navigateToPayrollReviewScreen();
+  await unbillableOrderPage.verifyShopInPayrollScreen();
+  await unbillableOrderPage.verifyShiftInPayrollScreen('1 - First Shift');
+  await unbillableOrderPage.STandOTForVessel();
+});
 When('Create a WO for weekday and select straight time in hour type for second shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
