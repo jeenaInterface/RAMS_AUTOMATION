@@ -222,9 +222,9 @@ export default class PurchaseOrderPage {
         EmailTo: "(//span[normalize-space(text())='Email Order']/following::input)[1]",
         secondEmailButton: "//button[@class='el-button el-button--primary']//span[contains(text(),'Email')]",
         emailOkButton: "xpath=/html/body/div[4]/div/div[3]/button[2]",
-        actionLogButton:"//button[@type='button']//span[contains(text(),'Action Log')]",
+        actionLogButton: "//button[@type='button']//span[contains(text(),'Action Log')]",
         actionLogHeader: "//span[@class='el-dialog__title'][normalize-space()='Action Log']",
-        operationSearchClaim:"(//input[@placeholder='--Input Text--'])[2]"
+        operationSearchClaim: "(//input[@placeholder='--Input Text--'])[2]"
 
 
     }
@@ -1593,7 +1593,7 @@ export default class PurchaseOrderPage {
     }
     async clickOnRejectButton(): Promise<void> {
         await this.base.waitAndClick(this.Elements.RejectButton);
-        await this.page.locator(this.Elements.rejectReasonClaim).fill('Test reject reason');       
+        await this.page.locator(this.Elements.rejectReasonClaim).fill('Test reject reason');
         await this.base.waitAndClick(this.Elements.rejectPopupOkButton);
         await this.base.waitAndClick(this.Elements.rejectOkbutton);
         //add a delay
@@ -1602,7 +1602,7 @@ export default class PurchaseOrderPage {
 
     async clickOnPrintButton(): Promise<void> {
         await this.base.waitAndClick(this.Elements.printButtonClaim);
-        
+
 
 
         // Wait for the new page (tab) to open upon clicking the print button on popup
@@ -1620,7 +1620,7 @@ export default class PurchaseOrderPage {
 
         // Optionally: Close the new tab or keep it open for further checks
         await newPage.close();
-              //add delay
+        //add delay
         await fixture.page.waitForTimeout(2000);
 
     }
@@ -1650,4 +1650,11 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.closeButton).click();
     }
+    async clickOnClaimOrderLinkInquire(): Promise<void> {
+        await this.page.locator(this.Elements.purchaseOrderNoSearch).fill(this.workOrderNumber);
+        await this.page.locator(this.Elements.searchButton).click();
+        await this.page.locator(this.Elements.orderNoSearchrESULT).click();
+
+    }
+
 }

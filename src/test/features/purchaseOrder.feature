@@ -204,33 +204,36 @@ Feature: Add, Update, and Search Functionalities in order Module
     Then verify Print functionality in claim order details page
 
 
-  # @waranteeClaim @sanity @ubwo
-  # Scenario: Create a work order with warranty claim and verify approval and rejection flow from inquire order list
+  @waranteeClaimOrderList @sanity @ubwo
+  Scenario: Create a work order with warranty claim and verify approval, rejection , print , email and action log flow in inquire order list
 
-  #   Given the admin user is logged into the application
-  #   When the admin navigates to the unbillable work order creation menu
-  #   And the admin creates a work order for a weekday with warranty claim set to Yes
-  #   And the admin closes the work order
-  #   Then the unbillable work order number is captured for future reference
+    Given the admin user is logged into the application
+    When the admin navigates to the unbillable work order creation menu
+    And the admin creates a work order for a weekday with warranty claim set to Yes
+    And the admin closes the work order
+    Then the unbillable work order number is captured for future reference
 
-  #   When the admin navigates to the inquire order list
-  #   And open the claim order details for the created work order
-  #   Then the admin approves the warranty claim request
-
-  #   When the admin navigates to the inquire order list
-  #   And open the claim order details for the created work order
-  #   Then the admin rejects the claim order
-
-  #   When the admin navigates to the inquire order list
-  #   Then the admin verifies the order status after the claim rejection
+    When the admin navigates to the inquire order list
+    And open the claim order details for the created work order
+    Then the admin approves the warranty claim request
+    Then the admin rejects the claim order
+    Then verify Email functionality in claim order details page
+    Then verify action log in the claim order details page
+    Then verify Print functionality in claim order details page
 
 
-  # @waranteeClaim @sanity @ubwo
-  # Scenario: Create a work order with a warranty claim, complete the approval process, and proceed with the material receive flow
+  @waranteeClaimMaterialReceive @sanity @ubwo
+  Scenario: Create a work order with a warranty claim, complete the approval process, and proceed with the material receive and material return flow
+    Given the admin user is logged into the application
+    When the admin navigates to the unbillable work order creation menu
+    And the admin creates a work order for a weekday with warranty claim set to Yes
+    And the admin closes the work order
+    Then the unbillable work order number is captured for future reference
 
-  # @waranteeClaim @sanity @ubwo
-  # Scenario: Create a work order with a warranty claim, do the approval in batch approve screen, and proceed with the material receive flow
+    When the admin navigates to the inquire order list
+    And open the claim order details for the created work order
+    Then the admin approves the warranty claim request
+    Then go to material receive page and do the material receive for the claim order
+    Then verifies the receive status value is updated to Fully Received in purchase order details page
+    Then go to material return page and do the material return for the claim order
 
-
-  # @waranteeClaim @sanity @ubwo
-  # Scenario: Create a work order with a warranty claim, do the approval in batch approve screen,  proceed with the material receive and material return flow

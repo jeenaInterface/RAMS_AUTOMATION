@@ -355,4 +355,11 @@ Then('verify action log in the claim order details page', async () => {
     await purchasePage.verifyActionLogClaimOrder();
 });
 
+Then('the admin navigates to the inquire order list', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+});
 
+Then('open the claim order details for the created work order', async () => {
+    await purchasePage.clickOnClaimOrderLinkInquire();
+
+});
