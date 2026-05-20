@@ -185,3 +185,52 @@ Feature: Add, Update, and Search Functionalities in order Module
         Then the purchase order number is captured
         Then the user navigates to the PO report and searches for the created PO
         Then verifies that the created PO is displayed in the search results of the PO report
+
+@waranteeClaimToDoList @sanity @ubwo
+  Scenario: Create a work order with warranty claim and verify approval, rejection , print , email and action log flow from ToDo list
+
+    Given the admin user is logged into the application
+    When the admin navigates to the unbillable work order creation menu
+    And the admin creates a work order for a weekday with warranty claim set to Yes
+    And the admin closes the work order
+    Then the unbillable work order number is captured for future reference
+
+    When the admin navigates to the ToDo list
+    And clicks on the Approval Claim Order link
+    Then the admin approves the warranty claim request
+    Then the admin rejects the claim order
+    Then verify Email functionality in claim order details page
+    Then verify action log in the claim order details page
+    Then verify Print functionality in claim order details page
+
+
+  # @waranteeClaim @sanity @ubwo
+  # Scenario: Create a work order with warranty claim and verify approval and rejection flow from inquire order list
+
+  #   Given the admin user is logged into the application
+  #   When the admin navigates to the unbillable work order creation menu
+  #   And the admin creates a work order for a weekday with warranty claim set to Yes
+  #   And the admin closes the work order
+  #   Then the unbillable work order number is captured for future reference
+
+  #   When the admin navigates to the inquire order list
+  #   And open the claim order details for the created work order
+  #   Then the admin approves the warranty claim request
+
+  #   When the admin navigates to the inquire order list
+  #   And open the claim order details for the created work order
+  #   Then the admin rejects the claim order
+
+  #   When the admin navigates to the inquire order list
+  #   Then the admin verifies the order status after the claim rejection
+
+
+  # @waranteeClaim @sanity @ubwo
+  # Scenario: Create a work order with a warranty claim, complete the approval process, and proceed with the material receive flow
+
+  # @waranteeClaim @sanity @ubwo
+  # Scenario: Create a work order with a warranty claim, do the approval in batch approve screen, and proceed with the material receive flow
+
+
+  # @waranteeClaim @sanity @ubwo
+  # Scenario: Create a work order with a warranty claim, do the approval in batch approve screen,  proceed with the material receive and material return flow

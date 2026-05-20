@@ -323,3 +323,36 @@ Then('verifies that the created PO is displayed in the search results of the PO 
     const downloadPath = await purchasePage.downloadReport();
     await purchasePage.verifyExcelContent(downloadPath);
 });
+
+
+Then('the admin creates a work order for a weekday with warranty claim set to Yes', async () => {
+    purchasePage = new purchaseOrderPage(fixture.page);
+    await purchasePage.createUnbillableOrderForWarantee();
+});
+Then('the admin closes the work order', async () => {
+    await purchasePage.clickCloseCompleteButton();
+});
+Then('the admin navigates to the ToDo list', async () => {
+    await purchasePage.gotoTodoList();
+});
+Then('clicks on the Approval Claim Order link', async () => {
+    await purchasePage.clickOnClaimOrderLink();
+});
+Then('the admin approves the warranty claim request', async () => {
+    await purchasePage.clickOnApproveButton();
+}
+); Then('the admin rejects the claim order', async () => {
+    await purchasePage.clickOnRejectButton();
+
+});
+Then('verify Print functionality in claim order details page', async () => {
+    await purchasePage.clickOnPrintButton();
+});
+Then('verify Email functionality in claim order details page', async () => {
+    await purchasePage.EmailButtonClaim();
+});
+Then('verify action log in the claim order details page', async () => {
+    await purchasePage.verifyActionLogClaimOrder();
+});
+
+

@@ -203,6 +203,30 @@ export default class PurchaseOrderPage {
         headerFieldsCheckBox: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[3]/div[1]/div[1]/p[2]/label[1]/span[1]/span[1]",
         itemFieldsCheckBox: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[4]/div[1]/div[1]/p[2]/label[1]/span[1]/span[1]",
 
+        agvHours: "(//label[normalize-space(text())='AGV Hours']/following::input)[1]",
+        underWarantee: "(//label[normalize-space(text())='Under Warranty']/following::input)[1]",
+
+        UserNameIcon: "//i[contains(@class,'menu-icon ivu-icon')]/following-sibling::span[1]",
+        todiListMenu: "//div[@class='ivu-menu-item select-item']//span[contains(text(),'To-Do List')]",
+        approveClaimOrderMenu: "//div[normalize-space(text())='Approve Claim Order']",
+        approveButtonClaim: "//span[normalize-space()='Approve']",
+        apoproveOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
+        RejectButton: "//span[normalize-space()='Reject']",
+        rejectReasonClaim: "(//label[normalize-space(text())='Reject Reason']/following::textarea)[1]",
+        rejectPopupOkButton: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[2]/div/div[3]/div/button[2]/span",
+        rejectOkbutton: "xpath=/html/body/div[4]/div/div[3]/button[2]/span",
+        printButtonClaim: "//span[normalize-space()='Print']",
+        secondPrintButtonClaim: "(//span[contains(text(),'Print')])[2]",
+
+        emailButtonClaim: "(//span[normalize-space()='Email'])[1]",
+        EmailTo: "(//span[normalize-space(text())='Email Order']/following::input)[1]",
+        secondEmailButton: "//button[@class='el-button el-button--primary']//span[contains(text(),'Email')]",
+        emailOkButton: "xpath=/html/body/div[4]/div/div[3]/button[2]",
+        actionLogButton:"//button[@type='button']//span[contains(text(),'Action Log')]",
+        actionLogHeader: "//span[@class='el-dialog__title'][normalize-space()='Action Log']",
+        operationSearchClaim:"(//input[@placeholder='--Input Text--'])[2]"
+
+
     }
     async clickOnCreateOrderMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.orderMenu);
@@ -1441,7 +1465,7 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.itemFieldsCheckBox).click();
         await this.page.locator(this.Elements.rightArrow2).click();
     }
-async downloadReport(): Promise<string> {
+    async downloadReport(): Promise<string> {
         const downloadPath = 'C:\\Users\\jeena.manuel\\OneDrive - Milestone Technologies Inc\\LBCT - Automation Practice\\Automation Reports\\RAMS Reports';
 
         // Creates folder only if it does NOT exist – no EEXIST error
@@ -1508,4 +1532,122 @@ async downloadReport(): Promise<string> {
         console.log('Verification passed: Both Order No. and purchase order number found in expected cells.');
     }
 
+    async createUnbillableOrderForWarantee(): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('AGV005');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'AGV005' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.underWarantee).click();
+        await this.page.getByText('Yes').click();
+        await this.page.locator(this.Elements.agvHours).click();
+        await this.page.locator(this.Elements.agvHours).fill('21436');
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('3BA - Battery').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IP - Inspect and report').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await fixture.page.waitForTimeout(2000);
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+
+    }
+    async gotoTodoList(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.UserNameIcon);
+        await this.base.waitAndClick(this.Elements.todiListMenu);
+        await this.base.waitAndClick(this.Elements.approveClaimOrderMenu);
+    }
+    async clickOnClaimOrderLink(): Promise<void> {
+        await this.page.getByRole('link', { name: this.workOrderNumber }).click();
+    }
+    async clickOnApproveButton(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.approveButtonClaim);
+        await this.base.waitAndClick(this.Elements.apoproveOkButton);
+        //add a delay
+        await fixture.page.waitForTimeout(2000);
+    }
+    async clickOnRejectButton(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.RejectButton);
+        await this.page.locator(this.Elements.rejectReasonClaim).fill('Test reject reason');       
+        await this.base.waitAndClick(this.Elements.rejectPopupOkButton);
+        await this.base.waitAndClick(this.Elements.rejectOkbutton);
+        //add a delay
+        await fixture.page.waitForTimeout(2000);
+    }
+
+    async clickOnPrintButton(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.printButtonClaim);
+        
+
+
+        // Wait for the new page (tab) to open upon clicking the print button on popup
+        const [newPage] = await Promise.all([
+            this.page.context().waitForEvent('page'),
+            this.page.locator(this.Elements.secondPrintButtonClaim).click(),
+        ]);
+
+        await newPage.waitForLoadState();
+
+        // Verify URL contains 'pdf/view'
+        if (!newPage.url().includes('pdf/view')) {
+            throw new Error(`Unexpected URL opened: ${newPage.url()}`);
+        }
+
+        // Optionally: Close the new tab or keep it open for further checks
+        await newPage.close();
+              //add delay
+        await fixture.page.waitForTimeout(2000);
+
+    }
+    async EmailButtonClaim(): Promise<void> {
+        // Click the initial email button
+        await this.page.locator(this.Elements.emailButtonClaim).click();
+
+        // Click the email button on the popup
+        await this.page.locator(this.Elements.EmailTo).fill('jeena.manuel@milestone.tech');
+        await this.page.locator(this.Elements.secondEmailButton).click();
+        await this.page.locator(this.Elements.emailOkButton).click();
+
+    }
+
+    async verifyActionLogClaimOrder(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.actionLogButton);
+        const actionLogHeader = this.page.locator(this.Elements.actionLogHeader);
+        await actionLogHeader.waitFor({ state: 'visible', timeout: 5000 });
+        const headerText = await actionLogHeader.textContent();
+        if (!headerText || !headerText.includes('Action Log')) {
+            throw new Error('Action Log header not found or does not contain expected text.');
+        }
+        await this.page.locator(this.Elements.operationSearchClaim).fill('Email Purchase Order');
+        await fixture.page.waitForTimeout(500);
+        const errorText = await this.page.locator(this.Elements.operationSearchResult).textContent();
+        expect(errorText).toContain('Email Purchase Order');
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.closeButton).click();
+    }
 }
