@@ -363,3 +363,16 @@ Then('open the claim order details for the created work order', async () => {
     await purchasePage.clickOnClaimOrderLinkInquire();
 
 });
+
+Then('go to batch approve order page from the menu', async () => {
+    await purchasePage.clickOnBatchApproveMenu();
+});
+
+Then('select the claim order for the created work order and click on approve button', async () => {
+    await purchasePage.DoApproveOperationForClaim();
+});
+Then('go to inquire order list and open the claim order details for the created work order', async () => {
+    await purchasePage.clickOnInquireOrderMenu();
+    await purchasePage.clickOnClaimOrderLinkInquire();
+});
+

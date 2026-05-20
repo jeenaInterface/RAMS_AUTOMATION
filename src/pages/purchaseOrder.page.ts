@@ -224,7 +224,7 @@ export default class PurchaseOrderPage {
         emailOkButton: "xpath=/html/body/div[4]/div/div[3]/button[2]",
         actionLogButton: "//button[@type='button']//span[contains(text(),'Action Log')]",
         actionLogHeader: "//span[@class='el-dialog__title'][normalize-space()='Action Log']",
-        operationSearchClaim: "(//input[@placeholder='--Input Text--'])[2]"
+        operationSearchClaim: "(//input[@placeholder='--Input Text--'])[2]",
 
 
     }
@@ -1654,7 +1654,19 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.purchaseOrderNoSearch).fill(this.workOrderNumber);
         await this.page.locator(this.Elements.searchButton).click();
         await this.page.locator(this.Elements.orderNoSearchrESULT).click();
+        //add delay
+        await fixture.page.waitForTimeout(2000);
+        this.extractStatusFromHeader();
+        await fixture.page.waitForTimeout(2000);
 
+    }
+        async DoApproveOperationForClaim(): Promise<void> {
+        await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.workOrderNumber);
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
+        await this.page.locator(this.Elements.batchApproveButton).click();
+        await this.page.locator(this.Elements.confirmButton).click();
+        await this.page.locator(this.Elements.okUpdateButton).click();
+        await fixture.page.waitForTimeout(2000);
     }
 
 }

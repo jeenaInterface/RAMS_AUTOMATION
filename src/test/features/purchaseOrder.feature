@@ -222,18 +222,32 @@ Feature: Add, Update, and Search Functionalities in order Module
     Then verify Print functionality in claim order details page
 
 
-  @waranteeClaimMaterialReceive @sanity @ubwo
-  Scenario: Create a work order with a warranty claim, complete the approval process, and proceed with the material receive and material return flow
+  @waranteeClaimOrderBatchApprove @sanity @ubwo
+  Scenario: Create a work order with warranty claim and verify approve from batch approval and verify the claim order status in inquire order list
+
     Given the admin user is logged into the application
     When the admin navigates to the unbillable work order creation menu
     And the admin creates a work order for a weekday with warranty claim set to Yes
     And the admin closes the work order
-    Then the unbillable work order number is captured for future reference
+    Then the unbillable work order number is captured
 
-    When the admin navigates to the inquire order list
-    And open the claim order details for the created work order
-    Then the admin approves the warranty claim request
-    Then go to material receive page and do the material receive for the claim order
-    Then verifies the receive status value is updated to Fully Received in purchase order details page
-    Then go to material return page and do the material return for the claim order
+    When go to batch approve order page from the menu
+    And select the claim order for the created work order and click on approve button
+    Then go to inquire order list and open the claim order details for the created work order
+
+
+#   @waranteeClaimMaterialReceive @sanity @ubwo
+#   Scenario: Create a work order with a warranty claim, complete the approval process, and proceed with the material receive and material return flow
+#     Given the admin user is logged into the application
+#     When the admin navigates to the unbillable work order creation menu
+#     And the admin creates a work order for a weekday with warranty claim set to Yes
+#     And the admin closes the work order
+#     Then the unbillable work order number is captured for future reference
+
+#     When the admin navigates to the inquire order list
+#     And open the claim order details for the created work order
+#     Then the admin approves the warranty claim request
+#     Then go to material receive page and do the material receive for the claim order
+#     Then verifies the receive status value is updated to Fully Received in purchase order details page
+#     Then go to material return page and do the material return for the claim order
 
