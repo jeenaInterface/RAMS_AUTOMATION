@@ -22,9 +22,9 @@ export default class ActivityCodePage {
         save: "//span[normalize-space(text())='Save']",
         codeList: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
         searchResult: "//span[normalize-space(text())='5CL - Shop Cleaning']",
-        firstRowEdit: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/button[1]/span[1]/i[1]",
+        firstRowEdit: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table/tbody/tr/td[5]/div/div/button[1]",
         actionTypeTextbox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[4]/div[1]/div[1]/div[1]/div[1]/input[1]",
-        firstrowdelete: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/button[2]/span[1]/i[1]",
+        firstrowdelete: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table/tbody/tr/td[5]/div/div/button[2]/span/i",
         okButton: "//button[normalize-space()='OK']",
         yesButton: "//span[normalize-space()='Yes']",
         rightSideMoveButton: "(//i[@class='el-icon-arrow-left'])[1]",
@@ -44,7 +44,6 @@ export default class ActivityCodePage {
     async CreateActivityCode(): Promise<void> {
         await this.page.getByPlaceholder('--Select One--').click();
         await this.page.getByText('AC - Access Gate Controller').click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.base.waitAndClick(this.Elements.create);
         await this.page.getByPlaceholder('--Select One--').nth(1).click();
@@ -88,10 +87,8 @@ export default class ActivityCodePage {
         await this.page.getByPlaceholder('--Input Text--').first().fill('5cl');
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.firstRowEdit).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
         await this.page.locator('label').filter({ hasText: 'BN - Burned' }).locator('span').nth(1).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(5000);
         await this.page.locator(this.Elements.rightSideMoveButton).click();
         await this.page.locator(this.Elements.save).click();
@@ -107,7 +104,6 @@ export default class ActivityCodePage {
         await this.page.getByPlaceholder('--Input Text--').first().fill('5cl');
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.firstrowdelete).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.yesButton).click();
         await this.page.locator(this.Elements.okButton).click();
