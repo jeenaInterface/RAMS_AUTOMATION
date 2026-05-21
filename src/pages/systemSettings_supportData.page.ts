@@ -32,7 +32,7 @@ export default class SupportDataPage {
         searchResult: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[2]/div[1]/span[1]",
         assetMenu: "//span[normalize-space(text())='- Asset']",
         assetGroup: "(//label[normalize-space(text())='Asset Group']/following::input)[1]",
-        firstRowEdit: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/button[1]/span[1]/i[1]",
+        firstRowEdit: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/div[1]/button[1]/span[1]/i[1]",
         actionLog: "//button[contains(.,'Action Log')]",
         headerTitle: "//div[@class='el-dialog__header']//span[1]",
         closeButton: "(//button[@aria-label='Close']//i)[1]",
@@ -55,7 +55,6 @@ export default class SupportDataPage {
     async CreateNewAssetGroup(): Promise<void> {
         const randomNumber = getRandomInt(1000, 9999);
         this.assetGroupCode = `TSG${randomNumber}`;
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.base.waitAndClick(this.Elements.create);
         await this.page.locator(this.Elements.code).fill(this.assetGroupCode);
@@ -84,10 +83,8 @@ export default class SupportDataPage {
         await this.base.waitAndClick(this.Elements.supportDataMenu);
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.codeList).fill(this.assetGroupCode);
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.firstRowEdit).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.status).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Inactive' }).click();
@@ -102,7 +99,6 @@ export default class SupportDataPage {
 
         await this.page.locator(this.Elements.typeList).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Warehouse' }).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.base.waitAndClick(this.Elements.create);
         await this.page.locator(this.Elements.code).fill(this.WarehouseCode);
@@ -117,7 +113,7 @@ export default class SupportDataPage {
 
         await this.page.locator(this.Elements.typeList).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Vendor Type' }).click();
-        fixture.logger.info("Waiting for 1 seconds")
+        // fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.base.waitAndClick(this.Elements.create);
         await this.page.locator(this.Elements.code).fill(this.vendorType);
@@ -161,19 +157,15 @@ export default class SupportDataPage {
         await this.base.waitAndClick(this.Elements.supportDataMenu);
         await this.page.locator(this.Elements.typeList).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Warehouse' }).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.codeList).fill(this.WarehouseCode);
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.firstRowEdit).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.status).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Inactive' }).click();
         await this.page.locator(this.Elements.save).click();
         await this.page.locator(this.Elements.okButton).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
 
     }
@@ -191,19 +183,15 @@ export default class SupportDataPage {
         await this.base.waitAndClick(this.Elements.supportDataMenu);
         await this.page.locator(this.Elements.typeList).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Vendor Type' }).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.codeList).fill(this.vendorType);
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.firstRowEdit).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.status).click();
         await this.page.getByRole('listitem').filter({ hasText: 'Inactive' }).click();
         await this.page.locator(this.Elements.save).click();
         await this.page.locator(this.Elements.okButton).click();
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
 
     }

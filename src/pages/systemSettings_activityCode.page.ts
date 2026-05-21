@@ -22,9 +22,9 @@ export default class ActivityCodePage {
         save: "//span[normalize-space(text())='Save']",
         codeList: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
         searchResult: "//span[normalize-space(text())='5CL - Shop Cleaning']",
-        firstRowEdit: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table/tbody/tr/td[5]/div/div/button[1]",
+        firstRowEdit: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table/tbody/tr/td[5]/div/div/button[1]/span/i",
         actionTypeTextbox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[4]/div[1]/div[1]/div[1]/div[1]/input[1]",
-        firstrowdelete: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table/tbody/tr/td[5]/div/div/button[2]/span/i",
+        firstrowdelete: "xpath=//*[@id='app']/div[2]/div/div/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table/tbody/tr/td[5]/div/div/button[2]",
         okButton: "//button[normalize-space()='OK']",
         yesButton: "//span[normalize-space()='Yes']",
         rightSideMoveButton: "(//i[@class='el-icon-arrow-left'])[1]",
@@ -85,7 +85,7 @@ export default class ActivityCodePage {
 
         await this.page.getByPlaceholder('--Input Text--').first().click();
         await this.page.getByPlaceholder('--Input Text--').first().fill('5cl');
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.firstRowEdit).click();
         await fixture.page.waitForTimeout(500);
         await this.page.locator('label').filter({ hasText: 'BN - Burned' }).locator('span').nth(1).click();
@@ -102,7 +102,7 @@ export default class ActivityCodePage {
         await this.page.getByText('AC - Access Gate Controller').click();
         await this.page.getByPlaceholder('--Input Text--').first().click();
         await this.page.getByPlaceholder('--Input Text--').first().fill('5cl');
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.firstrowdelete).click();
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.yesButton).click();

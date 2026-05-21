@@ -30,7 +30,7 @@ export default class StockLocationPage {
         OkButtonOnPopUp: "(//span[contains(text(),'OK')])[2]",
         warehouseDropdown: "(//input[@class='el-input__inner'])[1]",
         firstRowEdit: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/button[1]/span[1]/i[1]",
-        firstRowDelete: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[1]",
+        firstRowDelete: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/div[1]/button[1]",
         confirmDeleteButton: "//span[normalize-space()='OK']",
         row:"(//label[normalize-space(text())='Row']/following::input)[1]",
         column:"(//label[normalize-space(text())='Column']/following::input)[1]",
@@ -50,7 +50,6 @@ export default class StockLocationPage {
     async createNewStockLocation(): Promise<void> {
         const randomNumber = getRandomInt(1000, 9999);
         this.stockLocationCode = `TSL${randomNumber}`;
-        fixture.logger.info("Waiting for 1 seconds");
         await fixture.page.waitForTimeout(1000);
         await this.base.waitAndClick(this.Elements.create);
         await this.page.locator(this.Elements.row).fill(this.stockLocationCode);

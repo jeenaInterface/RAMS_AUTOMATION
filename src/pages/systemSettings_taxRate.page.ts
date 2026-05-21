@@ -40,7 +40,7 @@ export default class taxRatePage {
         searchResult: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/span[1]",
         closeButton: "//div[@class='el-dialog el-dialog--full full-dialog']//i[@class='el-dialog__close el-icon el-icon-close']",
         stateSearch:"(//input[@placeholder='--Input Text--'])[3]",
-        deleteButton: "//button[@class='el-button el-button--default icon-button-secondary']",
+        deleteButton: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[8]/div[1]/div[1]/button[1]/span[1]/i[1]",
         deletButtonOnPopup:"//span[normalize-space()='Delete']",
         okButton:"//span[normalize-space()='OK']"
 

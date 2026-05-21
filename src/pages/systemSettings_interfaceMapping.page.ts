@@ -28,9 +28,9 @@ export default class interfaceMappingPage {
         save: "(//button[@class='el-button el-button--primary']//span)[1]",
         codeList: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
         searchResult: "//td[@class='el-table_1_column_59_column_60 is-left internal-filter']//div[@class='cell']",
-        firstRowEdit: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/button[1]",
+        firstRowEdit: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/div[1]/button[1]/span[1]/i[1]",
         actionTypeTextbox: "(//input[@placeholder='--Input Text--'])[14]",
-        firstrowdelete: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/button[2]/span[1]/i[1]",
+        firstrowdelete: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[5]/div[1]/div[1]/button[2]/span[1]/i[1]",
         okButton: "//button[normalize-space()='OK']",
         yesButton: "//span[normalize-space()='Yes']",
         searchCode: "(//input[@class='el-input__inner'])[3]",
@@ -59,14 +59,12 @@ export default class interfaceMappingPage {
 
     async CreateAR(): Promise<void> {
 
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
         await this.base.waitAndClick(this.Elements.create);
         await this.page.getByRole('textbox', { name: '--Select One--' }).click();
         await this.page.getByRole('listitem').filter({ hasText: 'AC - Access Gate Controller' }).click();
         const randomNumber = getRandomInt(1000, 9999);
         this.ARProductCode = `AR${randomNumber}`;
-        fixture.logger.info("Waiting for 1 seconds")
         await this.page.locator(this.Elements.ARGLCode).click();
         await this.page.locator(this.Elements.ARGLCode).fill(randomNumber.toString());
         await this.page.locator(this.Elements.ARProductCode).click();
@@ -126,7 +124,6 @@ export default class interfaceMappingPage {
 
     async CreateAP(): Promise<void> {
         await this.base.waitAndClick(this.Elements.APTab);
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(500);
         await this.page.getByPlaceholder('--Select One--').first().click();
         await this.page.getByText('OPX_AGV_BATTERY - Maintenance Parts - AGV Battery').click();

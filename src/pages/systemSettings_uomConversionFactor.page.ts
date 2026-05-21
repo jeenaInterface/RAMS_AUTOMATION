@@ -26,9 +26,9 @@ export default class UOMConversionPage {
         save: "//span[normalize-space(text())='Save']",
         codeList: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
         searchResult: "//tbody/tr[1]/td[1]/div[1]/span[1]",
-        firstRowEdit: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table[1]/tbody[1]/tr[1]/td[4]/div[1]/button[1]/span[1]/i[1]",
+        firstRowEdit: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/div[1]/button[1]/span[1]/i[1]",
         actionTypeTextbox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[4]/div[1]/div[1]/div[1]/div[1]/input[1]",
-        firstrowdelete: "//body[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[2]/div[3]/table[1]/tbody[1]/tr[1]/td[4]/div[1]/button[2]/span[1]/i[1]",
+        firstrowdelete: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[4]/div[1]/div[1]/button[2]/span[1]/i[1]",
         okButton: "//button[normalize-space()='OK']",
         yesButton: "//span[normalize-space()='Yes']"
 
@@ -43,7 +43,6 @@ export default class UOMConversionPage {
 
     async CreateUOMConversionFactor(): Promise<void> {
 
-        fixture.logger.info("Waiting for 1 seconds")
         await fixture.page.waitForTimeout(1000);
         await this.base.waitAndClick(this.Elements.create);
         await this.page.getByPlaceholder('--Select One--').nth(2).click();
@@ -67,8 +66,7 @@ export default class UOMConversionPage {
     async verifyEditFunctionality(): Promise<void> {
 
         await this.page.locator(this.Elements.firstRowEdit).click();
-        fixture.logger.info("Waiting for 1 seconds")
-        await fixture.page.waitForTimeout(500);
+        await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.CONVERSIONfACTOR).fill("0.03")
         await this.page.locator(this.Elements.save).click();
         await this.page.locator(this.Elements.okButton).click();

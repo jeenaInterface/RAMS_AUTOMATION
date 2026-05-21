@@ -68,7 +68,7 @@ export default class AssetPage {
     }
 
     async fillAssetForm(): Promise<void> {
-        this.assetData = { assetId: getRandomInt(4000, 9999).toString() };
+        this.assetData = { assetId: 'Automation' + getRandomInt(4000, 9999).toString() };
         await this.page.locator(this.Elements.assetNo).fill(this.assetData.assetId!);
         await fixture.page.waitForTimeout(500);
         await this.page.locator(this.Elements.assetGroup).click();

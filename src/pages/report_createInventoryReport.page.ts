@@ -40,7 +40,7 @@ export default class InventoryPage {
         secondOkButton: "(//div[@class='el-message-box__btns']//button)[2]",
         myReportTemplateMenu: "//span[normalize-space(text())='- My Report Template']",
         reportNameSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[3]/div[1]/div[1]/div[1]/div[1]/input[1]",
-        searchIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[1]/span[1]/i[1]",
+        searchIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/div[1]/button[1]",
         downloadIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[2]/span[1]/i[1]",
         scheduleIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[3]/span[1]/i[1]",
         deleteIcon: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[7]/div[1]/button[4]/span[1]/i[1]",
