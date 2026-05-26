@@ -375,4 +375,21 @@ Then('go to inquire order list and open the claim order details for the created 
     await purchasePage.clickOnInquireOrderMenu();
     await purchasePage.clickOnClaimOrderLinkInquire();
 });
+Then('go to material receive page and do the material receive for the claim order', async () => {
+    await purchasePage.createReceiveMaterialClaimOrder();
+});
+Then('verifies the value in the receive status field in claim Order', async function (this: any) {
+    const status = await purchasePage.receiveStatusValueClaimOrderFullyReceived() || '';
 
+    // Attach the status to the test report or fallback to logger
+
+    if (this && typeof this.attach === 'function') {
+        await this.attach(`Receive Status: ${status}`);
+    } else {
+        fixture.logger?.info(`Receive Status: ${status}`);
+    }   
+});
+Then('go to material return page and do the material return for the claim order', async () => {
+    await purchasePage.clickmaterialReturnMenu();
+    await purchasePage.returnOperation();
+});

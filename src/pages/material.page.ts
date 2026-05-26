@@ -350,7 +350,6 @@ export default class MaterialPage {
             const match = headerText.match(/Material\s*\|\s*(\d+)/);
             if (match && match[1]) {
                 this.stockNo = match[1];
-                fixture.logger.info(`Auto-generated stock number: ${this.stockNo}`);
             }
         }
         await fixture.page.waitForTimeout(1000);
@@ -560,23 +559,23 @@ export default class MaterialPage {
         // Wait for both elements to be visible before getting their content
         await orderQuantity.waitFor({ state: 'visible', timeout: 5000 });
 
-        this.orderQtyuantity = await orderQuantity.textContent();
+        this.orderQtyuantity = (await orderQuantity.textContent()) ?? '';
         const totalOutStandingQuantity = newPage.locator(this.Elements.totalOutStandingQuantity);
 
         // Wait for both elements to be visible before getting their content
         await totalOutStandingQuantity.waitFor({ state: 'visible', timeout: 5000 });
 
-        this.outStandingQuantity = await totalOutStandingQuantity.textContent();
+        this.outStandingQuantity = (await totalOutStandingQuantity.textContent()) ?? '';
         await fixture.page.waitForTimeout(1000);
-        const totalAmount = await newPage.locator(this.Elements.subTotal).textContent();
+        const totalAmount = (await newPage.locator(this.Elements.subTotal).textContent()) ?? '';
         this.subTotal = totalAmount.replace(/\$|,/g, '');
 
-        const tax = await newPage.locator(this.Elements.tax).textContent();
+        const tax = (await newPage.locator(this.Elements.tax).textContent()) ?? '';
         this.tax = tax.replace(/\$|,/g, '');
 
         await fixture.page.waitForTimeout(1000);
 
-        const freight = await newPage.locator(this.Elements.Freight).textContent();
+        const freight = (await newPage.locator(this.Elements.Freight).textContent()) ?? '';
         this.Freight = freight.replace(/\$|,/g, '');
         fixture.page = originalPage;
         await newPage.close();
@@ -756,7 +755,6 @@ export default class MaterialPage {
             const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
             if (match && match[1]) {
                 this.ReceivingDocumentNo = match[1];
-                fixture.logger.info(`Auto-generated stock number: ${this.ReceivingDocumentNo}`);
             }
         }
 
@@ -1010,7 +1008,6 @@ export default class MaterialPage {
             const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
             if (match && match[1]) {
                 this.ReceivingDocumentNo = match[1];
-                fixture.logger.info(`Receiving document number: ${this.ReceivingDocumentNo}`);
             }
         }
         await fixture.page.waitForTimeout(1000);
@@ -1081,7 +1078,7 @@ export default class MaterialPage {
         const textContent = await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=5]/div[position()=1]/span[position()=1]`).textContent();
 
         // Verify that this.purchaseOrderNo and the text content are the same
-        if (textContent.trim() === this.purchaseOrderNo) {
+        if (textContent && textContent.trim() === this.purchaseOrderNo) {
             console.log("Purchase order number matches the text content.");
         } else {
             console.error(`Mismatch: Purchase order number "${this.purchaseOrderNo}" does not match the text content "${textContent}"`);
@@ -1098,7 +1095,7 @@ export default class MaterialPage {
         const textContent = await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=4]/div[position()=1]/a[position()=1]`).textContent();
 
         // Verify that this.purchaseOrderNo and the text content are the same
-        if (textContent.trim() === this.payslipNumber) {
+        if (textContent && textContent.trim() === this.payslipNumber) {
             console.log("Purchase order number matches the text content.");
         } else {
             console.error(`Mismatch: Payslip number "${this.payslipNumber}" does not match the text content "${textContent}"`);
@@ -1157,11 +1154,12 @@ export default class MaterialPage {
         await fixture.page.waitForTimeout(500);
         const textContent = await this.page.locator(`//table[position()=1]/tbody[position()=1]/tr[position()=1]/td[position()=7]/div[position()=1]`).textContent();
 
-        // Verify that this.purchaseOrderNo and the text content are the same
-        if (textContent.trim() === this.stockNo) {
-            console.log("Stock number matches the text content.");
+        // Verify that this.stockNo and the text content are the same (handle possible null)
+        const normalizedText = (textContent ?? '').trim();
+        if (normalizedText === this.stockNo) {
+            console.log('Stock number matches the text content.');
         } else {
-            console.error(`Mismatch: Stock number "${this.stockNo}" does not match the text content "${textContent}"`);
+            console.error(`Mismatch: Stock number "${this.stockNo}" does not match the text content "${normalizedText}"`);
         }
 
     }
@@ -1336,7 +1334,6 @@ export default class MaterialPage {
             const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
             if (match && match[1]) {
                 this.ReceivingDocumentNo = match[1];
-                fixture.logger.info(`Receiving document number: ${this.ReceivingDocumentNo}`);
             }
         }
         await fixture.page.waitForTimeout(1000);
@@ -1696,7 +1693,6 @@ export default class MaterialPage {
             const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
             if (match && match[1]) {
                 this.ReceivingDocumentNo = match[1];
-                fixture.logger.info(`Receiving document number: ${this.ReceivingDocumentNo}`);
             }
         }
         await fixture.page.waitForTimeout(1000);
@@ -1751,14 +1747,16 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.invoiceLink).click();
         const headerText = await this.page.locator(this.Elements.invoiceTitle).textContent();
 
-        // Use regex to find the number after "Sequence No.:"
-        const sequenceMatchNumber = headerText.match(/Sequence No\.\:\s*(\d+)/);
-
-        let sequenceNumber;
-        if (sequenceMatchNumber) {
-            this.sequenceMatch = sequenceMatchNumber[1]; // captured number as string
+        // Safely handle possible null headerText and use regex to find the number after "Sequence No.:"
+        if (!headerText) {
+            this.sequenceMatch = '';
         } else {
-            sequenceNumber = null; // or handle absence of number as needed
+            const sequenceMatchNumber = headerText.match(/Sequence No\.\:\s*(\d+)/);
+            if (sequenceMatchNumber) {
+                this.sequenceMatch = sequenceMatchNumber[1]; // captured number as string
+            } else {
+                this.sequenceMatch = '';
+            }
         }
 
         console.log(this.sequenceMatch);

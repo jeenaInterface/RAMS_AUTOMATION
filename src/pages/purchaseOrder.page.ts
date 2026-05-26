@@ -29,6 +29,7 @@ export default class PurchaseOrderPage {
     public subTotal: string = '';
     public tax: string = '';
     public Freight: string = '';
+    public receiveStatusClaim: string = '';
 
 
     constructor(page: Page) {
@@ -226,6 +227,11 @@ export default class PurchaseOrderPage {
         actionLogHeader: "//span[@class='el-dialog__title'][normalize-space()='Action Log']",
         operationSearchClaim: "(//input[@placeholder='--Input Text--'])[2]",
 
+        claimReceiveStatus:"(//input[@type='text'])[6]",
+        ordermenu: "//span[normalize-space()='Order']",
+        returnToVendorMenu: "//span[normalize-space(text())='- Return to Vendor']",
+        
+
 
     }
     async clickOnCreateOrderMenu(): Promise<void> {
@@ -236,6 +242,11 @@ export default class PurchaseOrderPage {
     async clickOnInquireOrderMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.orderMenu);
         await this.base.waitAndClick(this.Elements.inquireOrderMenu);
+    }
+        async clickmaterialReturnMenu(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.ordermenu);
+        await this.page.locator(this.Elements.returnToVendorMenu).click();
+        await fixture.page.waitForTimeout(1000);
     }
     async clickOnCreateOrderButton(): Promise<void> {
 
@@ -1668,5 +1679,61 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.okUpdateButton).click();
         await fixture.page.waitForTimeout(2000);
     }
+    async createReceiveMaterialClaimOrder(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.orderMenu).click();
+        await this.page.locator(this.Elements.receiveMaterial).click();
+        await this.page.locator(this.Elements.orderNoTextBox).fill(this.workOrderNumber);
+        await this.base.waitAndClick(this.Elements.RetrieveButton);
+        await fixture.page.waitForTimeout(500);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        await this.page.locator(this.Elements.receivingDate).fill(formattedDate);
+        await this.page.locator(this.Elements.packSlipNumber).fill(`PSN-${getRandomInt(1000, 9999)}`);
+        await this.page.locator(this.Elements.receiveQuantityInput).fill('1');
+        await this.page.getByRole('button', { name: 'Save' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'Review' }).click();
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(2000);
+        const headerText = await this.page.locator(this.Elements.receivingDocumentNumber).textContent();
+
+        if (headerText && headerText.includes('Receiving Doc. No.:')) {
+            // Extract the number after "Receiving Doc. No.:"
+            const match = headerText.match(/Receiving Doc\. No\.\s*:\s*(\d+)/);
+            if (match && match[1]) {
+                this.ReceivingDocumentNo = match[1];
+            }
+        }
+        await fixture.page.waitForTimeout(1000);
+        const locator = this.page.locator(this.Elements.payslipNumber);
+
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        // Get the value of the input field (the text inside the input)
+        this.payslipNumber = await locator.inputValue();
+
+        console.log('Payslip Number:', this.payslipNumber);
+
+    }
+        async receiveStatusValueClaimOrderFullyReceived(): Promise<string | null> {
+        await this.page.locator(this.Elements.orderMenu).click();
+        await this.page.locator(this.Elements.inquireOrderMenu).click();
+        await this.page.locator(this.Elements.purchaseOrderNoSearch).fill(this.workOrderNumber);
+        await this.page.locator(this.Elements.searchButton).click();
+        await this.page.locator(this.Elements.orderNoSearchrESULT).click();
+        await this.page.waitForTimeout(15000);
+
+        const locator = this.page.locator(this.Elements.claimReceiveStatus);
+        await locator.waitFor({ state: 'visible', timeout: 5000 });
+
+        this.receiveStatusClaim = await locator.inputValue();
+
+        // Assertion to verify the status is "Fully Received"
+        expect(this.receiveStatusClaim).toBe('Fully Received');
+        return this.receiveStatusClaim;
+    }
+       
 
 }
