@@ -393,3 +393,12 @@ Then('go to material return page and do the material return for the claim order'
     await purchasePage.clickmaterialReturnMenu();
     await purchasePage.returnOperation();
 });
+Then('the admin creates a work order for a weekday with warranty claim set to Yes and adds multiple stock details', async () => {
+    purchasePage = new purchaseOrderPage(fixture.page);
+    await purchasePage.createUnbillableOrderForWarantee1();
+    await purchasePage.asst_Two_Details();
+});
+Then('verify two claim orders are created for the multiple stock details in the work order', async () => {
+    await purchasePage.extractAndStoreClaimOrderNumbers();
+    await purchasePage.verifyBothClaimOrderLinksExist();
+});

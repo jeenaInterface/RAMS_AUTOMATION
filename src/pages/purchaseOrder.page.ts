@@ -30,6 +30,8 @@ export default class PurchaseOrderPage {
     public tax: string = '';
     public Freight: string = '';
     public receiveStatusClaim: string = '';
+    public claimOrderNumber1: string = '';
+    public claimOrderNumber2: string = '';
 
 
     constructor(page: Page) {
@@ -227,10 +229,14 @@ export default class PurchaseOrderPage {
         actionLogHeader: "//span[@class='el-dialog__title'][normalize-space()='Action Log']",
         operationSearchClaim: "(//input[@placeholder='--Input Text--'])[2]",
 
-        claimReceiveStatus:"(//input[@type='text'])[6]",
+        claimReceiveStatus: "(//input[@type='text'])[6]",
         ordermenu: "//span[normalize-space()='Order']",
         returnToVendorMenu: "//span[normalize-space(text())='- Return to Vendor']",
-        
+
+        stockNoPlusButton: "(//i[@class='ivu-icon ivu-icon-plus'])[2]",
+
+        underWaranteforSecondAsset: "(//input[@placeholder='--Select One--'])[8]",
+
 
 
     }
@@ -243,7 +249,7 @@ export default class PurchaseOrderPage {
         await this.base.waitAndClick(this.Elements.orderMenu);
         await this.base.waitAndClick(this.Elements.inquireOrderMenu);
     }
-        async clickmaterialReturnMenu(): Promise<void> {
+    async clickmaterialReturnMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.ordermenu);
         await this.page.locator(this.Elements.returnToVendorMenu).click();
         await fixture.page.waitForTimeout(1000);
@@ -1588,6 +1594,51 @@ export default class PurchaseOrderPage {
 
 
     }
+        async createUnbillableOrderForWarantee1(): Promise<void> {
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('AGV005');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'AGV005' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.underWarantee).click();
+        await this.page.getByText('Yes').click();
+        await this.page.locator(this.Elements.agvHours).click();
+        await this.page.locator(this.Elements.agvHours).fill('21436');
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('3BA - Battery').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('IP - Inspect and report').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('6');
+        await fixture.page.waitForTimeout(2000);
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
+        await fixture.page.waitForTimeout(1000);
+        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+
+    }
     async gotoTodoList(): Promise<void> {
         await this.base.waitAndClick(this.Elements.UserNameIcon);
         await this.base.waitAndClick(this.Elements.todiListMenu);
@@ -1595,6 +1646,14 @@ export default class PurchaseOrderPage {
     }
     async clickOnClaimOrderLink(): Promise<void> {
         await this.page.getByRole('link', { name: this.workOrderNumber }).click();
+    }
+
+    async clickOnFirstClaimOrder(): Promise<void> {
+        await this.page.getByRole('link', { name: this.claimOrderNumber1 }).click();
+    }
+
+    async clickOnSecondClaimOrder(): Promise<void> {
+        await this.page.getByRole('link', { name: this.claimOrderNumber2 }).click();
     }
     async clickOnApproveButton(): Promise<void> {
         await this.base.waitAndClick(this.Elements.approveButtonClaim);
@@ -1671,7 +1730,7 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(2000);
 
     }
-        async DoApproveOperationForClaim(): Promise<void> {
+    async DoApproveOperationForClaim(): Promise<void> {
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.workOrderNumber);
         await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
         await this.page.locator(this.Elements.batchApproveButton).click();
@@ -1717,7 +1776,7 @@ export default class PurchaseOrderPage {
         console.log('Payslip Number:', this.payslipNumber);
 
     }
-        async receiveStatusValueClaimOrderFullyReceived(): Promise<string | null> {
+    async receiveStatusValueClaimOrderFullyReceived(): Promise<string | null> {
         await this.page.locator(this.Elements.orderMenu).click();
         await this.page.locator(this.Elements.inquireOrderMenu).click();
         await this.page.locator(this.Elements.purchaseOrderNoSearch).fill(this.workOrderNumber);
@@ -1734,6 +1793,64 @@ export default class PurchaseOrderPage {
         expect(this.receiveStatusClaim).toBe('Fully Received');
         return this.receiveStatusClaim;
     }
-       
+    async asst_Two_Details(): Promise<void> {
+        await this.page.locator(this.Elements.PlusButtonAddAsset1).click();
+        await fixture.page.waitForTimeout(2000);
+        const assetInput2 = this.page.locator(this.Elements.assetNumber2);
+        await assetInput2.type('AGVOVR');
+        await fixture.page.waitForTimeout(1000);
+        const suggestion2 = this.page.getByRole('listitem').filter({ hasText: 'AGVOVR' }).first();
+        await suggestion2.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion2.click();
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator(this.Elements.underWaranteforSecondAsset).click();
+        await this.page.locator('xpath=/html/body/div[11]/div/div[1]/ul/li[1]').click();
 
+        await this.page.locator(this.Elements.componentCode2).click();
+        await this.page.getByText('3BA - Battery').nth(1).click();
+        await this.page.locator(this.Elements.damageCode2).click();
+        await this.page.getByText('BR - Broken').nth(1).click();
+        await this.page.locator(this.Elements.repairCode2).click();
+        await this.page.getByText('IP - Inspect and report').nth(1).click();
+        await this.page.locator(this.Elements.repairLocation2).click();
+        await this.page.getByText('BATT - Battery Rack').nth(1).click();
+        await this.page.locator(this.Elements.actualHours2).click();
+        await this.page.locator(this.Elements.actualHours2).fill('2');
+        await fixture.page.waitForTimeout(1000);
+        await this.page.locator("xpath=(//input[@placeholder='--Input Text or Look up--'])[3]").type('1002');
+        await fixture.page.waitForTimeout(1000);
+        const searchText1 = `1002 - 30221Y3 - lamp amber marker with flange`;
+        await this.page.getByRole('listitem').filter({ hasText: searchText1 }).locator('span').first().click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.stockQuantitywo2).click();
+        await this.page.locator(this.Elements.stockQuantitywo2).fill('1');
+    }
+
+
+    async extractAndStoreClaimOrderNumbers(): Promise<void> {
+        // Extract first claim order number with _1 suffix
+        this.claimOrderNumber1 = `${this.workOrderNumber}_1`;
+        // Extract second claim order number with _2 suffix
+        this.claimOrderNumber2 = `${this.workOrderNumber}_2`;
+        
+        fixture.logger?.info(`Claim Order Number 1: ${this.claimOrderNumber1}`);
+        fixture.logger?.info(`Claim Order Number 2: ${this.claimOrderNumber2}`);
+    }
+
+    async verifyBothClaimOrderLinksExist(): Promise<void> {
+        const firstClaimLink = this.page.getByRole('link', { name: this.claimOrderNumber1 });
+        const secondClaimLink = this.page.getByRole('link', { name: this.claimOrderNumber2 });
+        
+        await firstClaimLink.waitFor({ state: 'visible', timeout: 5000 });
+        await secondClaimLink.waitFor({ state: 'visible', timeout: 5000 });
+        
+        const firstLinkVisible = await firstClaimLink.isVisible();
+        const secondLinkVisible = await secondClaimLink.isVisible();
+        
+        if (!firstLinkVisible || !secondLinkVisible) {
+            throw new Error('One or both claim order links are not visible.');
+        }
+        
+        fixture.logger?.info(`Both claim order links are visible: ${this.claimOrderNumber1} and ${this.claimOrderNumber2}`);
+    }
 }

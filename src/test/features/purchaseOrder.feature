@@ -250,3 +250,13 @@ Feature: Add, Update, and Search Functionalities in order Module
     Then verifies the value in the receive status field in claim Order
     Then go to material return page and do the material return for the claim order
 
+@waranteeClaimForMultipleStock @sanity @ubwo
+  Scenario: Create a work order with warranty claim having multiple stock details and verify two claim orders are created
+
+    Given the admin user is logged into the application
+    When the admin navigates to the unbillable work order creation menu
+    And the admin creates a work order for a weekday with warranty claim set to Yes and adds multiple stock details
+    And the admin closes the work order
+
+   When the admin navigates to the ToDo list
+   Then verify two claim orders are created for the multiple stock details in the work order
