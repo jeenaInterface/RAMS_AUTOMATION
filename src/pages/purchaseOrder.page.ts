@@ -455,6 +455,8 @@ export default class PurchaseOrderPage {
         await this.page.locator('form').filter({ hasText: 'Cancel Reason' }).getByPlaceholder('--Input Text--').click();
         await this.page.locator('form').filter({ hasText: 'Cancel Reason' }).getByPlaceholder('--Input Text--').fill('cancel');
         // await this.page.locator(this.Elements.cancelReson).fill(this.description);
+        //add delay
+        
         await await this.page.locator(this.Elements.okCancel).click();
         // Capture the email validation message
         const cancelMessage = await this.page.locator(this.Elements.cancelMessage).textContent();
@@ -466,6 +468,7 @@ export default class PurchaseOrderPage {
 
         // Optionally, you can log success or continue your flow
         console.log('Confirmation message verified.');
+         await fixture.page.waitForTimeout(2000);
         await this.page.getByRole('button', { name: 'OK' }).click();
 
     }
@@ -936,9 +939,9 @@ export default class PurchaseOrderPage {
         // await fixture.page.waitForTimeout(500);
         // await newPage.locator(this.Elements.orderQuantity).fill(price);
         await await this.page.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').click();
-        await await this.page.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').fill('9000');
+        await await this.page.locator('.el-table_1_column_7 > .cell > .el-input > .el-input__inner').fill('600');
         await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').click();
-        await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('8');
+        await await this.page.locator('.cell > .lbct-number-wrapper > .el-input > .el-input__inner').fill('50');
         await await this.page.locator(this.Elements.productCode).click();
         await await this.page.getByText('OPX_AGV_BATTERY - Maintenance Parts - AGV Battery').click();
         await fixture.page.waitForTimeout(1000);
@@ -997,7 +1000,9 @@ export default class PurchaseOrderPage {
     async DoRejectOperation(): Promise<void> {
 
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
-        await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[11]`).check()
+        //add delay to wait for the checkbox to be checked before clicking the reject button
+        await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.batchRejectButton).click();
         await this.page.locator(`//form[position()=1]/div[position()=1]/div[position()=1]/div[position()=1]/textarea[position()=1]`).fill("Rejected")
         await this.page.locator(this.Elements.rejectOKButton).click();
@@ -1006,7 +1011,9 @@ export default class PurchaseOrderPage {
     }
     async DoApproveOperation(): Promise<void> {
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
-        await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[11]`).check()
+        //add delay to wait for the checkbox to be checked before clicking the reject button
+        await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.batchApproveButton).click();
         await this.page.locator(this.Elements.confirmButton).click();
         await this.page.locator(this.Elements.okUpdateButton).click();
@@ -1014,7 +1021,7 @@ export default class PurchaseOrderPage {
     }
     async verifyRedirection(): Promise<void> {
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.purchaseOrderNo);
-        await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[11]`).check()
         const poLinkText = await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=3]/div[position()=1]/a[position()=1]`).textContent();
         await this.page.locator(`//tbody[position()=1]/tr[position()=1]/td[position()=3]/div[position()=1]/a[position()=1]`).click();
 
@@ -1732,7 +1739,7 @@ export default class PurchaseOrderPage {
     }
     async DoApproveOperationForClaim(): Promise<void> {
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.workOrderNumber);
-        await this.page.locator(`(//span[@class='el-checkbox__inner'])[8]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[11]`).check()
         await this.page.locator(this.Elements.batchApproveButton).click();
         await this.page.locator(this.Elements.confirmButton).click();
         await this.page.locator(this.Elements.okUpdateButton).click();

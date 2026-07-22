@@ -596,7 +596,7 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.componentCode3).click();
         await this.page.getByText('2EL - Electrical').click();
         await this.page.locator(this.Elements.damageCode3).click();
-        await this.page.getByText('DZ - Damaged (other)').click();
+        await this.page.getByText('DZ - Damaged (other)').first().click();
         await this.page.locator(this.Elements.repairCode3).click();
         await this.page.getByText('CT - Calibration - TPS').click();
         await this.page.locator(this.Elements.repairLocation3).click();

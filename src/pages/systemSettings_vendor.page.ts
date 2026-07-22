@@ -135,6 +135,7 @@ await this.page.locator(this.Elements.zipcode).fill('99685');
     async verifyActionLog(): Promise<void> {
         await this.page.locator(this.Elements.actionLog).click();
         await expect(this.page.locator(this.Elements.headerTitle)).toBeVisible();
+        await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.actionTypeTextbox).fill('Add');
         await expect(this.page.locator(this.Elements.searchResult)).toHaveText('Add');
         await this.page.locator(this.Elements.closeButton).click();

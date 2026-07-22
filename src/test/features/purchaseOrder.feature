@@ -71,41 +71,51 @@ Feature: Add, Update, and Search Functionalities in order Module
 
     @VerifyBatchRejectOrder @sanity @po @Regression
     Scenario: Verify batch reject functionality
-        Given the admin user is logged into the application
-        Then the admin navigates to the order creation menu
+        Given Logged in as MNR admin user
+        When  the user navigates to the order creation menu
         And enters all the required fields for approval and clicks on the save button
+        Then the purchase order number is captured
+        Then user click on logout button
+        Then the admin is logged into the application
+        And the user searches for the newly created order in the inquiry list page
         Then the purchase order number is captured
         And performs batch reject
         Then verify the status of the po
 
     @VerifyBatchApproveOrder @sanity @po @Regression
     Scenario: Verify batch approve functionality
-        Given the admin user is logged into the application
-        Then the admin navigates to the order creation menu
+        Given Logged in as MNR admin user
+        When  the user navigates to the order creation menu
         And enters all the required fields for approval and clicks on the save button
+        Then the purchase order number is captured
+        Then user click on logout button
+        Then the admin is logged into the application
+        And the user searches for the newly created order in the inquiry list page
         Then the purchase order number is captured
         And performs batch approve
         Then verify the status of the po
 
     @VerifyBatchRejectOrderFromForm @sanity @po @Regression
-    Scenario: Verify batch reject functionality for orders
-        Given the admin user is logged into the application
-        When the admin navigates to the order creation menu
+    Scenario: Verify batch reject functionality for orders by sselecting batch approve form
+        Given Logged in as MNR admin user
+        When  the user navigates to the order creation menu
         And enters all the required fields for approval and clicks on the save button
         Then the purchase order number is captured
-        Then verify the status of the po
+        Then user click on logout button
+        Then the admin is logged into the application
         When the admin navigates to the batch approve order page
         And performs a batch reject by selecting the order
         And the user searches for the newly created order in the inquiry list page
         Then verify the status of the po
 
     @VerifyBatchApproveOrderFromForm @sanity @po @Regression
-    Scenario: Verify batch approve functionality for orders
-        Given the admin user is logged into the application
-        When the admin navigates to the order creation menu
+    Scenario: Verify batch approve functionality for orders by sselecting batch approve form
+        Given Logged in as MNR admin user
+        When  the user navigates to the order creation menu
         And enters all the required fields for approval and clicks on the save button
         Then the purchase order number is captured
-        Then verify the status of the po
+        Then user click on logout button
+        Then the admin is logged into the application
         When the admin navigates to the batch approve order page
         And performs a batch approve by selecting the order
         And the user searches for the newly created order in the inquiry list page
@@ -114,11 +124,12 @@ Feature: Add, Update, and Search Functionalities in order Module
 
     @VerifyOrderLinkInBatch @sanity @po @Regression
     Scenario: Verify navigation on clicking purchase order number link
-        Given the admin user is logged into the application
-        When the admin navigates to the order creation menu
+        Given Logged in as MNR admin user
+        When  the user navigates to the order creation menu
         And enters all the required fields for approval and clicks on the save button
         Then the purchase order number is captured
-        Then verify the status of the po
+        Then user click on logout button
+        Then the admin is logged into the application
         When the admin navigates to the batch approve order page
         Then the system verifies navigation to the corresponding purchase order screen once click on the link
 

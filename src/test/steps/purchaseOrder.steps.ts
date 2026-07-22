@@ -11,6 +11,11 @@ When('the admin navigates to the order creation menu', async () => {
     materialPage = new MaterialPage(fixture.page);
     await purchasePage.clickOnCreateOrderMenu();
 });
+When('the user navigates to the order creation menu', async () => {
+    purchasePage = new purchaseOrderPage(fixture.page);
+    materialPage = new MaterialPage(fixture.page);
+    await purchasePage.clickOnCreateOrderMenu();
+});
 When('Again the admin navigates to the order creation menu', async function (this: any) {
 
     await purchasePage.clickOnCreateOrderMenu();
