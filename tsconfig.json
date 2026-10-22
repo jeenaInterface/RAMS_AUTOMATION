@@ -4,6 +4,7 @@
             "./node_modules/@types",
             "src/helper/types"
         ],
+        "skipLibCheck": true,
         "resolveJsonModule": true
     }
 }

@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+import { safeClick, safeFill } from "playwright-healer";
 
 export default class PlaywrightWrapper {
     [x: string]: any;
@@ -16,7 +17,11 @@ export default class PlaywrightWrapper {
         await element.waitFor({
             state: "visible"
         });
-        await element.click();
+        await safeClick(this.page as unknown as import("playwright").Page, locator);
+    }
+
+    async fill(locator: string, value: string) {
+        await safeFill(this.page as unknown as import("playwright").Page, locator, value);
     }
 
     async navigateTo(link: string) {

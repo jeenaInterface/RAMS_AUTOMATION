@@ -33,7 +33,7 @@ export default class UnbillableOrderPage {
         notes: "(//label[normalize-space(text())='Notes']/following::textarea)[1]",
         saveButton: "(//span[normalize-space()='Save'])[1]",
         draftButton: "(//span[normalize-space()='Draft'])[1]",
-        okDraftButton: "(//span[contains(text(),'OK')])[3]",
+        okDraftButton: "(//span[contains(text(),'OK')])[4]",
         closeButton: "(//span[normalize-space()='Close'])[1]",
         closeButtonActionLog: "(//i[@class='el-dialog__close el-icon el-icon-close'])[1]",
         okCompleteButton: "(//span[contains(text(),'OK')])[8]",
@@ -71,7 +71,7 @@ export default class UnbillableOrderPage {
         OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
         okPopupButton1: "//div[position()=8]/div[position()=1]/div[position()=3]/button[position()=2]",
         headertitle: "(//span[@class='header-title font-size-title'])[1]",
-        saveOkButton: "(//span[contains(text(),'OK')])[4]",
+        saveOkButton: "(//span[contains(text(),'OK')])[6]",
         specialShiftOption: "(//label[normalize-space(text())='Special Shift']/following::input)[1]",
         WOLINKE: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
         agvHours: "(//label[normalize-space(text())='AGV Hours']/following::input)[1]",
@@ -276,8 +276,13 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours).fill('8');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        const option = this.page.getByText(
+            '1000 - ST 47 RB - Lamp Tail Light - Red',
+            { exact: true }
+        );
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
@@ -1109,7 +1114,7 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(8000);
 
     }
-        async clickonWObUttonInPayrollScreen1(): Promise<void> {
+    async clickonWObUttonInPayrollScreen1(): Promise<void> {
         await this.page.locator(this.Elements.showWODetails1).click();
         await this.page.waitForLoadState('networkidle');
         await this.page.locator(this.Elements.WOLinkOnPopUp).click();
@@ -1427,7 +1432,7 @@ export default class UnbillableOrderPage {
         expect(this.OT).toBe('0.00');
         await fixture.page.waitForTimeout(1000);
     }
-        async STandOTForVessel1(): Promise<void> {
+    async STandOTForVessel1(): Promise<void> {
         //verify ST=8 and OT=2
 
         this.ST = await this.page.locator(

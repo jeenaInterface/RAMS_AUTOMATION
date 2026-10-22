@@ -456,7 +456,7 @@ export default class PurchaseOrderPage {
         await this.page.locator('form').filter({ hasText: 'Cancel Reason' }).getByPlaceholder('--Input Text--').fill('cancel');
         // await this.page.locator(this.Elements.cancelReson).fill(this.description);
         //add delay
-        
+
         await await this.page.locator(this.Elements.okCancel).click();
         // Capture the email validation message
         const cancelMessage = await this.page.locator(this.Elements.cancelMessage).textContent();
@@ -468,7 +468,7 @@ export default class PurchaseOrderPage {
 
         // Optionally, you can log success or continue your flow
         console.log('Confirmation message verified.');
-         await fixture.page.waitForTimeout(2000);
+        await fixture.page.waitForTimeout(2000);
         await this.page.getByRole('button', { name: 'OK' }).click();
 
     }
@@ -1593,15 +1593,20 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(2000);
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        const option = this.page.getByText(
+            '1000 - ST 47 RB - Lamp Tail Light - Red',
+            { exact: true }
+        );
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
 
 
     }
-        async createUnbillableOrderForWarantee1(): Promise<void> {
+    async createUnbillableOrderForWarantee1(): Promise<void> {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.WorkOrderMenu).click();
         await this.page.locator(this.Elements.createUnbillableOrder).click();
@@ -1638,8 +1643,13 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(2000);
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        const option = this.page.getByText(
+            '1000 - ST 47 RB - Lamp Tail Light - Red',
+            { exact: true }
+        );
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
@@ -1739,7 +1749,7 @@ export default class PurchaseOrderPage {
     }
     async DoApproveOperationForClaim(): Promise<void> {
         await this.page.locator(`(//input[@placeholder='--Input Text--'])[2]`).fill(this.workOrderNumber);
-        await this.page.locator(`(//span[@class='el-checkbox__inner'])[11]`).check()
+        await this.page.locator(`(//span[@class='el-checkbox__inner'])[5]`).check()
         await this.page.locator(this.Elements.batchApproveButton).click();
         await this.page.locator(this.Elements.confirmButton).click();
         await this.page.locator(this.Elements.okUpdateButton).click();
@@ -1804,12 +1814,17 @@ export default class PurchaseOrderPage {
         await this.page.locator(this.Elements.PlusButtonAddAsset1).click();
         await fixture.page.waitForTimeout(2000);
         const assetInput2 = this.page.locator(this.Elements.assetNumber2);
-        await assetInput2.type('AGVOVR');
+        await assetInput2.type('AGV001');
         await fixture.page.waitForTimeout(1000);
-        const suggestion2 = this.page.getByRole('listitem').filter({ hasText: 'AGVOVR' }).first();
+        const suggestion2 = this.page.getByRole('listitem').filter({ hasText: 'AGV001' }).first();
         await suggestion2.waitFor({ state: 'visible', timeout: 1500 });
         await suggestion2.click();
         await fixture.page.waitForTimeout(1000);
+        const agvHoursSecond = this.page.locator(
+            "xpath=(//label[normalize-space()='AGV Hours']/following::input[1])[2]"
+        );
+
+        await agvHoursSecond.fill('19578');
         await this.page.locator(this.Elements.underWaranteforSecondAsset).click();
         await this.page.locator('xpath=/html/body/div[11]/div/div[1]/ul/li[1]').click();
 
@@ -1826,8 +1841,15 @@ export default class PurchaseOrderPage {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator("xpath=(//input[@placeholder='--Input Text or Look up--'])[3]").type('1002');
         await fixture.page.waitForTimeout(1000);
-        const searchText1 = `1002 - 30221Y3 - lamp amber marker with flange`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText1 }).locator('span').first().click();
+        // const searchText1 = `1002 - 30221Y3 - lamp amber marker with flange`;
+        // await this.page.getByRole('listitem').filter({ hasText: searchText1 }).locator('span').first().click();
+        const option = this.page.getByText(
+            '1002 - 30221Y3 - lamp amber marker with flange',
+            { exact: true }
+        );
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo2).click();
         await this.page.locator(this.Elements.stockQuantitywo2).fill('1');
@@ -1839,7 +1861,7 @@ export default class PurchaseOrderPage {
         this.claimOrderNumber1 = `${this.workOrderNumber}_1`;
         // Extract second claim order number with _2 suffix
         this.claimOrderNumber2 = `${this.workOrderNumber}_2`;
-        
+
         fixture.logger?.info(`Claim Order Number 1: ${this.claimOrderNumber1}`);
         fixture.logger?.info(`Claim Order Number 2: ${this.claimOrderNumber2}`);
     }
@@ -1847,17 +1869,17 @@ export default class PurchaseOrderPage {
     async verifyBothClaimOrderLinksExist(): Promise<void> {
         const firstClaimLink = this.page.getByRole('link', { name: this.claimOrderNumber1 });
         const secondClaimLink = this.page.getByRole('link', { name: this.claimOrderNumber2 });
-        
+
         await firstClaimLink.waitFor({ state: 'visible', timeout: 5000 });
         await secondClaimLink.waitFor({ state: 'visible', timeout: 5000 });
-        
+
         const firstLinkVisible = await firstClaimLink.isVisible();
         const secondLinkVisible = await secondClaimLink.isVisible();
-        
+
         if (!firstLinkVisible || !secondLinkVisible) {
             throw new Error('One or both claim order links are not visible.');
         }
-        
+
         fixture.logger?.info(`Both claim order links are visible: ${this.claimOrderNumber1} and ${this.claimOrderNumber2}`);
     }
 }
