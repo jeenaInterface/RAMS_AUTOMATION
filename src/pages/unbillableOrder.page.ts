@@ -33,7 +33,9 @@ export default class UnbillableOrderPage {
         notes: "(//label[normalize-space(text())='Notes']/following::textarea)[1]",
         saveButton: "(//span[normalize-space()='Save'])[1]",
         draftButton: "(//span[normalize-space()='Draft'])[1]",
-        okDraftButton: "(//span[contains(text(),'OK')])[4]",
+        okDraftButton: "xpath=/html/body/div[9]/div/div[3]/button[2]/span",
+        okDraftButton1: "xpath=/html/body/div[10]/div/div[3]/button[2]/span",
+        okDraftButton3: "xpath=/html/body/div[28]/div/div[3]/button[2]/span",
         closeButton: "(//span[normalize-space()='Close'])[1]",
         closeButtonActionLog: "(//i[@class='el-dialog__close el-icon el-icon-close'])[1]",
         okCompleteButton: "(//span[contains(text(),'OK')])[8]",
@@ -71,7 +73,7 @@ export default class UnbillableOrderPage {
         OKButtonOnWOclosePopup: "//i[@class='el-message-box__close el-icon-close']",
         okPopupButton1: "//div[position()=8]/div[position()=1]/div[position()=3]/button[position()=2]",
         headertitle: "(//span[@class='header-title font-size-title'])[1]",
-        saveOkButton: "(//span[contains(text(),'OK')])[6]",
+        saveOkButton: "xpath=/html/body/div[3]/div/div[3]/button[2]/span",
         specialShiftOption: "(//label[normalize-space(text())='Special Shift']/following::input)[1]",
         WOLINKE: "//table[@class='el-table__body']/tbody[1]/tr[1]/td[1]/div[1]/a[1]",
         agvHours: "(//label[normalize-space(text())='AGV Hours']/following::input)[1]",
@@ -276,10 +278,9 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours).fill('8');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const option = this.page.getByText(
-            '1000 - ST 47 RB - Lamp Tail Light - Red',
-            { exact: true }
-        );
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
 
         await option.waitFor({ state: 'visible', timeout: 10000 });
         await option.click();
@@ -295,6 +296,53 @@ export default class UnbillableOrderPage {
     async clickOnDraftButton(): Promise<void> {
         await this.page.locator(this.Elements.draftButton).click();
         await this.page.locator(this.Elements.okDraftButton).click();
+        await this.page.waitForLoadState('networkidle');
+        //add delay
+        await fixture.page.waitForTimeout(10000);
+        await this.captureUnbillableOrderNumber();
+        await this.captureUnbillableOrderStatus();
+        //verify the status is Draft
+
+        const status = this.unbillableOrderStatus;
+        // expect(status).toBe('Draft'); // add soft assertion
+
+    }
+
+    async clickOnDraftButton2(): Promise<void> {
+        await this.page.locator(this.Elements.draftButton).click();
+        await this.page.locator(this.Elements.okDraftButton1).click();
+        await this.page.waitForLoadState('networkidle');
+        //add delay
+        await fixture.page.waitForTimeout(10000);
+        await this.captureUnbillableOrderNumber();
+        await this.captureUnbillableOrderStatus();
+        //verify the status is Draft
+
+        const status = this.unbillableOrderStatus;
+        // expect(status).toBe('Draft'); // add soft assertion
+
+    }
+
+    async clickOnDraftButton3(): Promise<void> {
+        await this.page.locator(this.Elements.draftButton).click();
+        await this.page.locator(this.Elements.okDraftButton3).click();
+        await this.page.waitForLoadState('networkidle');
+        //add delay
+        await fixture.page.waitForTimeout(10000);
+        await this.captureUnbillableOrderNumber();
+        await this.captureUnbillableOrderStatus();
+        //verify the status is Draft
+
+        const status = this.unbillableOrderStatus;
+        // expect(status).toBe('Draft'); // add soft assertion
+
+    }
+
+        async clickOnDraftButton4(): Promise<void> {
+        await this.page.locator(this.Elements.draftButton).click();
+        await this.page.locator(
+  "xpath=//div[contains(@class,'el-message-box')]//button[.//span[normalize-space()='OK']]"
+).click();
         await this.page.waitForLoadState('networkidle');
         //add delay
         await fixture.page.waitForTimeout(10000);
@@ -497,8 +545,14 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours).fill('4');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
@@ -547,9 +601,14 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours).fill('2');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
-        await fixture.page.waitForTimeout(2000);
+
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
     }
@@ -577,11 +636,16 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours2).click();
         await this.page.locator(this.Elements.actualHours2).fill('2');
         await fixture.page.waitForTimeout(1000);
-        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[3]").type('1000');
+        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[3]").type('1008');
         await fixture.page.waitForTimeout(1000);
-        const searchText1 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText1 }).locator('span').first().click();
-        await fixture.page.waitForTimeout(2000);
+
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
         await this.page.locator(this.Elements.stockQuantitywo2).click();
         await this.page.locator(this.Elements.stockQuantitywo2).fill('1');
     }
@@ -612,9 +676,14 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[4]").type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
-        await fixture.page.waitForTimeout(2000);
+
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
         await this.page.locator(this.Elements.stockQuantitywo3).click();
         await this.page.locator(this.Elements.stockQuantitywo3).fill('1');
     }
@@ -642,11 +711,26 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours4).click();
         await this.page.locator(this.Elements.actualHours4).fill('1');
         await fixture.page.waitForTimeout(1000);
+        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[5]").type('1008');
+        await fixture.page.waitForTimeout(1000);
+
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
         await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[5]").type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
-        await fixture.page.waitForTimeout(2000);
+
+        const option1 = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option1.waitFor({ state: 'visible', timeout: 10000 });
+        await option1.click();
+
         await this.page.locator(this.Elements.stockQuantitywo4).click();
         await this.page.locator(this.Elements.stockQuantitywo4).fill('1');
     }
@@ -673,11 +757,27 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours5).click();
         await this.page.locator(this.Elements.actualHours5).fill('2');
         await fixture.page.waitForTimeout(1000);
-        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[6]").type('1000');
+        const assetInput5 = this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[6]");
+        await assetInput5.type('1008');
         await fixture.page.waitForTimeout(1000);
-        const searchText2 = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText2 }).locator('span').first().click();
-        await fixture.page.waitForTimeout(2000);
+
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1008 - 1000X20RCP - tire flexi van recap 10.00x20' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
+        await this.page.locator("(//input[@placeholder='--Input Text or Look up--'])[5]").type('1000');
+        await fixture.page.waitForTimeout(1000);
+
+        const option1 = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option1.waitFor({ state: 'visible', timeout: 10000 });
+        await option1.click();
+
         await this.page.locator(this.Elements.stockQuantitywo5).click();
         await this.page.locator(this.Elements.stockQuantitywo5).fill('1');
     }
@@ -1023,8 +1123,13 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours).fill('8');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
@@ -1344,8 +1449,12 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours).fill('5');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
@@ -1411,8 +1520,12 @@ export default class UnbillableOrderPage {
         await this.page.locator(this.Elements.actualHours).fill('4');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');

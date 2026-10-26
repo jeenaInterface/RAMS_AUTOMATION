@@ -21,17 +21,17 @@ When('After entering all required fields for the unbillable work order and click
 
 When('enters all the required fields for unbillable work order and selects special shift as vessel sail and clicks on the Draft button', async () => {
   await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('2 - Vessel Sail');
-  await unbillableOrderPage.clickOnDraftButton();
+  await unbillableOrderPage.clickOnDraftButton2();
 });
 
 When('enters all the required fields for unbillable work order and selects special shift as 4 and Go and clicks on the Draft button', async () => {
   await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('3 - 4 and Go');
-  await unbillableOrderPage.clickOnDraftButton();
+  await unbillableOrderPage.clickOnDraftButton2();
 });
 
 When('enters all the required fields for unbillable work order and selects special shift as PMA Training and clicks on the Draft button', async () => {
   await unbillableOrderPage.createNewUnbillableOrderWithSpecialShift('4 - PMA Training');
-  await unbillableOrderPage.clickOnDraftButton();
+  await unbillableOrderPage.clickOnDraftButton2();
 });
 
 // When('enters all the required fields for unbillable work order and adds two assets then clicks on the Draft button', async () => {
@@ -112,7 +112,7 @@ Then('enters all the required fields for unbillable work order and adds three as
   await unbillableOrderPage.asst2Details();
   await unbillableOrderPage.asst3Details();
   await unbillableOrderPage.asst4Details();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton3();
 });
 
 Then('add another two assets in draft mode', async () => {
@@ -316,7 +316,7 @@ When('verify the search functionality using asset manufacturer claime type and v
 When('Create a WO for weekday and select straight time in hour type for first shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayroll('1 - No');
   await unbillableOrderPage.asst8Details();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -367,14 +367,14 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select overtime in hour type for first shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollOT('1 - No');
   await unbillableOrderPage.asst8Details();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select straight time in hour type for second shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('1 - No');
   await unbillableOrderPage.asst8Details();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton2();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -401,7 +401,7 @@ Then('Open the Show Detail of WOs for the created WO and click on the WO link fo
 When('Create a WO for weekday and select straight time in hour type for third shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollThirdShift('1 - No');
   await unbillableOrderPage.asst8DetailsForThirdShift();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton2();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -426,21 +426,21 @@ Then('Open the Show Detail of WOs for the created WO and click on the WO link fo
 When('Create a WO for weekday and select overtime in hour type for second shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOT('1 - No');
   await unbillableOrderPage.asst8Details();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select overtime in hour type for third shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForVerifyPayrollThirdShiftOT('1 - No');
   await unbillableOrderPage.asst8DetailsForThirdShift();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select straight time in hour type for first shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollVesselSail('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -459,7 +459,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select straight time in hour type for second shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -472,7 +472,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select straight time in hour type for third shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollThirdShift('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -485,28 +485,28 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select overtime in hour type for first shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollOT('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select overtime in hour type for second shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOT('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select overtime in hour type for third shift with special shift as Vessel Sail and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForVerifyPayrollThirdShiftOT('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select straight time in hour type for first shift with special shift as four and Go and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayroll('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -519,7 +519,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select straight time in hour type for second shift with special shift as four and Go and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -532,7 +532,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select straight time in hour type for third shift with special shift as four and Go and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollThirdShift('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -545,14 +545,14 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select overtime in hour type for first shift with special shift as four and Go and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollOT('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select overtime in hour type for second shift with special shift as four and Go and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOT('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
@@ -560,14 +560,14 @@ When('Create a WO for weekday and select overtime in hour type for second shift 
 When('Create a WO for weekday and select overtime in hour type for third shift with special shift as four and Go and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForVerifyPayrollThirdShiftOT('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select straight time in hour type for first shift with special shift as PMA Training and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayroll('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -580,7 +580,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select straight time in hour type for second shift with special shift as PMA Training and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollSecondShift('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -593,7 +593,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select straight time in hour type for third shift with special shift as PMA Training and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollThirdShift('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -606,21 +606,21 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekday and select overtime in hour type for first shift with special shift as PMA Training and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftToVerifyPayrollOT('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select overtime in hour type for second shift with special shift as PMA Training and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOT('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
 When('Create a WO for weekday and select overtime in hour type for third shift with special shift as PMA Training and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForVerifyPayrollThirdShiftOT('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatusOT();
 });
@@ -628,7 +628,7 @@ When('Create a WO for weekday and select overtime in hour type for third shift w
 When('Create a WO for weekend and select overtime in hour type for first shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftWeekEnd('1 - No');
   await unbillableOrderPage.asst8Details();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -650,7 +650,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend and select overtime in hour type for second shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOTWeekEnd('1 - No');
   await unbillableOrderPage.asst8Details();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -673,7 +673,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend and select overtime in hour type for third shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollThridShiftOTWeekEnd('1 - No');
   await unbillableOrderPage.asst8DetailsForThirdShift();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -696,7 +696,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift vessel sail and select overtime in hour type for first shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftWeekEnd('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -711,7 +711,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift vessel sail and select overtime in hour type for second shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOTWeekEnd('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -726,7 +726,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift vessel sail and select overtime in hour type for third shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollThridShiftOTWeekEnd('2 - Vessel Sail');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -740,7 +740,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift four and Go and select overtime in hour type for first shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftWeekEnd('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -755,7 +755,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift four and Go and select overtime in hour type for second shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOTWeekEnd('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -770,7 +770,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift four and Go and select overtime in hour type for third shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollThridShiftOTWeekEnd('3 - 4 and Go');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -785,7 +785,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift PMA Training and select overtime in hour type for first shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShiftWeekEnd('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -800,7 +800,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift PMA Training and select overtime in hour type for second shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollSecondShiftOTWeekEnd('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
@@ -815,7 +815,7 @@ Then('the admin navigates to the payroll screen and verify ST and OT for the cre
 When('Create a WO for weekend for the special shift PMA Training and select overtime in hour type for third shift and close the WO', async () => {
   await unbillableOrderPage.CreateNewOrderToVerifyPayrollThridShiftOTWeekEnd('4 - PMA Training');
   await unbillableOrderPage.asst8DetailsForVesselSail();
-  await unbillableOrderPage.clickOnDraftButton1();
+  await unbillableOrderPage.clickOnDraftButton4();
   await unbillableOrderPage.clickOnCompleteButtonNoStatus();
   await unbillableOrderPage.clickOnCloseButtonNoStatus();
 });
