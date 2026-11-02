@@ -383,3 +383,18 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then verify cancel functionality
 
 
+    @installationLocation @sanity @material @Regression
+    Scenario: Verify the installation location functionality by creating new installation location and linking it to the material and then map to unbillable order
+        Given the admin user is logged into the application
+        Then select Support Data from the system settings menu to create installation location
+        When Click on the create button and fill the installation location form
+        And Search for the created installation location code
+        And Create a new material and link the created installation location to the material
+        Then the created Stock No is captured for further use
+        # Then the admin searches for the newly created material using its Stock No.
+        And submits the create order form after filling in the required order details
+        Then the Purchase Order number is captured for further use
+        Then Do receive material and review for the created order
+        Then track the receiving document number for further use
+        Then go to unbillable order page and create unbillable order by using the created material
+        Then the unbillable work order number is captured for further use

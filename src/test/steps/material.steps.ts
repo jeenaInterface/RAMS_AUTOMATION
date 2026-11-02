@@ -553,3 +553,23 @@ Then('verify the menu AP Interface status', async () => {
 Then('Fill all the fields for credit note and click on save button', async () => {
   await materialPage.FillCaptureCreditNote();
 });
+Then('Click on the create button and fill the installation location form', async () => {
+  await materialPage.CreateNewInstallationLocation();
+});
+Then('Search for the created installation location code', async () => {
+  await materialPage.searchInstallationLocationCode();
+});
+
+Then('Create a new material and link the created installation location to the material', async () => {
+  await materialPage.clickOnCreateMaterialMenu();
+  await materialPage.createNewMaterialInstallationLocation();
+});
+
+Then('select Support Data from the system settings menu to create installation location', async () => {
+  purchasePage = new purchaseOrderPage(fixture.page);
+  materialPage = new MaterialPage(fixture.page);
+  await materialPage.clickOnSupportDataMenu();
+  await materialPage.CreateNewInstallationLocation();
+});
+
+

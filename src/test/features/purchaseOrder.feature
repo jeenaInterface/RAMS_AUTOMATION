@@ -271,3 +271,6 @@ Feature: Add, Update, and Search Functionalities in order Module
 
    When the admin navigates to the ToDo list
    Then verify two claim orders are created for the multiple stock details in the work order
+
+
+   

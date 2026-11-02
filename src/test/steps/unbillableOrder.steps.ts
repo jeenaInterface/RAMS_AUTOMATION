@@ -254,7 +254,7 @@ Then('Verify hour validation messages are displayed as expected for the third sh
 When('enters all the required fields for unbillable work order and and select Is PM work order checkbox then clicks on the Draft button', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShift('1 - No');
   await unbillableOrderPage.asst6Details();
-  await unbillableOrderPage.clickOnDraftButton();
+  await unbillableOrderPage.clickOnDraftButton4();
 });
 When('the admin navigates to the Batch close menu and perform batch close operation for the recently created unbillable work order', async () => {
   await unbillableOrderPage.batchCloseMenuClick();
@@ -836,7 +836,7 @@ Then('confirm that the IsLead checkbox is not checked by default', async () => {
 When('enters all the required fields for unbillable work order and and select Is PM work order checkbox then clicks on the Draft button for bombcart asset', async () => {
   await unbillableOrderPage.CreateNewOrderForFirstShift('1 - No');
   await unbillableOrderPage.bombCartasstDetails();
-  await unbillableOrderPage.clickOnDraftButton();
+  await unbillableOrderPage.clickOnDraftButton4();
 });
 Then('Select safty talk subject', async () => {
   await unbillableOrderPage.saftyTalkSubject();

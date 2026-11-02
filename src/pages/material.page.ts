@@ -26,6 +26,7 @@ export default class MaterialPage {
     public tax: string = '';
     public Freight: string = '';
     public sequenceMatch: string = '';
+    public installationLocation: string = '';
 
     constructor(page: Page) {
         this.base = new PlaywrightWrapper(page);
@@ -198,6 +199,7 @@ export default class MaterialPage {
         materialUsageCloseButton2: "(//button[@aria-label='Close']//i)[1]",
         clickUsageLink: "//tbody/tr[1]/td[1]/div[1]/a[1]",
         systemSettingsMenu: "//span[normalize-space(text())='System Setting']",
+        supportDataMenu: "//span[normalize-space(text())='- Supporting Data']",
         assetMenu: "//span[normalize-space(text())='- Asset']",
         firstRowEdit: "//i[@class='ivu-icon ivu-icon-edit']",
         inquireSearchBox: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
@@ -257,7 +259,15 @@ export default class MaterialPage {
         checkAPInterfaceStatus: "//span[normalize-space()='- Check AP Interface Result']",
         sequenceNumberSearchOnAPInterface: "(//label[normalize-space(text())='Sequence No.']/following::input)[1]",
 
-
+        create: "//span[normalize-space(text())='Create']",
+        code: "(//label[normalize-space(text())='Code']/following::input)[1]",
+        description: "(//label[normalize-space(text())='Description']/following::textarea)[1]",
+        status: "//div[@class='el-input']//input[@placeholder='--Select One--']",
+        save: "//span[normalize-space(text())='Save']",
+        codeList: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        requireInstallationCheckBox: "//label[.//span[normalize-space()='Require Installation Location']]//span[contains(@class,'el-checkbox__inner')]",
+        installationLocations: "//input[@placeholder='--Input Text or Look up--']",
+        typeList: "(//input[@placeholder='--Select One--'])[1]",
     };
     async clickOnAssetMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
@@ -1589,9 +1599,18 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.actualHours).fill('8');
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type(this.stockNo);
         await fixture.page.waitForTimeout(1000);
+
         const searchText = `${this.stockNo} - ${this.manufaturesPartNumber} - ${this.description}`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
-        await fixture.page.waitForTimeout(2000);
+        // await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        // await fixture.page.waitForTimeout(2000);
+
+                const option = this.page.getByRole('listitem')
+            .filter({ hasText: searchText })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
         await this.page.locator(this.Elements.completeButton).click();
@@ -1906,8 +1925,102 @@ export default class MaterialPage {
 
 
     }
+    async CreateNewInstallationLocation(): Promise<void> {
+        const randomNumber = getRandomInt(1000, 9999);
+        this.installationLocation = `InsLocation${randomNumber}`;
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.typeList).click();
+        await this.page.getByRole('listitem').filter({ hasText: 'Installation Location' }).click();
+        await fixture.page.waitForTimeout(1000);
+        await this.base.waitAndClick(this.Elements.create);
+        await this.page.locator(this.Elements.code).fill(this.installationLocation);
+        await this.page.locator(this.Elements.description).fill(`Test Installation Location ${randomNumber}`);
+        await this.base.waitAndClick(this.Elements.save);
+        await this.page.locator(this.Elements.okButton).click();
+    }
+    async searchInstallationLocationCode(): Promise<void> {
+        await this.page.locator(this.Elements.codeList).fill(this.installationLocation);
+    }
+    async createNewMaterialInstallationLocation(): Promise<void> {
+        const randomNumber = getRandomInt(1000, 9999);
+        this.description = `Auto Material ${randomNumber}`;
+        await fixture.page.waitForTimeout(3000);
+
+        const imagePath = path.resolve(process.cwd(), 'src', 'helper', 'util', 'test-data', 'materialImage.jpg');
+        const fileInput = this.page.locator('input[type="file"]');
+        if (await fileInput.count() > 0) {
+            await fileInput.setInputFiles(imagePath);
+        }
+        await fixture.page.waitForTimeout(2000);
+        this.manufaturesPartNumber = `MPN-${randomNumber}`;
+
+        // Fill stock no and description and manufacturer's part no
+        await this.page.locator(this.Elements.manufacturerPartNoInput).fill(this.manufaturesPartNumber);
+        await this.page.locator(this.Elements.manufacturerInput).fill(`MAN-${randomNumber}`);
+        await this.page.locator(this.Elements.descriptionInput).fill(this.description);
+        await this.page.locator('form i').first().click();
+        await this.page.getByRole('listitem').filter({ hasText: '24LB - 24 Pound Bottle' }).click();
+        await this.page.locator('form i').nth(1).click();
+        await this.page.getByRole('listitem').filter({ hasText: 'LBS - LBS' }).locator('span').click();
+        await this.page.getByPlaceholder('--Select One--').nth(2).click();
+        await this.page.getByText('Active', { exact: true }).click();
+
+
+        await this.page.locator(this.Elements.maxOHQtyInput).fill('10');
+        await this.page.locator(this.Elements.orderPointInput).fill('1');
+
+        await this.page.locator(this.Elements.shopSelect).click();
+        await this.page.getByText('AGV - AGV').click();
+
+
+
+        const tc = this.page.locator(this.Elements.taxableCheckbox);
+        await tc.check();
+
+        const uop = this.page.locator(this.Elements.underOrderPointCheckbox);
+        await uop.check();
+        await fixture.page.waitForTimeout(1000);
+        const requireInstallation = this.page.locator(this.Elements.requireInstallationCheckBox);
+        await requireInstallation.check();
+
+        const installationLocations = this.page.locator(this.Elements.installationLocations);
+        await installationLocations.type(this.installationLocation);
+        const installationLocationResult = this.page
+            .locator('li.el-select-dropdown__item')
+            .filter({ hasText: this.installationLocation })
+            .first();
+        await installationLocationResult.waitFor({ state: 'visible' });
+        await installationLocationResult.click();
+        await fixture.page.waitForTimeout(500);
+
+        // Save
+        await this.base.waitAndClick(this.Elements.saveButton);
+        await fixture.page.waitForTimeout(500);
+
+        await this.page
+            .locator("//div[contains(@class,'el-message-box__btns')]/button[normalize-space(.)='OK']")
+            .click();
+
+        // Wait briefly and read the header text directly
+        await fixture.page.waitForTimeout(4000);
+        const headerText = (await this.page.locator(this.Elements.headertitle).textContent());
+        if (headerText && headerText.includes('Material |')) {
+            // Extract the number after "Material | "
+            const match = headerText.match(/Material\s*\|\s*(\d+)/);
+            if (match && match[1]) {
+                this.stockNo = match[1];
+            }
+        }
+        await fixture.page.waitForTimeout(1000);
+
+        // return the extracted stock number (may be empty string if extraction failed)
+
+    }
+
+    async clickOnSupportDataMenu(): Promise<void> {
+        await this.base.waitAndClick(this.Elements.systemSettingsMenu);
+        await this.base.waitAndClick(this.Elements.supportDataMenu);
+    }
 }
-
-
-
 

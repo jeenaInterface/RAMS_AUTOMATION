@@ -338,11 +338,11 @@ export default class UnbillableOrderPage {
 
     }
 
-        async clickOnDraftButton4(): Promise<void> {
+    async clickOnDraftButton4(): Promise<void> {
         await this.page.locator(this.Elements.draftButton).click();
         await this.page.locator(
-  "xpath=//div[contains(@class,'el-message-box')]//button[.//span[normalize-space()='OK']]"
-).click();
+            "xpath=//div[contains(@class,'el-message-box')]//button[.//span[normalize-space()='OK']]"
+        ).click();
         await this.page.waitForLoadState('networkidle');
         //add delay
         await fixture.page.waitForTimeout(10000);
@@ -864,26 +864,40 @@ export default class UnbillableOrderPage {
         await fixture.page.waitForTimeout(1000);
         await this.page.locator(this.Elements.IsPMCheckBox).check();
         await this.page.locator(this.Elements.PMGroupList).click();
-        await this.page.getByText('Hourly PMs').click();
+        await this.page.getByText('5th Wheel PM', { exact: true }).click();
         await this.page.locator(this.Elements.PMName).click();
-        await this.page.getByText('1500 Hour').click();
+        await this.page.getByText('6W PM').click();
         await this.page.locator(this.Elements.PMHours).click();
         await this.page.locator(this.Elements.PMHours).fill('2');
 
-        await this.page.locator(this.Elements.componentCode).click();
-        await this.page.getByText('4EZ - Electrical / Electronics').click();
-        await this.page.locator(this.Elements.damageCode).click();
-        await this.page.getByText('BR - Broken').click();
-        await this.page.locator(this.Elements.repairCode).click();
-        await this.page.getByText('IP - Inspect and report').click();
-        await this.page.locator(this.Elements.repairLocation).click();
-        await this.page.getByText('CABN - CABN - Cab').click();
-        await this.page.locator(this.Elements.actualHours).click();
-        await this.page.locator(this.Elements.actualHours).fill('8');
+        // await this.page.locator(this.Elements.componentCode).click();
+        // await this.page.getByText('4EZ - Electrical / Electronics').click();
+        // await this.page.locator(this.Elements.damageCode).click();
+        // await this.page.getByText('BR - Broken').click();
+        // await this.page.locator(this.Elements.repairCode).click();
+        // await this.page.getByText('IP - Inspect and report').click();
+        // const repairLocation = this.page.locator(this.Elements.repairLocation).first();
+        // await repairLocation.click();
+        // const backReachOption = this.page.locator('.el-select-dropdown__item:visible')
+        //     .filter({ hasText: 'BACK - Back Reach' })
+        //     .first();
+        // await expect(backReachOption).toBeVisible();
+        // await backReachOption.click();
+        // await expect(repairLocation).toHaveValue('BACK - Back Reach');
+        // const actualHours = this.page.locator(this.Elements.actualHours);
+        // await actualHours.click();
+        // await actualHours.fill('8');
+        await this.page.locator("(//tr[@class='activity-row']/td[3]//input[@type='text'])[1]").fill('8');
+        await fixture.page.waitForTimeout(1000);
         await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type('1000');
         await fixture.page.waitForTimeout(1000);
-        const searchText = `1000 - ST 47 RB - Lamp Tail Light - Red`;
-        await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+
+        const option = this.page.getByRole('listitem')
+            .filter({ hasText: '1000 - ST 47 RB - Lamp Tail Light - Red' })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
         await fixture.page.waitForTimeout(2000);
         await this.page.locator(this.Elements.stockQuantitywo).click();
         await this.page.locator(this.Elements.stockQuantitywo).fill('1');
