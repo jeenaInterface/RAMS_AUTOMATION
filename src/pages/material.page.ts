@@ -268,6 +268,7 @@ export default class MaterialPage {
         requireInstallationCheckBox: "//label[.//span[normalize-space()='Require Installation Location']]//span[contains(@class,'el-checkbox__inner')]",
         installationLocations: "//input[@placeholder='--Input Text or Look up--']",
         typeList: "(//input[@placeholder='--Select One--'])[1]",
+        installationLocationList: "//input[@placeholder='Please select the installation locations']",
     };
     async clickOnAssetMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
@@ -2021,6 +2022,78 @@ export default class MaterialPage {
     async clickOnSupportDataMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
         await this.base.waitAndClick(this.Elements.supportDataMenu);
+    }
+    async createUnbillableOrderInstallationLocation(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.userIDSearchBox).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('IYAG6');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'IYAG6' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('2ME - Mechanical').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('GW - Straighten and weld').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type(this.stockNo);
+        await fixture.page.waitForTimeout(1000);
+
+        const searchText = `${this.stockNo} - ${this.manufaturesPartNumber} - ${this.description}`;
+        // await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        // await fixture.page.waitForTimeout(2000);
+
+                const option = this.page.getByRole('listitem')
+            .filter({ hasText: searchText })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+        await this.page.locator(this.Elements.installationLocationList).click();
+        await this.page.getByRole('listitem').filter({ hasText: this.installationLocation }).click();
+        
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        await this.page.locator(this.Elements.closeButtonWO).click();
+        await this.page.locator(this.Elements.OKButtonOnWOclosePopup).click();
+        await fixture.page.waitForTimeout(2000);
+        const element = await fixture.page.locator(this.Elements.headertitle).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.workOrderNumber = match[1];
+                console.log(this.workOrderNumber);
+                // Use workOrderNumber as needed
+            }
+        }
+
     }
 }
 

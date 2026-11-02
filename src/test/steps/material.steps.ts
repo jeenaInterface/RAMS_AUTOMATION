@@ -572,4 +572,7 @@ Then('select Support Data from the system settings menu to create installation l
   await materialPage.CreateNewInstallationLocation();
 });
 
+Then('go to unbillable order page and create unbillable order by using the created material and map installation location', async () => {
+  await materialPage.createUnbillableOrderInstallationLocation();
+});
 
