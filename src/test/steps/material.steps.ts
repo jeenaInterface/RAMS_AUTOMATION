@@ -579,3 +579,6 @@ Then('go to unbillable order page and create unbillable order by using the creat
 Then('Go to the Unbillable Order page, create an unbillable order using the created material, map the installation location, progress the order to Complete status, and then perform the Do Close action from the Batch Close screen', async () => {
   await materialPage.createUnbillableOrderInstallationLocationBatchClose();
 });
+Given('cancel the created unbillable work order that having installation location', async () => {
+  await materialPage.clickOnCancelButtonAfterVerifyPayroll();
+});

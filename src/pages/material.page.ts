@@ -275,7 +275,9 @@ export default class MaterialPage {
         typeList: "(//input[@placeholder='--Select One--'])[1]",
         installationLocationList: "//input[@placeholder='Please select the installation locations']",
 
-        errorMessage:"//p[contains(text(),'Installation location count does not match the stock quantity')]"
+        errorMessage:"//p[contains(text(),'Installation location count does not match the stock quantity')]",
+        cancelokButton1: "(//button[contains(@class,'el-button el-button--default el-button--primary')])[1]",
+        cancelButton1: "//div[@class='work-order-footer']//span[contains(text(),'Cancel')]",
     };
     async clickOnAssetMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
@@ -2194,5 +2196,12 @@ export default class MaterialPage {
         await this.page.locator(this.Elements.BatchCloseOkButton).click();
 
     }
+        async clickOnCancelButtonAfterVerifyPayroll(): Promise<void> {
+        await fixture.page.waitForTimeout(5000);
+        await this.page.locator(this.Elements.cancelButton1).click();
+        await this.page.waitForSelector(this.Elements.cancelokButton1);
+        await this.page.locator(this.Elements.cancelokButton1).click();
+    }
+
 }
 

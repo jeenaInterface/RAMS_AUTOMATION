@@ -396,6 +396,7 @@ Feature: Add, Update, and Search Functionalities in material Module
         Then Do receive material and review for the created order
         Then track the receiving document number for further use
         Then go to unbillable order page and create unbillable order by using the created material and map installation location
+        Then cancel the created unbillable work order that having installation location
         Then the unbillable work order number is captured for further use
 
     @installationLocationBatchClose @sanity @material @Regression
