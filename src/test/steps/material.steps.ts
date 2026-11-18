@@ -576,3 +576,6 @@ Then('go to unbillable order page and create unbillable order by using the creat
   await materialPage.createUnbillableOrderInstallationLocation();
 });
 
+Then('Go to the Unbillable Order page, create an unbillable order using the created material, map the installation location, progress the order to Complete status, and then perform the Do Close action from the Batch Close screen', async () => {
+  await materialPage.createUnbillableOrderInstallationLocationBatchClose();
+});

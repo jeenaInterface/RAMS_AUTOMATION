@@ -176,6 +176,11 @@ export default class MaterialPage {
         inquireRMASearch: "(//label[normalize-space(text())='RMA No.']/following::input)[1]",
         vendorSearchReturnSearch: "//i[contains(@class,'el-input__icon el-icon-search')]",
         WorkOrderMenu: "//span[normalize-space()='Work Order']",
+        batchCloseMenu: "//span[normalize-space()='- Batch Close Un-billable Work Order']",
+        WONumberSearchBatchClose: "//table[@class='el-table__header']/thead[1]/tr[2]/th[2]/div[1]/div[1]/div[1]/div[1]/input[1]",
+        BatchCloseCheckBox: "//tr[@class='el-table__row current-row']//span[@class='el-checkbox__inner']",
+        BatchCloseButton: "//span[normalize-space()='Batch Close']",
+        BatchCloseOkButton: "//div[contains(@class,'el-message-box')]//button[.//span[normalize-space()='OK']]",
         createUnbillableOrder: "//span[normalize-space(text())='- Create Un-billable Work Order']",
         mechanicSearch: "//div[@class='select-lookup form-control']//i[1]",
         userIDSearchBox: "(//label[normalize-space(text())='User ID']/following::input)[1]",
@@ -269,6 +274,8 @@ export default class MaterialPage {
         installationLocations: "//input[@placeholder='--Input Text or Look up--']",
         typeList: "(//input[@placeholder='--Select One--'])[1]",
         installationLocationList: "//input[@placeholder='Please select the installation locations']",
+
+        errorMessage:"//p[contains(text(),'Installation location count does not match the stock quantity')]"
     };
     async clickOnAssetMenu(): Promise<void> {
         await this.base.waitAndClick(this.Elements.systemSettingsMenu);
@@ -2093,6 +2100,98 @@ export default class MaterialPage {
                 // Use workOrderNumber as needed
             }
         }
+
+    }
+    async createUnbillableOrderInstallationLocationBatchClose(): Promise<void> {
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.createUnbillableOrder).click();
+        await this.page.locator(this.Elements.mechanicSearch).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.locator(this.Elements.userIDSearchBox).click();
+        await this.page.locator(this.Elements.userIDSearchBox).fill('AARON.BARRIOS');
+        await this.page.getByRole('button', { name: 'Search' }).click();
+        await fixture.page.waitForTimeout(500);
+        await this.page.getByRole('button', { name: 'OK' }).click();
+        await fixture.page.waitForTimeout(500);
+        const assetInput = this.page.locator(this.Elements.assetNumber);
+        await assetInput.type('IYAG6');
+        //await assetInput.press('Enter');
+        await fixture.page.waitForTimeout(1000);
+
+
+        const suggestion = this.page.getByRole('listitem').filter({ hasText: 'IYAG6' }).first();
+        await suggestion.waitFor({ state: 'visible', timeout: 1500 });
+        await suggestion.click();
+        await fixture.page.waitForTimeout(1000);
+
+        await this.page.locator(this.Elements.componentCode).click();
+        await this.page.getByText('2ME - Mechanical').click();
+        await this.page.locator(this.Elements.damageCode).click();
+        await this.page.getByText('BR - Broken').click();
+        await this.page.locator(this.Elements.repairCode).click();
+        await this.page.getByText('GW - Straighten and weld').click();
+        await this.page.locator(this.Elements.repairLocation).click();
+        await this.page.getByText('BATT - Battery Rack').click();
+        await this.page.locator(this.Elements.actualHours).click();
+        await this.page.locator(this.Elements.actualHours).fill('8');
+        await this.page.getByPlaceholder('--Input Text or Look up--').nth(2).type(this.stockNo);
+        await fixture.page.waitForTimeout(1000);
+
+        const searchText = `${this.stockNo} - ${this.manufaturesPartNumber} - ${this.description}`;
+        // await this.page.getByRole('listitem').filter({ hasText: searchText }).locator('span').first().click();
+        // await fixture.page.waitForTimeout(2000);
+
+                const option = this.page.getByRole('listitem')
+            .filter({ hasText: searchText })
+            .first();
+
+        await option.waitFor({ state: 'visible', timeout: 10000 });
+        await option.click();
+
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('2');
+
+        await this.page.locator(this.Elements.installationLocationList).click();
+        await this.page.getByRole('listitem').filter({ hasText: this.installationLocation }).click();
+        
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+
+        //display this message is thrwoing - Installation location count does not match the stock quantity. if there is a mismatch in the stock quantity and installation location count, the system will not allow to complete the work order.
+        //verify above message is displayed
+        const errorMessage = await this.page.locator(this.Elements.errorMessage).textContent();
+        if (errorMessage && errorMessage.includes('Installation location count does not match the stock quantity')) {
+            console.log('Error message displayed: Installation location count does not match the stock quantity');
+        }   
+
+        await this.page.locator(this.Elements.stockQuantitywo).click();
+        await this.page.locator(this.Elements.stockQuantitywo).clear();
+        await this.page.locator(this.Elements.stockQuantitywo).fill('1');
+
+        await this.page.locator(this.Elements.completeButton).click();
+        await this.page.locator(this.Elements.okButtonOnCompletePopup).click();
+
+        await fixture.page.waitForTimeout(2000);
+        const element = await fixture.page.locator(this.Elements.headertitle).textContent();
+        const text = element ? element.toString() : '';
+
+        if (text) {
+            const match = text.match(/\|\s*([A-Z0-9]+)\s*\(/i);
+            if (match && match[1]) {
+                this.workOrderNumber = match[1];
+                console.log(this.workOrderNumber);
+                // Use workOrderNumber as needed
+            }
+        }
+        await this.page.locator(this.Elements.WorkOrderMenu).click();
+        await this.page.locator(this.Elements.batchCloseMenu).click();
+        await this.page.locator(this.Elements.WONumberSearchBatchClose).fill(this.workOrderNumber);
+        await this.page.locator(this.Elements.BatchCloseCheckBox).click();
+        await this.page.locator(this.Elements.BatchCloseButton).click();
+               //add delay
+        await fixture.page.waitForTimeout(3000);
+        await this.page.locator(this.Elements.BatchCloseOkButton).click();
 
     }
 }
